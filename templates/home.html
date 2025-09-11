@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Utama - LENTERAMU{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1><i class="fas fa-brain"></i> Selamat Datang di LENTERAMU</h1>
+    <div class="card">
+        <h2>Platform Pembelajaran Cerdas Berbasis AI</h2>
+        <p style="font-size: 1.1rem; color: #666; text-align: center; margin-bottom: 2rem;">
+            LENTERAMU menyediakan pengalaman pembelajaran yang dipersonalisasi dengan teknologi AI terdepan
+        </p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">1,250</div>
+            <div class="stat-label">Siswa Aktif</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">95%</div>
+            <div class="stat-label">Tingkat Kepuasan</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">87</div>
+            <div class="stat-label">Guru Terlatih</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">25</div>
+            <div class="stat-label">Sekolah Partner</div>
+        </div>
+    </div>
+
+    <div class="card-grid">
+        <div class="feature-card">
+            <i class="fas fa-user-graduate" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3>Dashboard Siswa</h3>
+            <p>Akses materi pembelajaran yang dipersonalisasi sesuai gaya belajar Anda</p>
+            <a href="/dashboard/siswa" class="btn">Masuk Dashboard</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="fas fa-user-cog" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3>Dashboard Admin</h3>
+            <p>Kelola sistem, monitor performa, dan analisis data pembelajaran</p>
+            <a href="/dashboard/admin" class="btn">Panel Admin</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="fas fa-chart-line" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3>Analisis Data</h3>
+            <p>Insight mendalam tentang pola belajar dan performa siswa</p>
+            <a href="/analytics/student" class="btn">Lihat Analytics</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="fas fa-robot" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3>AI Personalisasi</h3>
+            <p>Rekomendasi konten cerdas berdasarkan preferensi belajar</p>
+            <a href="/ai/personalization" class="btn">Akses AI</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="fas fa-sync-alt" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3>Retrain Model</h3>
+            <p>Pembaruan model AI dengan data terbaru untuk akurasi optimal</p>
+            <a href="/ai/retrain" class="btn btn-secondary">Retrain Model</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="fas fa-eye" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3>Monitoring</h3>
+            <p>Pantau performa sistem dan evaluasi implementasi real-time</p>
+            <a href="/monitoring" class="btn btn-secondary">Monitor Sistem</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="fas fa-poll" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3>Survei & Feedback</h3>
+            <p>Kumpulkan umpan balik untuk pengembangan berkelanjutan</p>
+            <a href="/survey" class="btn btn-secondary">Isi Survei</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="fas fa-chalkboard-teacher" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3>Pelatihan Guru</h3>
+            <p>Modul pelatihan dan pengembangan kompetensi pendidik</p>
+            <a href="/training" class="btn btn-secondary">Mulai Pelatihan</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

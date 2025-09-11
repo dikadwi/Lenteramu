@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - LENTERAMU{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1><i class="fas fa-chart-line"></i> Analytics Dashboard</h1>
+    
+    <div class="card">
+        <h2>Analisis Data Siswa & Performa Pembelajaran</h2>
+        <p>Insight mendalam tentang pola belajar dan pencapaian siswa</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">{{ total_students }}</div>
+            <div class="stat-label">Total Siswa</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ engagement_rate }}%</div>
+            <div class="stat-label">Tingkat Keterlibatan</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ completion_rate }}%</div>
+            <div class="stat-label">Tingkat Penyelesaian</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ satisfaction_score }}/5</div>
+            <div class="stat-label">Skor Kepuasan</div>
+        </div>
+    </div>
+
+    <div class="card-grid">
+        <div class="card">
+            <h3><i class="fas fa-chart-bar"></i> Tren Pembelajaran per Mata Pelajaran</h3>
+            {% for trend in learning_trends %}
+            <div style="margin: 1rem 0; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <strong>{{ trend.subject }}</strong>
+                    <span>{{ trend.students }} siswa</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ trend.progress }}%;"></div>
+                </div>
+                <small>Progress: {{ trend.progress }}%</small>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-clock"></i> Aktivitas Harian</h3>
+            <canvas id="dailyActivityChart" width="400" height="200"></canvas>
+            <div style="margin-top: 1rem;">
+                <div class="alert alert-info">
+                    <strong>Peak Hours:</strong> 14:00 - 16:00 WIB<br>
+                    <strong>Rata-rata Session:</strong> 45 menit
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3><i class="fas fa-users"></i> Segmentasi Siswa Berdasarkan Performa</h3>
+        <div class="stats-grid">
+            <div style="background: #d4edda; padding: 1.5rem; border-radius: 15px; text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold; color: #155724;">65%</div>
+                <div style="color: #155724;">High Performers</div>
+            </div>
+            <div style="background: #fff3cd; padding: 1.5rem; border-radius: 15px; text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold; color: #856404;">25%</div>
+                <div style="color: #856404;">Average Performers</div>
+            </div>
+            <div style="background: #f8d7da; padding: 1.5rem; border-radius: 15px; text-align: center;">
+                <div style="font-size: 2rem; font-weight: bold; color: #721c24;">10%</div>
+                <div style="color: #721c24;">Need Support</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3><i class="fas fa-brain"></i> AI Model Performance</h3>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">94.2%</div>
+                <div class="stat-label">Model Accuracy</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">87.5%</div>
+                <div class="stat-label">Prediction Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">120ms</div>
+                <div class="stat-label">Response Time</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">98.7%</div>
+                <div class="stat-label">System Uptime</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Simulasi chart dengan Chart.js jika tersedia
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('dailyActivityChart');
+    if (ctx && typeof Chart !== 'undefined') {
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
+                datasets: [{
+                    label: 'Siswa Aktif',
+                    data: [20, 45, 80, 120, 200, 180, 90, 40],
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

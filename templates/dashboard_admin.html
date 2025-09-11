@@ -1,0 +1,1843 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Admin - LENTERAMU{% endblock %}
+
+{% block content %}
+<style>
+    /* Modern Admin Dashboard Styling */
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+        /* min-height: 100vh; */
+        background: linear-gradient(135deg, #e73c7e 0%, #23a6d5 100%);
+    }
+
+    .admin-header {
+        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+        padding: 2.5rem;
+        border-radius: 20px;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .admin-header:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 80px rgba(0,0,0,0.15);
+    }
+
+    .admin-welcome {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+    .admin-avatar {
+        position: relative;
+    }
+
+    .avatar-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 4px solid #e73c7e;
+        object-fit: cover;
+        transition: all 0.3s ease;
+    }
+
+    .avatar-img:hover {
+        transform: scale(1.1);
+        border-color: #23a6d5;
+    }
+
+    .welcome-text h1 {
+        color: #2c3e50;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .welcome-text h1 i {
+        color: #e73c7e;
+        font-size: 2rem;
+    }
+
+    .admin-info {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .admin-name {
+        color: #2c3e50;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .admin-dept {
+        color: #e73c7e;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .system-status {
+        color: #7f8c8d;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .text-success { color: #27ae60; }
+    .text-warning { color: #f39c12; }
+    .text-danger { color: #e74c3c; }
+
+    .admin-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .btn {
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #e73c7e 0%, #23a6d5 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(231, 60, 126, 0.4);
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        color: white;
+    }
+
+    .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(243, 156, 18, 0.4);
+    }
+
+    .system-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+        padding: 2rem;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #e73c7e, #23a6d5);
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+    }
+
+    .stat-card:hover::before {
+        height: 6px;
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        color: white;
+        background: linear-gradient(135deg, #e73c7e 0%, #23a6d5 100%);
+        box-shadow: 0 10px 20px rgba(231, 60, 126, 0.3);
+    }
+
+    .stat-content .stat-number {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #2c3e50;
+        margin-bottom: 0.3rem;
+    }
+
+    .stat-content .stat-label {
+        font-size: 1rem;
+        color: #7f8c8d;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-breakdown {
+        font-size: 0.9rem;
+        color: #95a5a6;
+        font-weight: 500;
+    }
+
+    /* Dashboard Cards Grid */
+    .admin-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .admin-card {
+        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .admin-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #e73c7e, #23a6d5);
+    }
+
+    .admin-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #f8f9fa;
+    }
+
+    .card-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #2c3e50;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .card-title i {
+        color: #e73c7e;
+        font-size: 1.2rem;
+    }
+
+    .btn-small {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #e73c7e 0%, #23a6d5 100%);
+        color: white;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-small:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(231, 60, 126, 0.3);
+    }
+
+    /* User Management Styles */
+    .users-summary .user-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .user-stat-item {
+        text-align: center;
+        padding: 1rem;
+        background: rgba(231, 60, 126, 0.1);
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .user-stat-item:hover {
+        transform: scale(1.05);
+        background: rgba(231, 60, 126, 0.15);
+    }
+
+    .user-stat-number {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #e73c7e;
+        margin-bottom: 0.3rem;
+    }
+
+    .user-stat-label {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+        font-weight: 600;
+    }
+
+    .recent-registrations h4 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .user-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #f0f0f0;
+        transition: all 0.3s ease;
+    }
+
+    .user-item:hover {
+        background: rgba(231, 60, 126, 0.05);
+        border-radius: 8px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .user-info .user-name {
+        font-weight: 600;
+        color: #2c3e50;
+        display: block;
+    }
+
+    .user-info .user-role {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+    }
+
+    .registration-time {
+        font-size: 0.8rem;
+        color: #95a5a6;
+    }
+
+    /* Performance Metrics Styles */
+    .performance-metrics .metric-item {
+        margin-bottom: 1.5rem;
+    }
+
+    .metric-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .metric-label {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .metric-value {
+        font-weight: 700;
+        color: #e73c7e;
+    }
+
+    .metric-bar {
+        height: 8px;
+        background: #ecf0f1;
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .metric-fill {
+        height: 100%;
+        border-radius: 10px;
+        transition: width 2s ease-in-out;
+        background: linear-gradient(90deg, #e73c7e, #23a6d5);
+    }
+
+    .metric-fill.cpu { background: linear-gradient(90deg, #3498db, #2980b9); }
+    .metric-fill.memory { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+    .metric-fill.disk { background: linear-gradient(90deg, #f39c12, #e67e22); }
+
+    /* Activity Logs Styles */
+    .logs-list {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .log-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid #f0f0f0;
+        transition: all 0.3s ease;
+    }
+
+    .log-item:hover {
+        background: rgba(231, 60, 126, 0.05);
+        border-radius: 8px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .log-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .log-item.login .log-icon { background: #27ae60; }
+    .log-item.system .log-icon { background: #3498db; }
+    .log-item.error .log-icon { background: #e74c3c; }
+
+    .log-content p {
+        margin: 0;
+        font-weight: 500;
+        color: #2c3e50;
+    }
+
+    .log-time {
+        font-size: 0.8rem;
+        color: #95a5a6;
+        margin-top: 0.2rem;
+        display: block;
+    }
+
+    /* Notifications Styles */
+    .notification-badge {
+        background: #e74c3c;
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .notifications-list {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .admin-notification {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid #f0f0f0;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .admin-notification:hover {
+        background: rgba(231, 60, 126, 0.05);
+        border-radius: 8px;
+        padding-left: 1rem;
+        padding-right: 2rem;
+    }
+
+    .notification-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .admin-notification.system .notification-icon { background: #3498db; }
+    .admin-notification.alert .notification-icon { background: #f39c12; }
+    .admin-notification.update .notification-icon { background: #27ae60; }
+
+    .notification-content p {
+        margin: 0;
+        font-weight: 500;
+        color: #2c3e50;
+    }
+
+    .notification-time {
+        font-size: 0.8rem;
+        color: #95a5a6;
+        margin-top: 0.2rem;
+        display: block;
+    }
+
+    .notification-dismiss {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        color: #bdc3c7;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .notification-dismiss:hover {
+        color: #e74c3c;
+    }
+
+    /* Quick Actions Styles */
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .admin-action-btn {
+        background: linear-gradient(135deg, rgba(231, 60, 126, 0.1) 0%, rgba(35, 166, 213, 0.1) 100%);
+        border: 2px solid rgba(231, 60, 126, 0.2);
+        border-radius: 15px;
+        padding: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .admin-action-btn:hover {
+        background: linear-gradient(135deg, #e73c7e 0%, #23a6d5 100%);
+        color: white;
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 25px rgba(231, 60, 126, 0.3);
+        border-color: transparent;
+    }
+
+    .admin-action-btn i {
+        font-size: 2rem;
+    }
+
+    /* AI Status Styles */
+    .status-indicator {
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .status-indicator.online {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .ai-metrics {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .ai-metric-item {
+        text-align: center;
+        padding: 1rem;
+        background: rgba(35, 166, 213, 0.1);
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .ai-metric-item:hover {
+        transform: scale(1.05);
+        background: rgba(35, 166, 213, 0.15);
+    }
+
+    .ai-metric-value {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #23a6d5;
+        margin-bottom: 0.3rem;
+        display: block;
+    }
+
+    .ai-metric-label {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+        font-weight: 600;
+    }
+
+    .ai-models-list h4 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .ai-model-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .model-name {
+        font-weight: 500;
+        color: #2c3e50;
+    }
+
+    .model-status {
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .model-status.active {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .model-status.training {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .container {
+            padding: 1rem;
+        }
+
+        .admin-header {
+            flex-direction: column;
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .admin-welcome {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .admin-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .system-stats {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .admin-info {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .admin-actions {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+    <!-- System Overview Stats -->
+    <div class="system-stats">
+        <div class="stat-card users-stat">
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+            <div class="stat-content">
+                <div class="stat-number">{{ total_users or 125 }}</div>
+                <div class="stat-label">Total Pengguna</div>
+                <div class="stat-breakdown">
+                    <span>{{ total_students or 95 }} Siswa • {{ total_teachers or 30 }} Guru</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card active-stat">
+            <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+            <div class="stat-content">
+                <div class="stat-number">{{ daily_active_users or 87 }}</div>
+                <div class="stat-label">Pengguna Aktif Hari Ini</div>
+                <div class="stat-trend">
+                    <i class="fas fa-arrow-up text-success"></i> +12% dari kemarin
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card uptime-stat">
+            <div class="stat-icon"><i class="fas fa-server"></i></div>
+            <div class="stat-content">
+                <div class="stat-number">99.8%</div>
+                <div class="stat-label">System Uptime</div>
+                <div class="stat-status">
+                    <i class="fas fa-circle text-success"></i> Online
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card storage-stat">
+            <div class="stat-icon"><i class="fas fa-database"></i></div>
+            <div class="stat-content">
+                <div class="stat-number">2.4 GB</div>
+                <div class="stat-label">Database Size</div>
+                <div class="stat-trend">
+                    <i class="fas fa-info-circle"></i> Normal usage
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Admin Dashboard -->
+    <div class="admin-grid">
+        <!-- User Management -->
+        <div class="admin-card user-management">
+            <div class="card-header">
+                <h3><i class="fas fa-users-cog"></i> Manajemen Pengguna</h3>
+                <button class="btn btn-small" onclick="viewAllUsers()">Kelola</button>
+            </div>
+            <div class="users-summary">
+                <div class="user-stats-grid">
+                    <div class="user-stat-item">
+                        <div class="user-stat-number">{{ total_students or 95 }}</div>
+                        <div class="user-stat-label">Siswa</div>
+                    </div>
+                    <div class="user-stat-item">
+                        <div class="user-stat-number">{{ total_teachers or 30 }}</div>
+                        <div class="user-stat-label">Guru</div>
+                    </div>
+                    <div class="user-stat-item">
+                        <div class="user-stat-number">5</div>
+                        <div class="user-stat-label">Admin</div>
+                    </div>
+                </div>
+                <div class="recent-registrations">
+                    <h4>Registrasi Terbaru</h4>
+                    <div class="user-item">
+                        <div class="user-info">
+                            <span class="user-name">Ahmad Rizki</span>
+                            <span class="user-role">Siswa</span>
+                        </div>
+                        <span class="registration-time">2 jam lalu</span>
+                    </div>
+                    <div class="user-item">
+                        <div class="user-info">
+                            <span class="user-name">Siti Nurhaliza</span>
+                            <span class="user-role">Guru</span>
+                        </div>
+                        <span class="registration-time">5 jam lalu</span>
+                    </div>
+                    <div class="user-item">
+                        <div class="user-info">
+                            <span class="user-name">Budi Santoso</span>
+                            <span class="user-role">Siswa</span>
+                        </div>
+                        <span class="registration-time">1 hari lalu</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Performance -->
+        <div class="admin-card system-performance">
+            <div class="card-header">
+                <h3><i class="fas fa-chart-area"></i> Performa Sistem</h3>
+                <button class="btn btn-small" onclick="systemHealth()">Detail</button>
+            </div>
+            <div class="performance-metrics">
+                <div class="metric-item">
+                    <div class="metric-header">
+                        <span class="metric-label">CPU Usage</span>
+                        <span class="metric-value cpu-text">45%</span>
+                    </div>
+                    <div class="metric-bar">
+                        <div class="metric-fill cpu" style="width: 45%"></div>
+                    </div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-header">
+                        <span class="metric-label">Memory Usage</span>
+                        <span class="metric-value memory-text">62%</span>
+                    </div>
+                    <div class="metric-bar">
+                        <div class="metric-fill memory" style="width: 62%"></div>
+                    </div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-header">
+                        <span class="metric-label">Disk Usage</span>
+                        <span class="metric-value disk-text">38%</span>
+                    </div>
+                    <div class="metric-bar">
+                        <div class="metric-fill disk" style="width: 38%"></div>
+                    </div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Network Traffic</div>
+                    <div class="metric-value">24.5 MB/s</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Logs -->
+        <div class="admin-card activity-logs">
+            <div class="card-header">
+                <h3><i class="fas fa-list-alt"></i> Log Aktivitas</h3>
+                <button class="btn btn-small" onclick="viewAllLogs()">Lihat Semua</button>
+            </div>
+            <div class="logs-list">
+                <div class="log-item login">
+                    <div class="log-icon">
+                        <i class="fas fa-sign-in-alt"></i>
+                    </div>
+                    <div class="log-content">
+                        <p>User 'Ahmad Rizki' berhasil login</p>
+                        <span class="log-time">10:30 AM</span>
+                    </div>
+                </div>
+                <div class="log-item system">
+                    <div class="log-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <div class="log-content">
+                        <p>Model AI selesai ditraining</p>
+                        <span class="log-time">9:45 AM</span>
+                    </div>
+                </div>
+                <div class="log-item error">
+                    <div class="log-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="log-content">
+                        <p>Connection timeout pada database slave</p>
+                        <span class="log-time">8:20 AM</span>
+                    </div>
+                </div>
+                <div class="log-item login">
+                    <div class="log-icon">
+                        <i class="fas fa-sign-in-alt"></i>
+                    </div>
+                    <div class="log-content">
+                        <p>Guru 'Siti Nurhaliza' mengakses dashboard</p>
+                        <span class="log-time">7:15 AM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Notifications -->
+        <div class="admin-card admin-notifications">
+            <div class="card-header">
+                <h3><i class="fas fa-bell"></i> Notifikasi Sistem</h3>
+                <span class="notification-badge">4</span>
+            </div>
+            <div class="notifications-list">
+                <div class="admin-notification system">
+                    <div class="notification-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div class="notification-content">
+                        <p>Server backup berhasil dilakukan</p>
+                        <span class="notification-time">30 menit lalu</span>
+                    </div>
+                    <button class="notification-dismiss">×</button>
+                </div>
+                <div class="admin-notification alert">
+                    <div class="notification-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <div class="notification-content">
+                        <p>Penggunaan CPU tinggi terdeteksi</p>
+                        <span class="notification-time">1 jam lalu</span>
+                    </div>
+                    <button class="notification-dismiss">×</button>
+                </div>
+                <div class="admin-notification update">
+                    <div class="notification-icon">
+                        <i class="fas fa-arrow-circle-up"></i>
+                    </div>
+                    <div class="notification-content">
+                        <p>Update sistem tersedia</p>
+                        <span class="notification-time">2 jam lalu</span>
+                    </div>
+                    <button class="notification-dismiss">×</button>
+                </div>
+                <div class="admin-notification system">
+                    <div class="notification-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="notification-content">
+                        <p>Database optimasi selesai</p>
+                        <span class="notification-time">3 jam lalu</span>
+                    </div>
+                    <button class="notification-dismiss">×</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="admin-card quick-actions">
+            <div class="card-header">
+                <h3><i class="fas fa-bolt"></i> Aksi Cepat</h3>
+            </div>
+            <div class="actions-grid">
+                <button class="admin-action-btn" onclick="backupSystem()">
+                    <i class="fas fa-download"></i>
+                    <span>Backup Database</span>
+                </button>
+                <button class="admin-action-btn" onclick="generateReport()">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Generate Report</span>
+                </button>
+                <button class="admin-action-btn" onclick="systemHealth()">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>System Health</span>
+                </button>
+                <button class="admin-action-btn" onclick="manageAI()">
+                    <i class="fas fa-brain"></i>
+                    <span>AI Management</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- AI System Status -->
+        <div class="admin-card ai-status">
+            <div class="card-header">
+                <h3><i class="fas fa-brain"></i> Status AI System</h3>
+                <span class="status-indicator online">Online</span>
+            </div>
+            <div class="ai-metrics">
+                <div class="ai-metric-item">
+                    <div class="ai-metric-label">Active Models</div>
+                    <div class="ai-metric-value">3</div>
+                </div>
+                <div class="ai-metric-item">
+                    <div class="ai-metric-label">Training Queue</div>
+                    <div class="ai-metric-value">2</div>
+                </div>
+                <div class="ai-metric-item">
+                    <div class="ai-metric-label">Model Accuracy</div>
+                    <div class="ai-metric-value">94.7%</div>
+                </div>
+                <div class="ai-metric-item">
+                    <div class="ai-metric-label">Recommendations</div>
+                    <div class="ai-metric-value">1,247</div>
+                </div>
+            </div>
+            <div class="ai-models-list">
+                <h4>Model Status</h4>
+                <div class="ai-model-item">
+                    <span class="model-name">Learning Path Optimizer</span>
+                    <span class="model-status active">Active</span>
+                </div>
+                <div class="ai-model-item">
+                    <span class="model-name">Content Recommender</span>
+                    <span class="model-status active">Active</span>
+                </div>
+                <div class="ai-model-item">
+                    <span class="model-name">Performance Predictor</span>
+                    <span class="model-status training">Training</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                <div class="stat-label">Pengguna Aktif Hari Ini</div>
+                <div class="stat-trend">
+                    <i class="fas fa-arrow-up text-success"></i> +12% dari kemarin
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card uptime-stat">
+            <div class="stat-icon"><i class="fas fa-server"></i></div>
+            <div class="stat-content">
+                <div class="stat-number">{{ system_uptime }}</div>
+                <div class="stat-label">System Uptime</div>
+                <div class="stat-status">
+                    <i class="fas fa-circle text-success"></i> {{ server_status }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card storage-stat">
+            <div class="stat-icon"><i class="fas fa-database"></i></div>
+            <div class="stat-content">
+                <div class="stat-number">{{ database_size }}</div>
+                <div class="stat-label">Database Size</div>
+                <div class="stat-trend">
+                    <i class="fas fa-info-circle"></i> Normal usage
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Admin Dashboard -->
+    <div class="admin-grid">
+        <!-- User Management -->
+        <div class="admin-card user-management">
+            <div class="card-header">
+                <h3><i class="fas fa-users-cog"></i> Manajemen Pengguna</h3>
+                <button class="btn btn-small">Kelola</button>
+            </div>
+            <div class="user-stats-grid">
+                {% for stat in user_stats %}
+                <div class="user-stat-item">
+                    <div class="user-stat-info">
+                        <span class="role-name">{{ stat.role }}</span>
+                        <span class="user-count">{{ stat.count }} total</span>
+                    </div>
+                    <div class="active-count">
+                        <span class="active-number">{{ stat.active }}</span>
+                        <span class="active-label">aktif</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="user-actions">
+                <button class="action-btn" onclick="addUser()">
+                    <i class="fas fa-user-plus"></i> Tambah User
+                </button>
+                <button class="action-btn" onclick="bulkImport()">
+                    <i class="fas fa-upload"></i> Import Bulk
+                </button>
+            </div>
+        </div>
+
+        <!-- System Metrics -->
+        <div class="admin-card system-metrics">
+            <div class="card-header">
+                <h3><i class="fas fa-tachometer-alt"></i> Performa Sistem</h3>
+                <span class="metric-status">Real-time</span>
+            </div>
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-label">CPU Usage</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill cpu" style="width: {{ system_metrics.cpu_usage }}%"></div>
+                    </div>
+                    <span class="metric-value">{{ system_metrics.cpu_usage }}%</span>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Memory Usage</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill memory" style="width: {{ system_metrics.memory_usage }}%"></div>
+                    </div>
+                    <span class="metric-value">{{ system_metrics.memory_usage }}%</span>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Disk Usage</div>
+                    <div class="metric-bar">
+                        <div class="metric-fill disk" style="width: {{ system_metrics.disk_usage }}%"></div>
+                    </div>
+                    <span class="metric-value">{{ system_metrics.disk_usage }}%</span>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-label">Network Traffic</div>
+                    <div class="metric-value">{{ system_metrics.network_traffic }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Logs -->
+        <div class="admin-card activity-logs">
+            <div class="card-header">
+                <h3><i class="fas fa-list-alt"></i> Log Aktivitas</h3>
+                <button class="btn btn-small">Lihat Semua</button>
+            </div>
+            <div class="logs-list">
+                {% for log in recent_logs %}
+                <div class="log-item {{ log.type }}">
+                    <div class="log-icon">
+                        {% if log.type == 'login' %}
+                            <i class="fas fa-sign-in-alt"></i>
+                        {% elif log.type == 'system' %}
+                            <i class="fas fa-cog"></i>
+                        {% elif log.type == 'error' %}
+                            <i class="fas fa-exclamation-triangle"></i>
+                        {% endif %}
+                    </div>
+                    <div class="log-content">
+                        <p>{{ log.message }}</p>
+                        <span class="log-time">{{ log.time }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Admin Notifications -->
+        <div class="admin-card admin-notifications">
+            <div class="card-header">
+                <h3><i class="fas fa-bell"></i> Notifikasi Sistem</h3>
+                <span class="notification-badge">{{ notifications|length }}</span>
+            </div>
+            <div class="notifications-list">
+                {% for notification in notifications %}
+                <div class="admin-notification {{ notification.type }}">
+                    <div class="notification-icon">
+                        {% if notification.type == 'system' %}
+                            <i class="fas fa-server"></i>
+                        {% elif notification.type == 'alert' %}
+                            <i class="fas fa-exclamation-circle"></i>
+                        {% elif notification.type == 'update' %}
+                            <i class="fas fa-arrow-circle-up"></i>
+                        {% endif %}
+                    </div>
+                    <div class="notification-content">
+                        <p>{{ notification.message }}</p>
+                        <span class="notification-time">{{ notification.time }}</span>
+                    </div>
+                    <button class="notification-dismiss">×</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="admin-card quick-actions">
+            <div class="card-header">
+                <h3><i class="fas fa-bolt"></i> Aksi Cepat</h3>
+            </div>
+            <div class="actions-grid">
+                <button class="admin-action-btn" onclick="backupSystem()">
+                    <i class="fas fa-download"></i>
+                    <span>Backup Database</span>
+                </button>
+                <button class="admin-action-btn" onclick="generateReport()">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Generate Report</span>
+                </button>
+                <button class="admin-action-btn" onclick="systemHealth()">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>System Health</span>
+                </button>
+                <button class="admin-action-btn" onclick="manageAI()">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Management</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- AI System Status -->
+        <div class="admin-card ai-status">
+            <div class="card-header">
+                <h3><i class="fas fa-brain"></i> Status AI System</h3>
+                <span class="ai-indicator online">Online</span>
+            </div>
+            <div class="ai-metrics">
+                <div class="ai-metric">
+                    <span class="ai-label">Model Version</span>
+                    <span class="ai-value">v2.1.3</span>
+                </div>
+                <div class="ai-metric">
+                    <span class="ai-label">Last Training</span>
+                    <span class="ai-value">2 hari lalu</span>
+                </div>
+                <div class="ai-metric">
+                    <span class="ai-label">Accuracy Rate</span>
+                    <span class="ai-value">94.7%</span>
+                </div>
+                <div class="ai-metric">
+                    <span class="ai-label">Predictions Today</span>
+                    <span class="ai-value">1,247</span>
+                </div>
+            </div>
+            <div class="ai-actions">
+                <button class="btn btn-primary" onclick="retrainAI()">
+                    <i class="fas fa-cogs"></i> Retrain Model
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Admin CSS -->
+<style>
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    color: white;
+}
+
+.admin-welcome {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.admin-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.system-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.admin-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 1.5rem;
+    color: white;
+}
+
+.metrics-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.metric-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.metric-bar {
+    flex: 1;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    margin: 0 1rem;
+    overflow: hidden;
+}
+
+.metric-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.metric-fill.cpu { background: #e74c3c; }
+.metric-fill.memory { background: #f39c12; }
+.metric-fill.disk { background: #27ae60; }
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.admin-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.admin-action-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.ai-indicator.online {
+    background: #27ae60;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+.ai-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.ai-metric {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.log-item, .admin-notification {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.text-success { color: #27ae60; }
+
+@media (max-width: 768px) {
+    .admin-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .system-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .admin-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+</style>
+
+<script>
+function refreshSystemData() {
+    location.reload();
+}
+
+function systemMaintenance() {
+    if (confirm('Apakah Anda yakin ingin memulai maintenance mode?')) {
+        alert('Maintenance mode diaktifkan. Sistem akan tidak dapat diakses selama 30 menit.');
+    }
+}
+
+function addUser() {
+    window.location.href = '/admin/users/add';
+}
+
+function bulkImport() {
+    window.location.href = '/admin/users/import';
+}
+
+function backupSystem() {
+    if (confirm('Mulai backup database?')) {
+        alert('Backup database dimulai. Anda akan mendapat notifikasi setelah selesai.');
+    }
+}
+
+function generateReport() {
+    window.location.href = '/admin/reports/generate';
+}
+
+function systemHealth() {
+    window.location.href = '/admin/system/health';
+}
+
+function manageAI() {
+    window.location.href = '/admin/ai/management';
+}
+
+function retrainAI() {
+    if (confirm('Mulai retrain AI model? Proses ini membutuhkan waktu 30-60 menit.')) {
+        alert('AI retrain dimulai. Model akan di-update setelah proses selesai.');
+    }
+}
+
+// Real-time metric updates
+setInterval(function() {
+    // Simulate metric updates
+    const cpuBar = document.querySelector('.metric-fill.cpu');
+    const memoryBar = document.querySelector('.metric-fill.memory');
+    const diskBar = document.querySelector('.metric-fill.disk');
+    
+    if (cpuBar) {
+        const newCpu = Math.random() * 30 + 20;
+        cpuBar.style.width = newCpu + '%';
+        cpuBar.parentElement.parentElement.querySelector('.metric-value').textContent = Math.round(newCpu) + '%';
+    }
+}, 5000);
+</script>
+            <p>Analisis mendalam performa sistem dan pengguna</p>
+            <a href="/analytics/student" class="btn">Lihat Analytics</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="fas fa-shield-alt" style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3>Keamanan Sistem</h3>
+            <p>Monitor keamanan dan privasi data pengguna</p>
+            <a href="#" class="btn btn-secondary">Cek Keamanan</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="fas fa-cogs" style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3>Konfigurasi</h3>
+            <p>Pengaturan sistem dan kustomisasi platform</p>
+            <a href="#" class="btn btn-secondary">Pengaturan</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="fas fa-download" style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3>Backup & Restore</h3>
+            <p>Manajemen backup data dan restore sistem</p>
+            <a href="#" class="btn btn-secondary">Backup Data</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Status Sistem Real-time</h3>
+        <div class="stats-grid" style="margin-top: 1rem;">
+            <div style="background: #d4edda; padding: 1rem; border-radius: 10px;">
+                <strong style="color: #155724;">Server Status</strong><br>
+                <span style="color: #155724;">Online - Normal</span>
+            </div>
+            <div style="background: #d4edda; padding: 1rem; border-radius: 10px;">
+                <strong style="color: #155724;">Database</strong><br>
+                <span style="color: #155724;">Connected - Optimal</span>
+            </div>
+            <div style="background: #cce7ff; padding: 1rem; border-radius: 10px;">
+                <strong style="color: #004085;">AI Models</strong><br>
+                <span style="color: #004085;">Training - 2 models</span>
+            </div>
+            <div style="background: #d4edda; padding: 1rem; border-radius: 10px;">
+                <strong style="color: #155724;">API Services</strong><br>
+                <span style="color: #155724;">All Active</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Aktivitas Sistem Terbaru</h3>
+        <div style="margin-top: 1rem;">
+            <div class="alert alert-success">
+                <i class="fas fa-sync"></i> Model AI berhasil diretrain - 30 menit yang lalu
+            </div>
+            <div class="alert alert-info">
+                <i class="fas fa-user-plus"></i> 15 siswa baru terdaftar hari ini
+            </div>
+            <div class="alert alert-info">
+                <i class="fas fa-chart-up"></i> Peningkatan engagement 12% minggu ini
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+// Admin Dashboard JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    initializeAdminDashboard();
+    setupAdminAnimations();
+    startAdminProgressAnimations();
+    startRealTimeUpdates();
+});
+
+function initializeAdminDashboard() {
+    // Add loading animation to stats
+    const statCards = document.querySelectorAll('.stat-card');
+    statCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+
+    // Add loading animation to dashboard cards
+    const adminCards = document.querySelectorAll('.admin-card');
+    adminCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.8s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, 600 + (index * 150));
+    });
+}
+
+function setupAdminAnimations() {
+    // Hover animations for user items
+    const userItems = document.querySelectorAll('.user-item');
+    userItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateX(10px) scale(1.02)';
+            this.style.backgroundColor = 'rgba(231, 60, 126, 0.05)';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateX(0) scale(1)';
+            this.style.backgroundColor = 'transparent';
+        });
+    });
+
+    // Click animations for action buttons
+    const actionButtons = document.querySelectorAll('.btn, .admin-action-btn');
+    actionButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
+    });
+
+    // Activity log hover effects
+    const logItems = document.querySelectorAll('.log-item');
+    logItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = 'rgba(231, 60, 126, 0.08)';
+            this.style.borderRadius = '12px';
+            this.style.transform = 'translateX(8px)';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = 'transparent';
+            this.style.transform = 'translateX(0)';
+        });
+    });
+
+    // Notification hover effects
+    const notifications = document.querySelectorAll('.admin-notification');
+    notifications.forEach(notif => {
+        notif.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = 'rgba(231, 60, 126, 0.1)';
+            this.style.borderRadius = '8px';
+            this.style.transform = 'translateX(5px)';
+        });
+        
+        notif.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = 'transparent';
+            this.style.transform = 'translateX(0)';
+        });
+    });
+}
+
+function startAdminProgressAnimations() {
+    // Animate metric bars
+    const metricFills = document.querySelectorAll('.metric-fill');
+    metricFills.forEach((bar, index) => {
+        const width = bar.style.width;
+        bar.style.width = '0%';
+        setTimeout(() => {
+            bar.style.width = width;
+        }, 1000 + (index * 200));
+    });
+}
+
+function startRealTimeUpdates() {
+    // Update system status every 10 seconds
+    setInterval(updateSystemMetrics, 10000);
+}
+
+function refreshSystemData() {
+    // Add refresh animation
+    const refreshBtn = document.querySelector('.btn-primary');
+    const icon = refreshBtn.querySelector('i');
+    
+    // Rotate icon
+    icon.style.animation = 'spin 1s linear infinite';
+    
+    // Simulate refresh
+    setTimeout(() => {
+        icon.style.animation = '';
+        
+        // Show success notification
+        showAdminNotification('Data sistem berhasil diperbarui!', 'success');
+        
+        // Update random stats (simulation)
+        updateSystemStats();
+        updateSystemMetrics();
+    }, 2000);
+}
+
+function updateSystemStats() {
+    const usersStatNumber = document.querySelector('.users-stat .stat-number');
+    const activeStatNumber = document.querySelector('.active-stat .stat-number');
+    
+    if (usersStatNumber) {
+        const currentUsers = parseInt(usersStatNumber.textContent);
+        const newUsers = currentUsers + Math.floor(Math.random() * 5);
+        animateAdminNumber(usersStatNumber, newUsers);
+    }
+    
+    if (activeStatNumber) {
+        const currentActive = parseInt(activeStatNumber.textContent);
+        const newActive = currentActive + Math.floor(Math.random() * 10);
+        animateAdminNumber(activeStatNumber, newActive);
+    }
+}
+
+function updateSystemMetrics() {
+    // Update CPU usage
+    const cpuBar = document.querySelector('.metric-fill.cpu');
+    if (cpuBar) {
+        const newCpuUsage = 20 + Math.random() * 60; // 20-80%
+        cpuBar.style.width = newCpuUsage + '%';
+        const cpuText = document.querySelector('.cpu-text');
+        if (cpuText) {
+            cpuText.textContent = Math.round(newCpuUsage) + '%';
+        }
+    }
+
+    // Update Memory usage
+    const memoryBar = document.querySelector('.metric-fill.memory');
+    if (memoryBar) {
+        const newMemoryUsage = 30 + Math.random() * 50; // 30-80%
+        memoryBar.style.width = newMemoryUsage + '%';
+        const memoryText = document.querySelector('.memory-text');
+        if (memoryText) {
+            memoryText.textContent = Math.round(newMemoryUsage) + '%';
+        }
+    }
+
+    // Update Disk usage
+    const diskBar = document.querySelector('.metric-fill.disk');
+    if (diskBar) {
+        const newDiskUsage = 40 + Math.random() * 30; // 40-70%
+        diskBar.style.width = newDiskUsage + '%';
+        const diskText = document.querySelector('.disk-text');
+        if (diskText) {
+            diskText.textContent = Math.round(newDiskUsage) + '%';
+        }
+    }
+}
+
+function animateAdminNumber(element, targetValue, suffix = '') {
+    const startValue = parseInt(element.textContent) || 0;
+    const increment = (targetValue - startValue) / 20;
+    let currentValue = startValue;
+    
+    const animation = setInterval(() => {
+        currentValue += increment;
+        if ((increment > 0 && currentValue >= targetValue) || 
+            (increment < 0 && currentValue <= targetValue)) {
+            currentValue = targetValue;
+            clearInterval(animation);
+        }
+        element.textContent = Math.round(currentValue) + suffix;
+    }, 50);
+}
+
+function systemMaintenance() {
+    showAdminNotification('Mode maintenance akan dimulai...', 'warning');
+    setTimeout(() => {
+        window.location.href = '/admin/maintenance';
+    }, 1500);
+}
+
+function backupSystem() {
+    showAdminNotification('Memulai backup database...', 'info');
+    setTimeout(() => {
+        showAdminNotification('Backup berhasil dibuat!', 'success');
+    }, 3000);
+}
+
+function generateReport() {
+    showAdminNotification('Membuat laporan sistem...', 'info');
+    setTimeout(() => {
+        window.location.href = '/admin/reports';
+    }, 1000);
+}
+
+function systemHealth() {
+    showAdminNotification('Memeriksakan kesehatan sistem...', 'info');
+    setTimeout(() => {
+        window.location.href = '/admin/health';
+    }, 1000);
+}
+
+function manageAI() {
+    showAdminNotification('Membuka manajemen AI...', 'info');
+    setTimeout(() => {
+        window.location.href = '/admin/ai-management';
+    }, 1000);
+}
+
+function showAdminNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification-toast ${type}`;
+    
+    const colors = {
+        success: '#27ae60',
+        error: '#e74c3c',
+        warning: '#f39c12',
+        info: '#e73c7e'
+    };
+    
+    const icons = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-circle',
+        warning: 'fa-exclamation-triangle',
+        info: 'fa-info-circle'
+    };
+    
+    notification.innerHTML = `
+        <i class="fas ${icons[type]}"></i>
+        <span>${message}</span>
+    `;
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${colors[type]};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        transform: translateX(100%);
+        transition: transform 0.4s ease;
+        font-weight: 600;
+        min-width: 320px;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Auto remove
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 400);
+    }, 4000);
+}
+
+// Add CSS animations for admin dashboard
+const adminStyle = document.createElement('style');
+adminStyle.textContent = `
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .stat-card {
+        animation: fadeInUp 0.6s ease forwards;
+    }
+    
+    .admin-card {
+        animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .user-item, .log-item, .admin-notification {
+        transition: all 0.3s ease;
+    }
+
+    .metric-fill {
+        transition: width 2s ease-in-out;
+    }
+
+    .admin-action-btn:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 25px rgba(231, 60, 126, 0.3);
+    }
+`;
+document.head.appendChild(adminStyle);
+
+// Auto refresh system metrics every 30 seconds
+setInterval(function() {
+    updateSystemMetrics();
+}, 30000);
+
+// Notification dismiss functionality
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('notification-dismiss')) {
+        const notification = e.target.closest('.admin-notification');
+        if (notification) {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }
+    }
+});
+</script>
+
+{% endblock %}

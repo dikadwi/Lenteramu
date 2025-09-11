@@ -1,0 +1,1157 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Guru - LENTERAMU{% endblock %}
+
+{% block content %}
+ <style>
+/* Modern Teacher Dashboard Styling */
+
+        .teacher-header {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .teacher-header:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.15);
+        }
+
+        .teacher-welcome {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .teacher-avatar {
+            position: relative;
+        }
+
+        .avatar-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid #667eea;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        .avatar-img:hover {
+            transform: scale(1.1);
+            border-color: #764ba2;
+        }
+
+        .welcome-text h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .welcome-text h1 i {
+            color: #667eea;
+            font-size: 2rem;
+        }
+
+        .teacher-info {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .teacher-name {
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .teacher-subject {
+            color: #667eea;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .schedule-info {
+            color: #7f8c8d;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .teacher-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(86, 171, 47, 0.4);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .teaching-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+        }
+
+        .stat-card:hover::before {
+            height: 6px;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-content .stat-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-content .stat-label {
+            font-size: 1rem;
+            color: #7f8c8d;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-trend {
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .text-success { color: #27ae60; }
+        .text-warning { color: #f39c12; }
+        .text-danger { color: #e74c3c; }
+
+        /* Dashboard Cards Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f8f9fa;
+        }
+
+        .card-header h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .card-header h3 i {
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        /* Classes List */
+        .classes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .class-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .class-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .class-info h4 {
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .class-info p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .class-stats .class-avg {
+            text-align: center;
+        }
+
+        .avg-score {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .avg-label {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
+        .class-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Schedule List */
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .schedule-item:hover {
+            background: #e9ecef;
+        }
+
+        .schedule-time {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            background: #667eea;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 8px;
+            min-width: 80px;
+            font-weight: bold;
+        }
+
+        .time-separator {
+            font-size: 0.8rem;
+            margin: 0.2rem 0;
+        }
+
+        .schedule-details {
+            flex: 1;
+        }
+
+        .schedule-details h4 {
+            color: #2c3e50;
+            margin-bottom: 0.2rem;
+        }
+
+        .schedule-details p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        /* Assignments */
+        .assignments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .assignment-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .assignment-item:hover {
+            background: #e9ecef;
+        }
+
+        .assignment-info {
+            flex: 1;
+        }
+
+        .assignment-info h4 {
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .assignment-info p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .assignment-progress {
+            text-align: center;
+            margin-right: 1rem;
+        }
+
+        .progress-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .progress-label {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
+        /* Analytics Card */
+        .analytics-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .chart-placeholder i {
+            font-size: 3rem;
+            color: #667eea;
+        }
+
+        .performance-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .summary-item {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .summary-label {
+            display: block;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 0.3rem;
+        }
+
+        .summary-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-actions::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .teacher-header {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .teacher-welcome {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .teaching-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .teacher-info {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .teacher-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .performance-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .class-item,
+            .schedule-item,
+            .assignment-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .class-actions {
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Notification Toast */
+        .notification-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transform: translateX(100%);
+            transition: transform 0.4s ease;
+            font-weight: 600;
+            min-width: 320px;
+            color: white;
+        }
+
+        .notification-toast.info {
+            background: #667eea;
+        }
+
+        .notification-toast.success {
+            background: #27ae60;
+        }
+
+        .notification-toast.warning {
+            background: #f39c12;
+        }
+
+        .notification-toast.error {
+            background: #e74c3c;
+        }
+    </style>
+
+
+<div class="container">
+        <!-- Teacher Header -->
+        <div class="teacher-header fade-in">
+            <div class="teacher-welcome">
+                <div class="teacher-avatar">
+                    <img src="https://via.placeholder.com/80x80/667eea/ffffff?text=GT" alt="Avatar" class="avatar-img">
+                </div>
+                <div class="welcome-text">
+                    <h1><i class="fas fa-chalkboard-teacher"></i> Dashboard Guru</h1>
+                    <div class="teacher-info">
+                        <span class="teacher-name">Pak/Bu Guru Matematika</span>
+                        <span class="teacher-subject"><i class="fas fa-book"></i> Matematika</span>
+                    </div>
+                    <div class="schedule-info">
+                        <i class="fas fa-calendar"></i> 5 kelas aktif • 125 siswa
+                    </div>
+                </div>
+            </div>
+            <div class="teacher-actions">
+                <button class="btn btn-primary" onclick="refreshTeacherData()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <button class="btn btn-success" onclick="createAssignment()">
+                    <i class="fas fa-plus"></i> Buat Tugas
+                </button>
+            </div>
+        </div>
+
+        <!-- Teaching Overview Stats -->
+        <div class="teaching-stats">
+            <div class="stat-card fade-in">
+                <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
+                <div class="stat-content">
+                    <div class="stat-number">125</div>
+                    <div class="stat-label">Total Siswa</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up text-success"></i> +3 siswa baru
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card fade-in">
+                <div class="stat-icon"><i class="fas fa-chalkboard"></i></div>
+                <div class="stat-content">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Kelas Aktif</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-info-circle"></i> Semester ini
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card fade-in">
+                <div class="stat-icon"><i class="fas fa-clipboard-check"></i></div>
+                <div class="stat-content">
+                    <div class="stat-number">23</div>
+                    <div class="stat-label">Perlu Dinilai</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-exclamation-triangle text-warning"></i> Urgent
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-card fade-in">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-content">
+                    <div class="stat-number">87%</div>
+                    <div class="stat-label">Rata-rata Kelas</div>
+                    <div class="stat-trend">
+                        <i class="fas fa-arrow-up text-success"></i> Meningkat
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Teacher Dashboard -->
+        <div class="dashboard-grid">
+            <!-- Classes Overview -->
+            <div class="dashboard-card fade-in">
+                <div class="card-header">
+                    <h3><i class="fas fa-users"></i> Kelas Saya</h3>
+                    <button class="btn btn-small btn-primary" onclick="viewAllClasses()">Kelola Semua</button>
+                </div>
+                <div class="classes-list">
+                    <div class="class-item">
+                        <div class="class-info">
+                            <h4>Matematika X-A</h4>
+                            <p>32 siswa</p>
+                        </div>
+                        <div class="class-stats">
+                            <div class="class-avg">
+                                <span class="avg-score">85</span>
+                                <span class="avg-label">Rata-rata</span>
+                            </div>
+                        </div>
+                        <div class="class-actions">
+                            <button class="btn btn-small btn-primary" onclick="viewClass('X-A')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-small btn-success" onclick="manageClass('X-A')">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="class-item">
+                        <div class="class-info">
+                            <h4>Matematika X-B</h4>
+                            <p>28 siswa</p>
+                        </div>
+                        <div class="class-stats">
+                            <div class="class-avg">
+                                <span class="avg-score">82</span>
+                                <span class="avg-label">Rata-rata</span>
+                            </div>
+                        </div>
+                        <div class="class-actions">
+                            <button class="btn btn-small btn-primary" onclick="viewClass('X-B')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-small btn-success" onclick="manageClass('X-B')">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="class-item">
+                        <div class="class-info">
+                            <h4>Matematika XI-A</h4>
+                            <p>30 siswa</p>
+                        </div>
+                        <div class="class-stats">
+                            <div class="class-avg">
+                                <span class="avg-score">88</span>
+                                <span class="avg-label">Rata-rata</span>
+                            </div>
+                        </div>
+                        <div class="class-actions">
+                            <button class="btn btn-small btn-primary" onclick="viewClass('XI-A')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-small btn-success" onclick="manageClass('XI-A')">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Schedule -->
+            <div class="dashboard-card fade-in">
+                <div class="card-header">
+                    <h3><i class="fas fa-calendar-day"></i> Jadwal Hari Ini</h3>
+                    <span>04/09/2025</span>
+                </div>
+                <div class="schedule-list">
+                    <div class="schedule-item">
+                        <div class="schedule-time">
+                            <span class="time-start">08:00</span>
+                            <span class="time-separator">-</span>
+                            <span class="time-end">09:40</span>
+                        </div>
+                        <div class="schedule-details">
+                            <h4>Matematika</h4>
+                            <p>Kelas X-A</p>
+                        </div>
+                        <div class="schedule-status">
+                            <button class="btn btn-small btn-success">
+                                <i class="fas fa-play"></i> Mulai
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">
+                            <span class="time-start">10:00</span>
+                            <span class="time-separator">-</span>
+                            <span class="time-end">11:40</span>
+                        </div>
+                        <div class="schedule-details">
+                            <h4>Matematika</h4>
+                            <p>Kelas X-B</p>
+                        </div>
+                        <div class="schedule-status">
+                            <button class="btn btn-small" style="background: #f39c12; color: white;">
+                                <i class="fas fa-clock"></i> Tunggu
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">
+                            <span class="time-start">13:00</span>
+                            <span class="time-separator">-</span>
+                            <span class="time-end">14:40</span>
+                        </div>
+                        <div class="schedule-details">
+                            <h4>Matematika</h4>
+                            <p>Kelas XI-A</p>
+                        </div>
+                        <div class="schedule-status">
+                            <button class="btn btn-small" style="background: #6c757d; color: white;">
+                                <i class="fas fa-calendar"></i> Nanti
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Assignments -->
+            <div class="dashboard-card fade-in">
+                <div class="card-header">
+                    <h3><i class="fas fa-file-alt"></i> Tugas Terbaru</h3>
+                    <button class="btn btn-small btn-success" onclick="createAssignment()">Buat Baru</button>
+                </div>
+                <div class="assignments-list">
+                    <div class="assignment-item">
+                        <div class="assignment-info">
+                            <h4>Persamaan Linear</h4>
+                            <p>Kelas X-A, X-B</p>
+                        </div>
+                        <div class="assignment-progress">
+                            <div class="progress-circle">
+                                <span class="progress-text">28/32</span>
+                            </div>
+                            <div class="progress-label">Terkumpul</div>
+                        </div>
+                        <div class="assignment-actions">
+                            <button class="btn btn-small btn-primary" onclick="gradeAssignment('Persamaan Linear')">
+                                <i class="fas fa-check"></i> Nilai
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="assignment-item">
+                        <div class="assignment-info">
+                            <h4>Fungsi Kuadrat</h4>
+                            <p>Kelas XI-A</p>
+                        </div>
+                        <div class="assignment-progress">
+                            <div class="progress-circle">
+                                <span class="progress-text">25/30</span>
+                            </div>
+                            <div class="progress-label">Terkumpul</div>
+                        </div>
+                        <div class="assignment-actions">
+                            <button class="btn btn-small btn-primary" onclick="gradeAssignment('Fungsi Kuadrat')">
+                                <i class="fas fa-check"></i> Nilai
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="assignment-item">
+                        <div class="assignment-info">
+                            <h4>Trigonometri Dasar</h4>
+                            <p>Kelas XI-B</p>
+                        </div>
+                        <div class="assignment-progress">
+                            <div class="progress-circle">
+                                <span class="progress-text">22/25</span>
+                            </div>
+                            <div class="progress-label">Terkumpul</div>
+                        </div>
+                        <div class="assignment-actions">
+                            <button class="btn btn-small btn-primary" onclick="gradeAssignment('Trigonometri Dasar')">
+                                <i class="fas fa-check"></i> Nilai
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Performance Analytics -->
+            <div class="dashboard-card fade-in">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-bar"></i> Analisis Performa</h3>
+                    <button class="btn btn-small btn-primary" onclick="generateReport()">Laporan</button>
+                </div>
+                <div class="analytics-content">
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-area"></i>
+                        <p>Grafik performa siswa</p>
+                    </div>
+                    <div class="performance-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Nilai Tertinggi</span>
+                            <span class="summary-value">95</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Nilai Terendah</span>
+                            <span class="summary-value">67</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Siswa Butuh Bantuan</span>
+                            <span class="summary-value">8</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions fade-in">
+            <div class="card-header">
+                <h3><i class="fas fa-bolt"></i> Aksi Cepat</h3>
+            </div>
+            <div class="actions-grid">
+                <button class="btn btn-primary" onclick="createQuiz()">
+                    <i class="fas fa-question-circle"></i> Buat Kuis
+                </button>
+                <button class="btn btn-success" onclick="uploadMaterial()">
+                    <i class="fas fa-upload"></i> Upload Materi
+                </button>
+                <button class="btn" style="background: #f39c12; color: white;" onclick="classAnalytics()">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </button>
+                <button class="btn" style="background: #9b59b6; color: white;" onclick="aiRecommendations()">
+                    <i class="fas fa-robot"></i> AI Insights
+                </button>
+            </div>
+        </div>
+    </div>
+
+    
+<script>
+        // Animation on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    el.style.transition = 'all 0.6s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Teacher Dashboard Functions
+        function refreshTeacherData() {
+            const btn = document.querySelector('.btn-primary');
+            const icon = btn.querySelector('i');
+            
+            // Add spinning animation
+            icon.style.animation = 'spin 1s linear infinite';
+            
+            setTimeout(() => {
+                icon.style.animation = '';
+                showNotification('Data berhasil diperbarui!', 'success');
+                
+                // Simulate data update
+                updateStats();
+            }, 1500);
+        }
+
+        function updateStats() {
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach((stat, index) => {
+                const currentValue = parseInt(stat.textContent) || 0;
+                let newValue;
+                
+                switch(index) {
+                    case 0: // Students
+                        newValue = currentValue + Math.floor(Math.random() * 3);
+                        break;
+                    case 1: // Classes - keep same
+                        newValue = currentValue;
+                        break;
+                    case 2: // Pending grading
+                        newValue = Math.max(0, currentValue - Math.floor(Math.random() * 5));
+                        break;
+                    case 3: // Performance
+                        newValue = Math.min(100, currentValue + Math.floor(Math.random() * 3));
+                        stat.textContent = newValue + '%';
+                        return;
+                }
+                
+                animateNumber(stat, newValue);
+            });
+        }
+
+        function animateNumber(element, targetValue) {
+            const startValue = parseInt(element.textContent) || 0;
+            const increment = (targetValue - startValue) / 20;
+            let currentValue = startValue;
+            
+            const animation = setInterval(() => {
+                currentValue += increment;
+                if ((increment > 0 && currentValue >= targetValue) || 
+                    (increment < 0 && currentValue <= targetValue)) {
+                    currentValue = targetValue;
+                    clearInterval(animation);
+                }
+                element.textContent = Math.round(currentValue);
+            }, 50);
+        }
+
+        function createAssignment() {
+            showNotification('Membuka form pembuatan tugas...', 'info');
+            setTimeout(() => {
+                // Simulate navigation
+                console.log('Navigate to assignment creation');
+            }, 1000);
+        }
+
+        function viewClass(className) {
+            showNotification(`Membuka kelas ${className}...`, 'info');
+            setTimeout(() => {
+                console.log(`Navigate to class ${className}`);
+            }, 1000);
+        }
+
+        function manageClass(className) {
+            showNotification(`Mengelola kelas ${className}...`, 'info');
+            setTimeout(() => {
+                console.log(`Navigate to manage class ${className}`);
+            }, 1000);
+        }
+
+        function gradeAssignment(assignmentTitle) {
+            showNotification(`Membuka penilaian: ${assignmentTitle}`, 'info');
+            setTimeout(() => {
+                console.log(`Navigate to grade ${assignmentTitle}`);
+            }, 1000);
+        }
+
+        function viewAllClasses() {
+            showNotification('Membuka daftar semua kelas...', 'info');
+            setTimeout(() => {
+                console.log('Navigate to all classes');
+            }, 1000);
+        }
+
+        function generateReport() {
+            showNotification('Membuat laporan...', 'info');
+            setTimeout(() => {
+                console.log('Navigate to reports');
+            }, 1000);
+        }
+
+        function createQuiz() {
+            showNotification('Membuka quiz builder...', 'info');
+            setTimeout(() => {
+                console.log('Navigate to quiz builder');
+            }, 1000);
+        }
+
+        function uploadMaterial() {
+            showNotification('Membuka upload materi...', 'info');
+            setTimeout(() => {
+                console.log('Navigate to material upload');
+            }, 1000);
+        }
+
+        function classAnalytics() {
+            showNotification('Membuka analytics kelas...', 'info');
+            setTimeout(() => {
+                console.log('Navigate to class analytics');
+            }, 1000);
+        }
+
+        function aiRecommendations() {
+            showNotification('Membuka AI recommendations...', 'info');
+            setTimeout(() => {
+                console.log('Navigate to AI recommendations');
+            }, 1000);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification-toast ${type}`;
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle',
+                info: 'fa-info-circle'
+            };
+            
+            notification.innerHTML = `
+                <i class="fas ${icons[type]}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 400);
+            }, 3000);
+        }
+
+        // Add hover effects to interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const interactiveElements = document.querySelectorAll('.class-item, .schedule-item, .assignment-item');
+            
+            interactiveElements.forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(5px)';
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateX(0)';
+                });
+            });
+        });
+
+        // Auto-refresh data every 5 minutes
+        setInterval(function() {
+            const now = new Date();
+            if (now.getMinutes() % 5 === 0 && now.getSeconds() === 0) {
+                updateStats();
+            }
+        }, 1000);
+    </script>
+{% endblock %}

@@ -1,0 +1,982 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Siswa - LENTERAMU{% endblock %}
+
+{% block content %}
+<!-- Custom CSS for Dashboard -->
+<style>
+/* Dashboard Header */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    color: white;
+}
+
+.user-welcome {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.user-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.welcome-text h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.user-info {
+    display: flex;
+    gap: 1rem;
+    margin: 0.5rem 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+}
+
+.user-info span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.last-login {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.dashboard-actions .btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.dashboard-actions .btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1.5rem;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.progress-stat .stat-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
+.completed-stat .stat-icon { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+.pending-stat .stat-icon { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.grade-stat .stat-icon { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.streak-stat .stat-icon { background: linear-gradient(135deg, #ff6b35, #f7931e); }
+.hours-stat .stat-icon { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.stat-trend {
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.dashboard-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+}
+
+.card-header h3 {
+    color: #2c3e50;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-header h3 i {
+    color: #667eea;
+}
+
+.card-header .btn {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+}
+
+/* Subject Progress */
+.subjects-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.subject-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.subject-item:hover {
+    background: rgba(102, 126, 234, 0.1);
+    transform: translateX(5px);
+}
+
+.subject-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.subject-name {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.subject-grade {
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+}
+
+.grade-A { background: #27ae60; }
+.grade-Aplus { background: #2ecc71; }
+.grade-Aminus { background: #16a085; }
+.grade-Bplus { background: #f39c12; }
+.grade-B { background: #e67e22; }
+
+.subject-progress {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 120px;
+}
+
+.progress-bar {
+    background: rgba(0, 0, 0, 0.1);
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex: 1;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 4px;
+    transition: width 0.8s ease;
+}
+
+.progress-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #667eea;
+    min-width: 35px;
+}
+
+/* Exams and Notifications */
+.exam-item, .notification-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.exam-item:hover, .notification-item:hover {
+    background: rgba(102, 126, 234, 0.05);
+    margin: 0 -1rem;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.exam-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 12px;
+    margin-right: 1rem;
+}
+
+.date-day {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.date-month {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+.exam-details {
+    flex: 1;
+}
+
+.exam-details h4 {
+    color: #2c3e50;
+    margin-bottom: 0.3rem;
+    font-size: 1rem;
+}
+
+.exam-details p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.exam-time {
+    font-size: 0.8rem;
+    color: #95a5a6;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Notification styles */
+.notification-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: white;
+}
+
+.notification-item.assignment .notification-icon { background: #3498db; }
+.notification-item.grade .notification-icon { background: #f39c12; }
+.notification-item.announcement .notification-icon { background: #e74c3c; }
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-content p {
+    color: #2c3e50;
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+}
+
+.notification-time {
+    font-size: 0.8rem;
+    color: #95a5a6;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #667eea;
+    font-weight: 500;
+}
+
+.action-btn:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+    border-color: rgba(102, 126, 234, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+}
+
+.action-btn i {
+    font-size: 1.5rem;
+}
+
+/* Color classes */
+.text-success { color: #27ae60; }
+.text-warning { color: #f39c12; }
+.text-orange { color: #ff6b35; }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .user-welcome {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .user-info {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .subject-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .subject-progress {
+        width: 100%;
+    }
+    
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .dashboard-header {
+        padding: 1.5rem;
+    }
+    
+    .stat-card {
+        padding: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+}
+</style>
+
+
+<div class="container">
+    <!-- Header -->
+    <div class="dashboard-header">
+        <div class="user-welcome">
+            <div class="user-avatar">
+                <img src="{{ user.avatar or '/static/images/avatar-default.png' }}" alt="Avatar" class="avatar-img">
+            </div>
+            <div class="welcome-text">
+                <h1><i class="fas fa-user-graduate"></i> Selamat datang, {{ user.name or student_name }}!</h1>
+                <p class="user-info">
+                    <span class="user-class"><i class="fas fa-graduation-cap"></i> {{ user.class or 'XII IPA 1' }}</span>
+                    <span class="user-id"><i class="fas fa-id-card"></i> {{ user.student_id or 'STD2024001' }}</span>
+                </p>
+                <p class="last-login">Terakhir login: {{ timestamp }}</p>
+            </div>
+        </div>
+        <div class="dashboard-actions">
+            <button class="btn btn-primary" onclick="refreshDashboard()">
+                <i class="fas fa-sync-alt"></i> Refresh Data
+            </button>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+        <div class="stat-card progress-stat">
+            <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="stat-content">
+                <div class="stat-number">{{ progress }}%</div>
+                <div class="stat-label">Progress Belajar</div>
+                <div class="stat-trend">
+                    <i class="fas fa-arrow-up text-success"></i> +5% minggu ini
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card completed-stat">
+            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="stat-content">
+                <div class="stat-number">{{ completed_courses }}</div>
+                <div class="stat-label">Materi Selesai</div>
+                <div class="stat-trend">
+                    <i class="fas fa-arrow-up text-success"></i> +2 hari ini
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card pending-stat">
+            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+            <div class="stat-content">
+                <div class="stat-number">{{ pending_tasks }}</div>
+                <div class="stat-label">Tugas Pending</div>
+                <div class="stat-trend">
+                    <i class="fas fa-exclamation-triangle text-warning"></i> Perlu perhatian
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card grade-stat">
+            <div class="stat-icon"><i class="fas fa-medal"></i></div>
+            <div class="stat-content">
+                <div class="stat-number">{{ average_grade }}</div>
+                <div class="stat-label">Rata-rata Nilai</div>
+                <div class="stat-trend">
+                    <i class="fas fa-arrow-up text-success"></i> Meningkat
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card streak-stat">
+            <div class="stat-icon"><i class="fas fa-fire"></i></div>
+            <div class="stat-content">
+                <div class="stat-number">{{ learning_streak }}</div>
+                <div class="stat-label">Hari Berturut</div>
+                <div class="stat-trend">
+                    <i class="fas fa-fire text-orange"></i> Streak aktif!
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card hours-stat">
+            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+            <div class="stat-content">
+                <div class="stat-number">{{ total_study_hours }}h</div>
+                <div class="stat-label">Total Belajar</div>
+                <div class="stat-trend">
+                    <i class="fas fa-arrow-up text-success"></i> Bulan ini
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="dashboard-grid">
+        <!-- Subjects Progress -->
+        <div class="dashboard-card subjects-card">
+            <div class="card-header">
+                <h3><i class="fas fa-book-open"></i> Progress Mata Pelajaran</h3>
+                <button class="btn btn-small">Lihat Semua</button>
+            </div>
+            <div class="subjects-list">
+                {% for subject in subjects %}
+                <div class="subject-item">
+                    <div class="subject-info">
+                        <span class="subject-name">{{ subject.name }}</span>
+                        <span class="subject-grade badge grade-{{ subject.grade.replace('+', 'plus').replace('-', 'minus') }}">{{ subject.grade }}</span>
+                    </div>
+                    <div class="subject-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ subject.progress }}%"></div>
+                        </div>
+                        <span class="progress-text">{{ subject.progress }}%</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Upcoming Exams -->
+        <div class="dashboard-card exams-card">
+            <div class="card-header">
+                <h3><i class="fas fa-calendar-alt"></i> Ujian Mendatang</h3>
+                <span class="exam-count">{{ upcoming_exams|length }} ujian</span>
+            </div>
+            <div class="exams-list">
+                {% for exam in upcoming_exams %}
+                <div class="exam-item">
+                    <div class="exam-date">
+                        <span class="date-day">{{ exam.date.split('-')[2] if '-' in exam.date else exam.date[-2:] }}</span>
+                        <span class="date-month">Sep</span>
+                    </div>
+                    <div class="exam-details">
+                        <h4>{{ exam.subject }}</h4>
+                        <p>{{ exam.type }}</p>
+                        <span class="exam-time"><i class="fas fa-clock"></i> 08:00 - 10:00</span>
+                    </div>
+                    <div class="exam-actions">
+                        <button class="btn btn-small btn-outline">Siapkan</button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Notifications -->
+        <div class="dashboard-card notifications-card">
+            <div class="card-header">
+                <h3><i class="fas fa-bell"></i> Notifikasi</h3>
+                <span class="notification-count">{{ notifications|length }}</span>
+            </div>
+            <div class="notifications-list">
+                {% for notification in notifications %}
+                <div class="notification-item {{ notification.type }}">
+                    <div class="notification-icon">
+                        {% if notification.type == 'assignment' %}
+                            <i class="fas fa-file-alt"></i>
+                        {% elif notification.type == 'grade' %}
+                            <i class="fas fa-star"></i>
+                        {% elif notification.type == 'announcement' %}
+                            <i class="fas fa-bullhorn"></i>
+                        {% endif %}
+                    </div>
+                    <div class="notification-content">
+                        <p>{{ notification.message }}</p>
+                        <span class="notification-time">{{ notification.time }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="dashboard-card actions-card">
+            <div class="card-header">
+                <h3><i class="fas fa-lightning-bolt"></i> Aksi Cepat</h3>
+            </div>
+            <div class="quick-actions">
+                <button class="action-btn" onclick="startLearning()">
+                    <i class="fas fa-play"></i>
+                    <span>Mulai Belajar</span>
+                </button>
+                <button class="action-btn" onclick="viewAssignments()">
+                    <i class="fas fa-tasks"></i>
+                    <span>Lihat Tugas</span>
+                </button>
+                <button class="action-btn" onclick="takeQuiz()">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Kuis Harian</span>
+                </button>
+                <button class="action-btn" onclick="viewRecommendations()">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>Rekomendasi AI</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Additional Features -->
+    <div class="dashboard-grid" style="margin-top: 2rem;">
+        <div class="feature-card">
+            <i class="fas fa-tasks" style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3>Tugas & Kuis</h3>
+            <p>Kerjakan tugas dan kuis untuk mengukur pemahaman</p>
+            <div class="alert alert-info">
+                <strong>3 tugas</strong> menunggu dikerjakan
+            </div>
+            <a href="#" class="btn btn-secondary">Lihat Tugas</a>
+        </div>
+
+        <div class="feature-card">
+            <i class="fas fa-chart-pie" style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;"></i>
+            <h3>Progress Report</h3>
+            <p>Pantau perkembangan belajar Anda secara detail</p>
+            <a href="/reporting/report" class="btn btn-secondary">Lihat Laporan</a>
+        </div>
+    </div>
+
+    <!-- Aktivitas Terbaru -->
+    <div class="card" style="margin-top: 2rem;">
+    <div class="card">
+        <h3>Aktivitas Terbaru</h3>
+        <div style="margin-top: 1rem;">
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i> Menyelesaikan materi "Algoritma Dasar" - 2 jam yang lalu
+            </div>
+            <div class="alert alert-info">
+                <i class="fas fa-star"></i> Mendapat nilai A pada kuis "Struktur Data" - 1 hari yang lalu
+            </div>
+            <div class="alert alert-info">
+                <i class="fas fa-trophy"></i> Mencapai target belajar mingguan - 3 hari yang lalu
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+// Dashboard Siswa JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    initializeDashboard();
+    setupAnimations();
+    startProgressAnimations();
+});
+
+function initializeDashboard() {
+    // Add loading animation to stats
+    const statCards = document.querySelectorAll('.stat-card');
+    statCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+
+    // Add loading animation to dashboard cards
+    const dashboardCards = document.querySelectorAll('.dashboard-card');
+    dashboardCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.8s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, 600 + (index * 150));
+    });
+}
+
+function setupAnimations() {
+    // Hover animations for subject items
+    const subjectItems = document.querySelectorAll('.subject-item');
+    subjectItems.forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateX(10px) scale(1.02)';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateX(0) scale(1)';
+        });
+    });
+
+    // Click animations for action buttons
+    const actionButtons = document.querySelectorAll('.action-btn');
+    actionButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 150);
+        });
+    });
+
+    // Notification hover effects
+    const notifications = document.querySelectorAll('.notification-item');
+    notifications.forEach(notif => {
+        notif.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = 'rgba(102, 126, 234, 0.1)';
+            this.style.borderRadius = '8px';
+            this.style.margin = '0 -1rem';
+            this.style.padding = '1rem';
+        });
+        
+        notif.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = 'transparent';
+            this.style.margin = '0';
+            this.style.padding = '1rem 0';
+        });
+    });
+}
+
+function startProgressAnimations() {
+    // Animate progress bars
+    const progressBars = document.querySelectorAll('.progress-fill');
+    progressBars.forEach((bar, index) => {
+        const width = bar.style.width;
+        bar.style.width = '0%';
+        setTimeout(() => {
+            bar.style.width = width;
+        }, 1000 + (index * 200));
+    });
+}
+
+function refreshDashboard() {
+    // Add refresh animation
+    const refreshBtn = document.querySelector('.dashboard-actions .btn');
+    const icon = refreshBtn.querySelector('i');
+    
+    // Rotate icon
+    icon.style.animation = 'spin 1s linear infinite';
+    
+    // Simulate refresh
+    setTimeout(() => {
+        icon.style.animation = '';
+        
+        // Show success notification
+        showNotification('Data berhasil diperbarui!', 'success');
+        
+        // Update some random stats (simulation)
+        updateRandomStats();
+    }, 1500);
+}
+
+function updateRandomStats() {
+    const progressStat = document.querySelector('.progress-stat .stat-number');
+    const completedStat = document.querySelector('.completed-stat .stat-number');
+    
+    if (progressStat) {
+        const currentProgress = parseInt(progressStat.textContent);
+        const newProgress = Math.min(100, currentProgress + Math.floor(Math.random() * 5));
+        animateNumber(progressStat, newProgress, '%');
+    }
+    
+    if (completedStat) {
+        const currentCompleted = parseInt(completedStat.textContent);
+        const newCompleted = currentCompleted + Math.floor(Math.random() * 3);
+        animateNumber(completedStat, newCompleted);
+    }
+}
+
+function animateNumber(element, targetValue, suffix = '') {
+    const startValue = parseInt(element.textContent) || 0;
+    const increment = (targetValue - startValue) / 20;
+    let currentValue = startValue;
+    
+    const animation = setInterval(() => {
+        currentValue += increment;
+        if ((increment > 0 && currentValue >= targetValue) || 
+            (increment < 0 && currentValue <= targetValue)) {
+            currentValue = targetValue;
+            clearInterval(animation);
+        }
+        element.textContent = Math.round(currentValue) + suffix;
+    }, 50);
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification-toast ${type}`;
+    
+    const colors = {
+        success: '#27ae60',
+        error: '#e74c3c',
+        warning: '#f39c12',
+        info: '#3498db'
+    };
+    
+    const icons = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-circle',
+        warning: 'fa-exclamation-triangle',
+        info: 'fa-info-circle'
+    };
+    
+    notification.innerHTML = `
+        <i class="fas ${icons[type]}"></i>
+        <span>${message}</span>
+    `;
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${colors[type]};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        font-weight: 500;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Auto remove
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Action functions
+function startLearning() {
+    showNotification('Memulai sesi pembelajaran...', 'info');
+    setTimeout(() => {
+        window.location.href = '/learning/start';
+    }, 1000);
+}
+
+function viewAssignments() {
+    showNotification('Membuka daftar tugas...', 'info');
+    setTimeout(() => {
+        window.location.href = '/assignments';
+    }, 1000);
+}
+
+function takeQuiz() {
+    showNotification('Mempersiapkan kuis...', 'info');
+    setTimeout(() => {
+        window.location.href = '/quiz/daily';
+    }, 1000);
+}
+
+function viewRecommendations() {
+    showNotification('Mengambil rekomendasi AI...', 'info');
+    setTimeout(() => {
+        window.location.href = '/ai/recommendations';
+    }, 1000);
+}
+
+// Add CSS animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+    
+    .stat-card {
+        animation: fadeInUp 0.6s ease forwards;
+    }
+    
+    .dashboard-card {
+        animation: fadeInUp 0.8s ease forwards;
+    }
+`;
+document.head.appendChild(style);
+
+// Auto refresh data every 5 minutes
+setInterval(function() {
+    const now = new Date().getMinutes();
+    if (now % 5 === 0) {
+        updateRandomStats();
+    }
+}, 60000);
+</script>
+{% endblock %}

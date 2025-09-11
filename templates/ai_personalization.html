@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}AI Personalisasi - LENTERAMU{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1><i class="fas fa-robot"></i> AI Personalisasi Konten</h1>
+    
+    <div class="card">
+        <h2>Rekomendasi Pembelajaran yang Dipersonalisasi</h2>
+        <p>Konten yang disesuaikan dengan gaya belajar dan preferensi Anda</p>
+    </div>
+
+    <div class="card">
+        <h3><i class="fas fa-lightbulb"></i> Rekomendasi untuk Anda</h3>
+        <div class="card-grid">
+            {% for rec in recommendations %}
+            <div class="feature-card">
+                {% if rec.type == 'Video' %}
+                    <i class="fas fa-play-circle" style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;"></i>
+                {% elif rec.type == 'Artikel' %}
+                    <i class="fas fa-file-alt" style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;"></i>
+                {% elif rec.type == 'Quiz' %}
+                    <i class="fas fa-question-circle" style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;"></i>
+                {% else %}
+                    <i class="fas fa-code" style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;"></i>
+                {% endif %}
+                
+                <h4>{{ rec.title }}</h4>
+                <p><strong>Tipe:</strong> {{ rec.type }}</p>
+                <p><strong>Durasi:</strong> {{ rec.duration }}</p>
+                
+                <div style="background: #e8f4fd; padding: 0.5rem; border-radius: 8px; margin: 1rem 0;">
+                    <strong style="color: #0066cc;">Match Score: {{ rec.match }}%</strong>
+                </div>
+                
+                <a href="#" class="btn">Mulai Belajar</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="card-grid">
+        <div class="card">
+            <h3><i class="fas fa-user-graduate"></i> Profil Pembelajaran Anda</h3>
+            <div style="margin: 1rem 0;">
+                <strong>Gaya Belajar:</strong> Visual & Praktik<br>
+                <strong>Kecepatan:</strong> Sedang<br>
+                <strong>Preferensi:</strong> Video Tutorial<br>
+                <strong>Waktu Optimal:</strong> 14:00 - 16:00
+            </div>
+            
+            <h4>Kekuatan:</h4>
+            <div style="margin: 0.5rem 0;">
+                <span style="background: #d4edda; padding: 0.3rem 0.8rem; border-radius: 15px; margin: 0.2rem; display: inline-block; color: #155724;">Pemecahan Masalah</span>
+                <span style="background: #d4edda; padding: 0.3rem 0.8rem; border-radius: 15px; margin: 0.2rem; display: inline-block; color: #155724;">Analisis Data</span>
+                <span style="background: #d4edda; padding: 0.3rem 0.8rem; border-radius: 15px; margin: 0.2rem; display: inline-block; color: #155724;">Coding</span>
+            </div>
+            
+            <h4>Area Pengembangan:</h4>
+            <div style="margin: 0.5rem 0;">
+                <span style="background: #fff3cd; padding: 0.3rem 0.8rem; border-radius: 15px; margin: 0.2rem; display: inline-block; color: #856404;">Teori Matematika</span>
+                <span style="background: #fff3cd; padding: 0.3rem 0.8rem; border-radius: 15px; margin: 0.2rem; display: inline-block; color: #856404;">Presentasi</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3><i class="fas fa-chart-pie"></i> Progress Mingguan</h3>
+            <canvas id="weeklyProgressChart" width="300" height="200"></canvas>
+            <div style="margin-top: 1rem;">
+                <div class="alert alert-success">
+                    <strong>Target Tercapai!</strong><br>
+                    Anda telah menyelesaikan 85% target mingguan
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3><i class="fas fa-cog"></i> Pengaturan Personalisasi</h3>
+        <div class="card-grid">
+            <div>
+                <h4>Preferensi Konten</h4>
+                <div class="form-group">
+                    <label>Tipe Konten Favorit:</label>
+                    <div style="margin: 0.5rem 0;">
+                        <label style="display: inline-block; margin-right: 1rem;">
+                            <input type="checkbox" checked> Video
+                        </label>
+                        <label style="display: inline-block; margin-right: 1rem;">
+                            <input type="checkbox"> Artikel
+                        </label>
+                        <label style="display: inline-block; margin-right: 1rem;">
+                            <input type="checkbox" checked> Praktik
+                        </label>
+                        <label style="display: inline-block;">
+                            <input type="checkbox"> Audio
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <h4>Tingkat Kesulitan</h4>
+                <div class="form-group">
+                    <label>Preferensi Kesulitan:</label>
+                    <select class="form-control">
+                        <option>Pemula</option>
+                        <option selected>Menengah</option>
+                        <option>Lanjut</option>
+                        <option>Expert</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+            <button class="btn">Simpan Pengaturan</button>
+            <button class="btn btn-secondary">Reset ke Default</button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('weeklyProgressChart');
+    if (ctx && typeof Chart !== 'undefined') {
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Selesai', 'Tersisa'],
+                datasets: [{
+                    data: [85, 15],
+                    backgroundColor: ['#667eea', '#e9ecef'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

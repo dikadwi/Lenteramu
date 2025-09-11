@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LENTERAMU{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    {% block additional_css %}{% endblock %}
+    
+    <style>
+        /* Enhanced Navigation Styling */
+        .navbar {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .logo a:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links > li > a {
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links > li > a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-links > li > a:hover::before {
+            left: 100%;
+        }
+
+        .nav-links > li > a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            min-width: 200px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li {
+            list-style: none;
+        }
+
+        .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 1.5rem;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .dropdown-menu a:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .dropdown-divider {
+            margin: 0.5rem 0;
+            border: none;
+            border-top: 1px solid #eee;
+        }
+
+        .mobile-toggle {
+            display: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Role-specific styling */
+        .navbar.student {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.95) 0%, rgba(155, 89, 182, 0.95) 100%);
+        }
+
+        .navbar.teacher {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+        }
+
+        .navbar.admin {
+            background: linear-gradient(135deg, rgba(231, 60, 126, 0.95) 0%, rgba(35, 166, 213, 0.95) 100%);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: inherit;
+                flex-direction: column;
+                padding: 1rem 0;
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px);
+                transition: all 0.3s ease;
+            }
+
+            .nav-links.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+
+            .nav-links > li {
+                width: 100%;
+            }
+
+            .nav-links > li > a {
+                justify-content: center;
+                padding: 1rem;
+            }
+
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
+                background: rgba(255, 255, 255, 0.1);
+                margin-top: 0.5rem;
+            }
+
+            .dropdown-menu a {
+                color: white;
+                justify-content: center;
+            }
+            
+            .footer {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 2rem 0 1rem 0;
+                margin-top: 3rem;
+                box-shadow: 0 -2px 20px rgba(0,0,0,0.08);
+            }
+            .footer .container {
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 0 2rem;
+            }
+            .footer-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 2rem;
+                margin-bottom: 1rem;
+            }
+            .footer-logo a {
+                color: white;
+                font-size: 1.3rem;
+                font-weight: 700;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .footer-links a {
+                color: white;
+                margin: 0 1rem;
+                text-decoration: none;
+                font-weight: 500;
+                transition: color 0.3s;
+            }
+            .footer-links a:hover {
+                color: #ffd700;
+            }
+            .footer-social a {
+                color: white;
+                margin: 0 0.5rem;
+                font-size: 1.2rem;
+                transition: color 0.3s;
+            }
+            .footer-social a:hover {
+                color: #ffd700;
+            }
+            .footer-bottom {
+                text-align: center;
+                font-size: 0.95rem;
+                opacity: 0.8;
+                margin-top: 0.5rem;
+            }
+            @media (max-width: 768px) {
+                .footer-content {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 1rem;
+                }
+                .footer .container {
+                    padding: 0 1rem;
+                }
+            }
+        }
+    </style>
+</head>
+<body>
+    {% if session.user_id %}
+    <nav class="navbar {% if session.user_role %}{{ session.user_role }}{% endif %}">
+        <div class="container">
+            <div class="logo">
+                <a href="{{ url_for('landing') }}">
+                    <i class="fas fa-graduation-cap"></i> LENTERAMU
+                </a>
+            </div>
+            
+            <div class="mobile-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            
+            <ul class="nav-links" id="navLinks">
+                <!-- <li><a href="{{ url_for('landing') }}"><i class="fas fa-home"></i> Beranda</a></li> -->
+                
+                {% if session.user_role == 'student' %}
+                <li><a href="{{ url_for('dashboard_siswa') }}"><i class="fas fa-user-graduate"></i> Dashboard</a></li>
+                <li><a href="/ai_personalization"><i class="fas fa-brain"></i> AI Personalisasi</a></li>
+                <li><a href="/analytics"><i class="fas fa-chart-line"></i> Analytics</a></li>
+                {% endif %}
+                
+                {% if session.user_role == 'teacher' %}
+                <li><a href="{{ url_for('teacher_workflow') }}"><i class="fas fa-chalkboard-teacher"></i> Dashboard</a></li>
+                <li><a href="/teacher/classes"><i class="fas fa-users"></i> Kelas Saya</a></li>
+                <li><a href="/analytics"><i class="fas fa-chart-line"></i> Analytics</a></li>
+                {% endif %}
+                
+                {% if session.user_role == 'admin' %}
+                <li><a href="{{ url_for('dashboard_admin') }}"><i class="fas fa-user-cog"></i> Dashboard</a></li>
+                <li><a href="/monitoring"><i class="fas fa-eye"></i> Monitoring</a></li>
+                <li><a href="/analytics"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                {% endif %}
+                
+                <li class="user-menu">
+                    <a href="#" class="dropdown-toggle" onclick="toggleDropdown(event)">
+                        <i class="fas fa-user-circle"></i> {{ session.user_name }} 
+                        <i class="fas fa-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu" id="dropdownMenu">
+                        <li><a href="/profile"><i class="fas fa-user-edit"></i> Edit Profile</a></li>
+                        <li><a href="/settings"><i class="fas fa-cog"></i> Pengaturan</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    {% endif %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="{{ url_for('landing') }}">
+                        <i class="fas fa-graduation-cap"></i> LENTERAMU
+                    </a>
+                </div>
+                <div class="footer-links">
+                    <a href="/about">Tentang</a>
+                    <a href="/help">Bantuan</a>
+                    <a href="/contact">Kontak</a>
+                </div>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2025 LENTERAMU. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dynamic-dashboard.js') }}"></script>
+    
+    <!-- Enhanced Navigation JavaScript -->
+    <script>
+        // Dropdown menu functionality
+        function toggleDropdown(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const dropdown = document.getElementById('dropdownMenu');
+            dropdown.classList.toggle('show');
+        }
+
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const mobileToggle = document.querySelector('.mobile-toggle i');
+            
+            navLinks.classList.toggle('active');
+            
+            // Toggle icon
+            if (navLinks.classList.contains('active')) {
+                mobileToggle.classList.remove('fa-bars');
+                mobileToggle.classList.add('fa-times');
+            } else {
+                mobileToggle.classList.remove('fa-times');
+                mobileToggle.classList.add('fa-bars');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdownMenu');
+            const userMenu = document.querySelector('.user-menu');
+            
+            if (dropdown && !userMenu.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Close mobile menu when clicking on a link
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const navLinksMenu = document.getElementById('navLinks');
+                    const mobileToggle = document.querySelector('.mobile-toggle i');
+                    
+                    if (navLinksMenu.classList.contains('active')) {
+                        navLinksMenu.classList.remove('active');
+                        mobileToggle.classList.remove('fa-times');
+                        mobileToggle.classList.add('fa-bars');
+                    }
+                });
+            });
+        });
+    </script>
+    
+    {% block additional_js %}{% endblock %}
+    
+    <!-- Add user role data for JavaScript -->
+    {% if session.user_role %}
+    <div data-user-role="{{ session.user_role }}" style="display: none;"></div>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,145 @@
+1.2 Tujuan Dokumen 
+Tujuan utama dari dokumen ini adalah untuk menyediakan panduan 
+komprehensif dalam pengembangan LENTERAMU. Dokumen ini 
+dirancang  untuk  mengakomodasi  kebutuhan  pendidikan  yang  lebih 
+inklusif dan adaptif, dengan memanfaatkan teknologi AI untuk 
+mempersonalisasi pengalaman belajar siswa sesuai dengan 
+kebutuhan, gaya belajar, dan potensi masing-masing individu. Secara 
+lebih rinci, tujuan dari dokumen ini adalah sebagai berikut: 
+1. Mengidentifikasi dan Menguraikan Desain Model AI 
+Dokumen ini bertujuan untuk menjelaskan model AI yang 
+digunakan  dalam  LENTERAMU.  Ini  mencakup  deskripsi  detail 
+tentang  teknik  dan  algoritma  AI  yang  diadopsi,  seperti  Natural 
+Language Processing (NLP), Content Recommendation, 
+Reinforcement Learning, dan Supervised Learning, serta 
+bagaimana model-model ini diintegrasikan ke dalam sistem 
+untuk memberikan pengalaman belajar yang disesuaikan. 
+2. Merancang Arsitektur LENTERAMU 
+Dokumen ini juga bertujuan untuk merancang arsitektur aplikasi 
+yang  mampu  mendukung  personalisasi  pembelajaran  secara 
+efektif. Arsitektur ini akan mencakup modul-modul utama 
+ 
+11 
+diantaranya  Modul  Analisis  Data  Siswa,  Modul  Personalisasi 
+Konten,  Modul  Umpan  Balik  Adaptif,  dan  Modul  Pemantauan 
+dan  Penilaian.  Setiap  modul  dirancang  untuk  berfungsi  secara 
+sinergis dalam menciptakan ekosistem pembelajaran yang 
+responsif dan dinamis, sesuai dengan kebutuhan setiap siswa. 
+3. Menyediakan Panduan Implementasi yang Terperinci 
+Dokumen ini berfungsi sebagai panduan bagi pengembang, 
+pendidik, dan pemangku kepentingan lainnya dalam 
+mengimplementasikan LENTERAMU di sekolah-sekolah. 
+Panduan  ini  mencakup  langkah-langkah  teknis  untuk  instalasi, 
+konfigurasi, dan pemeliharaan sistem, serta rekomendasi 
+mengenai infrastruktur teknologi yang diperlukan, seperti cloud 
+computing, penyimpanan data, dan keamanan sistem. 
+4. Mengembangkan Kerangka Evaluasi untuk Menilai Kinerja 
+Sistem 
+Tujuan  lain  dari  dokumen  ini  adalah  menyediakan  kerangka 
+evaluasi yang dapat digunakan untuk menilai efektivitas sistem 
+dalam meningkatkan keterlibatan dan motivasi siswa serta 
+mengoptimalkan potensi individu mereka. Kerangka ini 
+mencakup indikator keberhasilan, metode pengukuran, dan 
+teknik analisis data untuk menilai kinerja sistem secara 
+berkelanjutan. 
+5. Mendorong Pendidikan yang Lebih Inklusif dan Berbasis Data 
+Dengan tersusunnya dokumen ini, diharapkan dapat 
+mempromosikan pendekatan pendidikan yang lebih inklusif dan 
+berbasis  data,  yang  mampu  menjawab  tantangan-tantangan 
+pendidikan di era digital. Sistem ini tidak hanya akan mendukung 
+siswa dengan kebutuhan belajar yang beragam tetapi juga 
+menyediakan alat bantu bagi guru untuk mengoptimalkan 
+metode pengajaran yang lebih efektif. 
+6. Menjadi Acuan dalam Inovasi Pendidikan Berbasis Teknologi 
+Dokumen ini diharapkan menjadi acuan bagi institusi pendidikan 
+lain  yang  ingin  mengadopsi  teknologi  AI  untuk  personalisasi 
+pembelajaran. Dengan menyediakan model desain dan 
+ 
+12 
+arsitektur yang sudah teruji, dokumen ini dapat menjadi 
+panduan dalam mengimplementasikan inovasi serupa di 
+berbagai konteks pendidikan. 
+ 
+Selanjutnya  dokumen  ini  tidak  hanya  bertindak  sebagai  cetak  biru 
+teknis, tetapi juga sebagai sumber informasi strategis yang 
+mendukung transformasi pendidikan menuju pendekatan yang lebih 
+modern, adaptif, dan berpusat pada siswa. Dengan kata lain 
+dokumen ini dapat digunakan untuk memastikan bahwa setiap 
+langkah  dalam  pengembangan  dan  penerapan  sistem  cerdas  ini 
+dirancang  dengan  mempertimbangkan  kebutuhan  pengguna  akhir 
+dan infrastruktur teknologi yang ada. 
+ 
+1.3 Ruang Lingkup 
+Dokumen ini mencakup perancangan dan pengembangan 
+LENTERAMU  yang  dirancang  untuk  diimplementasikan  di  sekolah-
+sekolah di lingkungan Yayasan Asih Putera Cimahi, Jawa Barat. Ruang 
+lingkup dokumen ini meliputi berbagai aspek teknis dan konseptual 
+yang  diperlukan  untuk  memastikan  sistem  yang  diusulkan  dapat 
+berfungsi secara efektif dalam menciptakan pengalaman belajar yang 
+lebih personal dan adaptif. Ruang lingkup dokumen ini meliputi: 
+1. Desain Model AI untuk Personalisasi Pembelajaran 
+Dokumen ini akan menguraikan model-model AI yang digunakan 
+untuk  mendukung  personalisasi  pembelajaran.  Ini  mencakup 
+algoritma-algoritma AI seperti Natural Language Processing 
+(NLP) untuk analisis teks dan profil siswa, Content 
+Recommendation untuk rekomendasi materi belajar, 
+Reinforcement Learning untuk adaptasi umpan balik 
+berdasarkan kinerja siswa, serta teknik Supervised Learning 
+untuk klasifikasi dan evaluasi performa siswa. 
+2. Arsitektur Aplikasi dan Modul Utama 
+Dokumen  ini  akan  menjelaskan  secara  rinci  arsitektur  aplikasi 
+yang  dirancang  untuk  mendukung  sistem  pembelajaran  yang 
+ 
+13 
+cerdas  dan  adaptif.  Arsitektur  ini  terdiri  dari  beberapa  modul 
+utama: 
+a) Modul Analisis Data Siswa 
+Mengumpulkan dan menganalisis data perilaku dan 
+preferensi siswa. 
+b) Modul Personalisasi Konten 
+Memberikan rekomendasi materi belajar yang 
+disesuaikan dengan karakteristik dan kebutuhan siswa. 
+c) Modul Umpan Balik Adaptif 
+Menyediakan umpan balik yang dinamis berdasarkan 
+performa siswa untuk mendukung pembelajaran 
+berkelanjutan. 
+d) Modul Pemantauan dan Penilaian 
+Mengevaluasi kinerja siswa dan memberikan saran 
+pengembangan lebih lanjut berdasarkan analisis data 
+e) Modul Pembuatan Laporan dan Analisis Visual 
+Menyediakan laporan mencakup analisis performa siswa, 
+rekomendasi  pengajaran,  dan  wawasan  yang  dihasilkan 
+oleh sistem. 
+f) Modul Integrasi dan Pengelolaan Data 
+Mengelola  pertukaran  data  antar  sistem  dan  menjaga 
+konsistensi data yang terintegrasi dengan berbagai 
+platform  dan  sistem  pembelajaran  lain  yang  sudah  ada 
+(LMS, SIS). 
+3. Kebutuhan Teknologi dan Infrastruktur 
+Dokumen ini akan mencakup deskripsi tentang kebutuhan 
+teknologi dan infrastruktur yang diperlukan untuk 
+mengimplementasikan sistem ini. Ini termasuk kebutuhan 
+perangkat keras dan perangkat lunak, integrasi cloud computing, 
+pengelolaan big data, serta protokol keamanan untuk 
+melindungi data siswa dan memastikan privasi. 
+4. Panduan Implementasi dan Pengujian Sistem 
+Dokumen ini akan menyediakan panduan langkah demi langkah 
+untuk mengimplementasikan sistem di sekolah. Selain itu, ruang 
+ 
+14 
+lingkup juga mencakup metodologi pengujian sistem untuk 
+memastikan  bahwa  sistem  berfungsi  sesuai  dengan  spesifikasi 
+dan tujuan yang diharapkan. 
+5. Metode Evaluasi dan Pemantauan Kinerja Sistem 
+Untuk memastikan bahwa sistem ini berfungsi dengan baik dan 
+mencapai tujuan yang telah ditetapkan, dokumen ini juga akan 
+mencakup metode evaluasi dan pemantauan kinerja sistem. Ini 
+melibatkan  penilaian  keberhasilan  sistem  dalam  meningkatkan 
+keterlibatan dan motivasi siswa, serta bagaimana sistem dapat 
+diperbaiki  secara  berkelanjutan  berdasarkan  umpan  balik  dari 
+pengguna. 
+6. Batasan dan Asumsi Pengembangan Sistem 
+Dokumen  ini  akan  menyebutkan  batasan-batasan  sistem  yang 
+diusulkan, termasuk cakupan fungsionalitas yang tersedia pada 
+tahap awal implementasi, serta asumsi-asumsi yang digunakan 
+dalam proses desain dan pengembangan.

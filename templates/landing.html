@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LENTERAMU - Platform Pembelajaran Adaptif Berbasis AI</title>
+    <meta name="description" content="LENTERAMU adalah platform pembelajaran adaptif yang menggunakan kecerdasan buatan untuk memberikan pengalaman belajar yang dipersonalisasi untuk siswa, guru, dan administrator.">
+    <meta name="keywords" content="pembelajaran adaptif, AI, kecerdasan buatan, pendidikan, e-learning, personalisasi pembelajaran">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="landing-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>LENTERAMU</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#beranda">Beranda</a></li>
+                <li><a href="#fitur">Fitur</a></li>
+                <li><a href="#tentang">Tentang</a></li>
+                <li><a href="#kontak">Kontak</a></li>
+                <li><a href="/login" class="btn-login">Login</a></li>
+            </ul>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="beranda" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        Platform Pembelajaran <span class="gradient-text">Adaptif</span> 
+                        Berbasis <span class="gradient-text">AI</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        LENTERAMU menggunakan kecerdasan buatan untuk memberikan pengalaman belajar yang dipersonalisasi, 
+                        membantu siswa mencapai potensi maksimal mereka dengan cara yang paling efektif.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="/dashboard" class="btn btn-primary">
+                            <i class="fas fa-rocket"></i> Mulai Belajar
+                        </a>
+                        <a href="#fitur" class="btn btn-secondary">
+                            <i class="fas fa-play"></i> Lihat Demo
+                        </a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">1,250+</span>
+                            <span class="stat-label">Siswa Aktif</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">87</span>
+                            <span class="stat-label">Guru Partner</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">95%</span>
+                            <span class="stat-label">Tingkat Kepuasan</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-image">
+                        <div class="floating-card card-1">
+                            <i class="fas fa-brain"></i>
+                            <span>AI Learning</span>
+                        </div>
+                        <div class="floating-card card-2">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Real-time Analytics</span>
+                        </div>
+                        <div class="floating-card card-3">
+                            <i class="fas fa-user-graduate"></i>
+                            <span>Personalized Learning</span>
+                        </div>
+                        <div class="main-visual">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="fitur" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Fitur Unggulan Platform</h2>
+                <p>Teknologi AI terdepan untuk pengalaman pembelajaran yang tak terlupakan</p>
+            </div>
+            
+            <div class="features-grid">
+                <!-- AI Learning -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI-Powered Learning</h3>
+                    <p>Sistem pembelajaran yang didukung kecerdasan buatan untuk memberikan konten yang disesuaikan dengan gaya belajar setiap siswa.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Rekomendasi konten personal</li>
+                        <li><i class="fas fa-check"></i> Adaptive difficulty adjustment</li>
+                        <li><i class="fas fa-check"></i> Predictive learning analytics</li>
+                    </ul>
+                </div>
+
+                <!-- Real-time Analytics -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Real-time Analytics</h3>
+                    <p>Dashboard analitik komprehensif yang memberikan insight mendalam tentang progress pembelajaran dan performa siswa.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Progress tracking real-time</li>
+                        <li><i class="fas fa-check"></i> Performance insights</li>
+                        <li><i class="fas fa-check"></i> Detailed learning reports</li>
+                    </ul>
+                </div>
+
+                <!-- Adaptive Feedback -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Adaptive Feedback</h3>
+                    <p>Sistem feedback yang cerdas dan adaptif yang memberikan umpan balik personal untuk membantu siswa belajar lebih efektif.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Personalized feedback</li>
+                        <li><i class="fas fa-check"></i> Intelligent tutoring system</li>
+                        <li><i class="fas fa-check"></i> Motivational messaging</li>
+                    </ul>
+                </div>
+
+                <!-- Multi-Role Platform -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Multi-Role Platform</h3>
+                    <p>Platform yang mendukung berbagai peran pengguna dengan interface dan fitur yang disesuaikan untuk setiap kebutuhan.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Student dashboard</li>
+                        <li><i class="fas fa-check"></i> Teacher management tools</li>
+                        <li><i class="fas fa-check"></i> Admin control panel</li>
+                    </ul>
+                </div>
+
+                <!-- Modern Interface -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Modern Interface</h3>
+                    <p>Desain yang modern dan responsif dengan user experience yang intuitif untuk semua perangkat dan platform.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Responsive design</li>
+                        <li><i class="fas fa-check"></i> Intuitive navigation</li>
+                        <li><i class="fas fa-check"></i> Cross-platform compatibility</li>
+                    </ul>
+                </div>
+
+                <!-- Security & Privacy -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Security & Privacy</h3>
+                    <p>Keamanan data dan privasi pengguna adalah prioritas utama dengan enkripsi dan perlindungan data tingkat enterprise.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> End-to-end encryption</li>
+                        <li><i class="fas fa-check"></i> GDPR compliant</li>
+                        <li><i class="fas fa-check"></i> Secure authentication</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Roles Section -->
+    <section class="user-roles">
+        <div class="container">
+            <div class="section-header">
+                <h2>Dirancang untuk Semua Pengguna</h2>
+                <p>Platform yang mengakomodasi kebutuhan berbagai peran dalam ekosistem pendidikan</p>
+            </div>
+            
+            <div class="roles-grid">
+                <!-- Student Role -->
+                <div class="role-card">
+                    <div class="role-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Untuk Siswa</h3>
+                    <p>Dapatkan pengalaman belajar yang dipersonalisasi dengan AI yang memahami gaya belajar Anda.</p>
+                    <ul class="role-features">
+                        <li>Personal learning dashboard</li>
+                        <li>AI-powered recommendations</li>
+                        <li>Progress tracking & analytics</li>
+                        <li>Interactive learning modules</li>
+                        <li>Achievement & gamification</li>
+                    </ul>
+                    <a href="/dashboard/siswa" class="btn btn-outline">Explore Student Features</a>
+                </div>
+
+                <!-- Teacher Role -->
+                <div class="role-card">
+                    <div class="role-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3>Untuk Guru</h3>
+                    <p>Kelola kelas dengan efisien dan dapatkan insight mendalam tentang performa siswa Anda.</p>
+                    <ul class="role-features">
+                        <li>Class management tools</li>
+                        <li>Student progress monitoring</li>
+                        <li>Content creation & curation</li>
+                        <li>Assessment & grading tools</li>
+                        <li>Teaching analytics & insights</li>
+                    </ul>
+                    <a href="/teacher/workflow" class="btn btn-outline">Explore Teacher Tools</a>
+                </div>
+
+                <!-- Admin Role -->
+                <div class="role-card">
+                    <div class="role-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3>Untuk Administrator</h3>
+                    <p>Kontrol penuh terhadap sistem dengan monitoring real-time dan manajemen yang komprehensif.</p>
+                    <ul class="role-features">
+                        <li>System health monitoring</li>
+                        <li>User management & access control</li>
+                        <li>Platform configuration</li>
+                        <li>Analytics & reporting</li>
+                        <li>Security & compliance tools</li>
+                    </ul>
+                    <a href="/dashboard/admin" class="btn btn-outline">Explore Admin Panel</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="tentang" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Tentang LENTERAMU</h2>
+                    <p class="about-subtitle">Learning Enhancement Through Adaptive Intelligence for Meaningful Understanding</p>
+                    <p>
+                        LENTERAMU adalah platform pembelajaran adaptif yang revolusioner, mengintegrasikan kecerdasan buatan 
+                        untuk menciptakan pengalaman belajar yang benar-benar dipersonalisasi. Kami percaya bahwa setiap siswa 
+                        memiliki cara belajar yang unik, dan teknologi AI kami membantu mengidentifikasi dan mengoptimalkan 
+                        metode pembelajaran yang paling efektif untuk setiap individu.
+                    </p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <h4>Inovasi Pendidikan</h4>
+                                <p>Menggunakan teknologi AI terdepan untuk merevolusi cara belajar dan mengajar</p>
+                            </div>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-users"></i>
+                            <div>
+                                <h4>Komunitas Belajar</h4>
+                                <p>Membangun ekosistem pembelajaran yang kolaboratif dan supportive</p>
+                            </div>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-target"></i>
+                            <div>
+                                <h4>Hasil Terukur</h4>
+                                <p>Memberikan hasil pembelajaran yang terukur dan dapat dianalisis secara mendalam</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="about-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">98%</div>
+                            <div class="stat-label">Improvement Rate</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">25+</div>
+                            <div class="stat-label">School Partners</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">50K+</div>
+                            <div class="stat-label">Learning Hours</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">24/7</div>
+                            <div class="stat-label">AI Support</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Siap Memulai Perjalanan Pembelajaran Anda?</h2>
+                <p>Bergabunglah dengan ribuan siswa dan guru yang telah merasakan pengalaman belajar yang dipersonalisasi dengan AI</p>
+                <div class="cta-buttons">
+                    <a href="/dashboard" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i> Mulai Sekarang
+                    </a>
+                    <a href="#kontak" class="btn btn-secondary">
+                        <i class="fas fa-envelope"></i> Hubungi Kami
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="kontak" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>LENTERAMU</span>
+                    </div>
+                    <p>Platform pembelajaran adaptif berbasis AI untuk masa depan pendidikan yang lebih baik.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="/dashboard/siswa">Dashboard Siswa</a></li>
+                        <li><a href="/teacher/workflow">Tools Guru</a></li>
+                        <li><a href="/dashboard/admin">Admin Panel</a></li>
+                        <li><a href="/analytics/student">Analytics</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Fitur</h4>
+                    <ul>
+                        <li><a href="#fitur">AI Learning</a></li>
+                        <li><a href="#fitur">Adaptive Feedback</a></li>
+                        <li><a href="#fitur">Real-time Analytics</a></li>
+                        <li><a href="#fitur">Multi-Role Support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Kontak</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contact@lenteramu.id</li>
+                        <li><i class="fas fa-phone"></i> +62 21 1234 5678</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Jakarta, Indonesia</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 LENTERAMU Platform. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/landing.js') }}"></script>
+</body>
+</html>

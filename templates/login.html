@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - LENTERAMU</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-container">
+        <!-- Background Elements -->
+        <div class="background-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+        
+        <!-- Back to Landing -->
+        <a href="/" class="back-to-landing">
+            <i class="fas fa-arrow-left"></i> Kembali ke Beranda
+        </a>
+        
+        <!-- Login Card -->
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>LENTERAMU</span>
+                </div>
+                <h1>Selamat Datang Kembali</h1>
+                <p>Masuk ke akun Anda untuk melanjutkan pembelajaran</p>
+            </div>
+            
+            <form class="login-form" action="{{ url_for('login') }}" method="POST">
+                <!-- Show error message if exists -->
+                {% if error %}
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ error }}
+                </div>
+                {% endif %}
+                
+                <div class="form-group">
+                    <label for="username">Username atau Email</label>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" name="username" required 
+                               placeholder="Masukkan username atau email"
+                               autocomplete="username">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" required 
+                               placeholder="Masukkan password"
+                               autocomplete="current-password">
+                        <button type="button" class="toggle-password" tabindex="-1">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="role">Masuk Sebagai</label>
+                    <div class="input-group">
+                        <i class="fas fa-user-tag"></i>
+                        <select id="role" name="role" required>
+                            <option value="">Pilih Role</option>
+                            <option value="student">Siswa</option>
+                            <option value="teacher">Guru</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-options">
+                    <label class="checkbox-container">
+                        <input type="checkbox" name="remember_me">
+                        <span class="checkmark"></span>
+                        Ingat saya
+                    </label>
+                    <a href="/forgot-password" class="forgot-password">Lupa password?</a>
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <span>Masuk</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <p>Belum memiliki akun? <a href="/register">Daftar sekarang</a></p>
+            </div>
+            
+            <!-- Demo Accounts -->
+            <div class="demo-section">
+                <h3>Demo Accounts</h3>
+                <div class="demo-accounts">
+                    <div class="demo-account" data-username="demo_student" data-password="demo123" data-role="student">
+                        <i class="fas fa-user-graduate"></i>
+                        <span>Demo Siswa</span>
+                    </div>
+                    <div class="demo-account" data-username="demo_teacher" data-password="demo123" data-role="teacher">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <span>Demo Guru</span>
+                    </div>
+                    <div class="demo-account" data-username="demo_admin" data-password="demo123" data-role="admin">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Demo Admin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Features Preview -->
+        <div class="features-preview">
+            <h3>Fitur Platform</h3>
+            <div class="feature-items">
+                <div class="feature-item">
+                    <i class="fas fa-brain"></i>
+                    <span>AI-Powered Learning</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Real-time Analytics</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Adaptive Feedback</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-users"></i>
+                    <span>Multi-Role Platform</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

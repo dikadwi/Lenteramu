@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+
+{% block title %}Student Workflow - LENTERAMU{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1><i class="fas fa-user-graduate"></i> Alur Kerja Siswa</h1>
+    
+    <div class="card">
+        <h2>Selamat datang, {{ student.user.full_name }}!</h2>
+        <p><strong>ID Siswa:</strong> {{ student.student_id }} | <strong>Kelas:</strong> {{ student.grade_level }}</p>
+        <p><strong>Gaya Belajar:</strong> {{ student.learning_style.title() }} | <strong>Kecepatan:</strong> {{ student.learning_pace.title() }}</p>
+    </div>
+
+    <!-- Progress Overview -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">{{ progress_summary.total_courses }}</div>
+            <div class="stat-label">Total Kursus</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ progress_summary.completed }}</div>
+            <div class="stat-label">Selesai</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ progress_summary.in_progress }}</div>
+            <div class="stat-label">Sedang Berjalan</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">{{ progress_summary.not_started }}</div>
+            <div class="stat-label">Belum Dimulai</div>
+        </div>
+    </div>
+
+    <!-- Student Workflow Steps -->
+    <div class="card">
+        <h3><i class="fas fa-route"></i> Alur Pembelajaran Anda</h3>
+        <div class="workflow-steps">
+            <div class="step completed">
+                <div class="step-icon"><i class="fas fa-sign-in-alt"></i></div>
+                <div class="step-content">
+                    <h4>1. Login & Dashboard</h4>
+                    <p>Akses dashboard pribadi dan lihat rekomendasi pembelajaran</p>
+                    <span class="status-badge success">✓ Selesai</span>
+                </div>
+            </div>
+            
+            <div class="step active">
+                <div class="step-icon"><i class="fas fa-book-open"></i></div>
+                <div class="step-content">
+                    <h4>2. Akses Materi Pembelajaran</h4>
+                    <p>Pelajari konten yang dipersonalisasi sesuai gaya belajar Anda</p>
+                    <span class="status-badge active">🔄 Aktif</span>
+                </div>
+            </div>
+            
+            <div class="step pending">
+                <div class="step-icon"><i class="fas fa-tasks"></i></div>
+                <div class="step-content">
+                    <h4>3. Ikuti Evaluasi</h4>
+                    <p>Kerjakan kuis dan tugas untuk mengukur pemahaman</p>
+                    <span class="status-badge pending">⏳ Menunggu</span>
+                </div>
+            </div>
+            
+            <div class="step pending">
+                <div class="step-icon"><i class="fas fa-comments"></i></div>
+                <div class="step-content">
+                    <h4>4. Terima Umpan Balik</h4>
+                    <p>Dapatkan feedback adaptif dari sistem AI</p>
+                    <span class="status-badge pending">⏳ Menunggu</span>
+                </div>
+            </div>
+            
+            <div class="step pending">
+                <div class="step-icon"><i class="fas fa-lightbulb"></i></div>
+                <div class="step-content">
+                    <h4>5. Ikuti Rekomendasi</h4>
+                    <p>Terapkan saran pembelajaran untuk perbaikan</p>
+                    <span class="status-badge pending">⏳ Menunggu</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Recommendations -->
+    <div class="card">
+        <h3><i class="fas fa-robot"></i> Rekomendasi AI untuk Anda</h3>
+        {% if ai_recommendations %}
+            <div class="recommendations-grid">
+                {% for rec in ai_recommendations %}
+                <div class="recommendation-card">
+                    {% if rec.type == 'remedial' %}
+                        <i class="fas fa-redo recommendation-icon remedial"></i>
+                    {% elif rec.type == 'motivation' %}
+                        <i class="fas fa-battery-full recommendation-icon motivation"></i>
+                    {% else %}
+                        <i class="fas fa-star recommendation-icon content"></i>
+                    {% endif %}
+                    
+                    <h4>{{ rec.title }}</h4>
+                    <p>{{ rec.reason }}</p>
+                    <button class="btn btn-sm">Mulai Sekarang</button>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                Terus belajar untuk mendapatkan rekomendasi AI yang dipersonalisasi!
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Recent Activities -->
+    <div class="card">
+        <h3><i class="fas fa-history"></i> Aktivitas Terbaru</h3>
+        {% if recent_activities %}
+            <div class="activity-timeline">
+                {% for activity in recent_activities %}
+                <div class="activity-item">
+                    <div class="activity-time">{{ activity.created_at }}</div>
+                    <div class="activity-content">
+                        <strong>{{ activity.activity_type.replace('_', ' ').title() }}</strong>
+                        {% if activity.score %}
+                            - Skor: {{ activity.score }}
+                        {% endif %}
+                        {% if activity.completed %}
+                            <span class="status-badge success">✓ Selesai</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Belum ada aktivitas pembelajaran</p>
+        {% endif %}
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card">
+        <h3><i class="fas fa-bolt"></i> Aksi Cepat</h3>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button class="btn" onclick="startLearning()">
+                <i class="fas fa-play"></i> Mulai Belajar
+            </button>
+            <button class="btn btn-secondary" onclick="takeAssessment()">
+                <i class="fas fa-clipboard-check"></i> Ikuti Kuis
+            </button>
+            <button class="btn btn-secondary" onclick="viewProgress()">
+                <i class="fas fa-chart-line"></i> Lihat Progress
+            </button>
+            <button class="btn btn-secondary" onclick="requestHelp()">
+                <i class="fas fa-question-circle"></i> Minta Bantuan
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+.workflow-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 10px;
+    border-left: 4px solid #ddd;
+}
+
+.step.completed {
+    background: #d4edda;
+    border-left-color: #28a745;
+}
+
+.step.active {
+    background: #cce7ff;
+    border-left-color: #007bff;
+}
+
+.step.pending {
+    background: #f8f9fa;
+    border-left-color: #ddd;
+}
+
+.step-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    background: white;
+    font-size: 1.2rem;
+}
+
+.step-content h4 {
+    margin: 0 0 0.5rem 0;
+}
+
+.step-content p {
+    margin: 0 0 0.5rem 0;
+    color: #666;
+}
+
+.status-badge {
+    padding: 0.2rem 0.5rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.status-badge.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.active {
+    background: #cce7ff;
+    color: #004085;
+}
+
+.status-badge.pending {
+    background: #f8f9fa;
+    color: #6c757d;
+}
+
+.recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.recommendation-card {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.recommendation-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.recommendation-icon.remedial {
+    color: #dc3545;
+}
+
+.recommendation-icon.motivation {
+    color: #ffc107;
+}
+
+.recommendation-icon.content {
+    color: #28a745;
+}
+
+.activity-timeline {
+    margin-top: 1rem;
+}
+
+.activity-item {
+    display: flex;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.activity-time {
+    width: 150px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.activity-content {
+    flex: 1;
+}
+</style>
+
+<script>
+function startLearning() {
+    window.location.href = '/ai/personalization';
+}
+
+function takeAssessment() {
+    showToast('Fitur assessment akan segera tersedia!', 'info');
+}
+
+function viewProgress() {
+    window.location.href = '/reporting/report';
+}
+
+function requestHelp() {
+    showToast('Tim support akan segera menghubungi Anda!', 'info');
+}
+
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type}`;
+    toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
+    toast.style.position = 'fixed';
+    toast.style.top = '20px';
+    toast.style.right = '20px';
+    toast.style.zIndex = '10000';
+    toast.style.minWidth = '300px';
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        document.body.removeChild(toast);
+    }, 3000);
+}
+</script>
+{% endblock %}
