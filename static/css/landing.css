@@ -25,6 +25,7 @@ body {
 }
 
 /* Navigation */
+
 .landing-nav {
     position: fixed;
     top: 0;
@@ -35,12 +36,13 @@ body {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     z-index: 1000;
     transition: all 0.3s ease;
+    padding: 0.3rem 0; /* Reduce vertical space */
 }
 
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 1rem 2rem;
+    padding: 0.5rem 1.2rem; /* Reduce vertical and horizontal padding */
     display: flex;
     justify-content: space-between;
     align-items: center;

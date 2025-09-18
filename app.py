@@ -1,18 +1,40 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from datetime import datetime
-import json
+from ai.adaptive_feedback import create_adaptive_feedback_system
+from ai.learning_process import create_ai_learning_process
+from models import db, User, StudentProfile, TeacherProfile, Subject, Course, LearningActivity, StudentProgress, AIRecommendation, SystemMetrics, UserFeedback
 import os
+import json
+from datetime import datetime
+from flask_migrate import Migrate
+from routes.admin import admin_bp
+from routes.siswa import siswa_bp
+from routes.guru import guru_bp
+from routes.admin_features import admin_features_bp
+from routes.guru_features import guru_features_bp
+from routes.siswa_features import siswa_features_bp
 
 # Import models
-from models import db, User, StudentProfile, TeacherProfile, Subject, Course, LearningActivity, StudentProgress, AIRecommendation, SystemMetrics, UserFeedback
-
 # Import AI modules
-from ai.learning_process import create_ai_learning_process
-from ai.adaptive_feedback import create_adaptive_feedback_system
-
 app = Flask(__name__)
+
+# Cara Kerja routes (must be after app is defined)
+
+
+# Cara Kerja routes (now use subfolders for each role)
+@app.route('/cara_kerja/siswa')
+def cara_kerja_siswa():
+    return render_template('cara_kerja/siswa.html')
+
+
+@app.route('/cara_kerja/guru')
+def cara_kerja_guru():
+    return render_template('cara_kerja/guru.html')
+
+
+@app.route('/cara_kerja/admin')
+def cara_kerja_admin():
+    return render_template('cara_kerja/admin.html')
+
 
 # Database Configuration
 app.config['SECRET_KEY'] = 'lenteramu-secret-key-2024'
@@ -35,188 +57,20 @@ adaptive_feedback_system = create_adaptive_feedback_system()
 # Session management
 
 
-def get_user_data(user_id=None, role=None):
-    """Get user data based on session or parameters"""
-    if not user_id:
-        user_id = session.get('user_id')
-    if not role:
-        role = session.get('user_role')
-
-    # Mock data untuk demo yang lebih dinamis
-    mock_users = {
-        'student': {
-            'id': 1,
-            'name': 'Ahmad Rizki Pratama',
-            'email': 'ahmad.rizki@student.lenteramu.id',
-            'avatar': '/static/images/avatar-student.png',
-            'class': 'XII IPA 1',
-            'student_id': 'STD2024001',
-            'join_date': '2024-01-15'
-        },
-        'teacher': {
-            'id': 2,
-            'name': 'Dr. Siti Nurhaliza',
-            'email': 'siti.nurhaliza@teacher.lenteramu.id',
-            'avatar': '/static/images/avatar-teacher.png',
-            'subject': 'Matematika',
-            'employee_id': 'TCH2024001',
-            'join_date': '2020-08-01'
-        },
-        'admin': {
-            'id': 3,
-            'name': 'Budi Santoso',
-            'email': 'budi.santoso@admin.lenteramu.id',
-            'avatar': '/static/images/avatar-admin.png',
-            'department': 'IT Administration',
-            'employee_id': 'ADM2024001',
-            'join_date': '2019-03-15'
-        }
-    }
-
-    return mock_users.get(role, {})
-
-
-def get_dynamic_dashboard_data(role):
-    """Get dynamic dashboard data based on role"""
-    import random
-    from datetime import datetime, timedelta
-
-    base_data = {
-        'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-        'notifications': [],
-        'recent_activities': [],
-        'quick_actions': []
-    }
-
-    if role == 'student':
-        base_data.update({
-            'progress': random.randint(70, 95),
-            'completed_courses': random.randint(8, 15),
-            'pending_tasks': random.randint(2, 8),
-            'average_grade': random.choice(['A', 'A-', 'B+', 'B']),
-            'learning_streak': random.randint(5, 30),
-            'total_study_hours': random.randint(45, 120),
-            'subjects': [
-                {'name': 'Matematika', 'progress': random.randint(
-                    70, 100), 'grade': 'A'},
-                {'name': 'Fisika', 'progress': random.randint(
-                    60, 95), 'grade': 'B+'},
-                {'name': 'Kimia', 'progress': random.randint(
-                    65, 90), 'grade': 'A-'},
-                {'name': 'Biologi', 'progress': random.randint(
-                    75, 100), 'grade': 'A'},
-                {'name': 'Bahasa Indonesia',
-                    'progress': random.randint(80, 100), 'grade': 'A'},
-            ],
-            'upcoming_exams': [
-                {'subject': 'Matematika', 'date': '2025-09-10',
-                    'type': 'Ujian Tengah Semester'},
-                {'subject': 'Fisika', 'date': '2025-09-12', 'type': 'Quiz Mingguan'},
-                {'subject': 'Kimia', 'date': '2025-09-15', 'type': 'Praktikum'},
-            ],
-            'notifications': [
-                {'type': 'assignment', 'message': 'Tugas Matematika: Integral batas akhir besok',
-                    'time': '2 jam lalu'},
-                {'type': 'grade', 'message': 'Nilai Quiz Fisika telah keluar: A-',
-                    'time': '5 jam lalu'},
-                {'type': 'announcement', 'message': 'Pengumuman: Libur nasional 17 Agustus',
-                    'time': '1 hari lalu'},
-            ]
-        })
-
-    elif role == 'teacher':
-        base_data.update({
-            'total_students': random.randint(120, 180),
-            'total_classes': random.randint(8, 12),
-            'pending_grading': random.randint(15, 45),
-            'average_class_performance': random.randint(75, 90),
-            'classes': [
-                {'name': 'XII IPA 1', 'students': 32,
-                    'avg_score': random.randint(80, 95)},
-                {'name': 'XII IPA 2', 'students': 30,
-                    'avg_score': random.randint(75, 90)},
-                {'name': 'XI IPA 1', 'students': 35,
-                    'avg_score': random.randint(70, 85)},
-                {'name': 'XI IPA 2', 'students': 33,
-                    'avg_score': random.randint(75, 88)},
-            ],
-            'recent_assignments': [
-                {'class': 'XII IPA 1', 'title': 'Integral Tentu',
-                    'submitted': 28, 'total': 32},
-                {'class': 'XII IPA 2', 'title': 'Fungsi Trigonometri',
-                    'submitted': 25, 'total': 30},
-                {'class': 'XI IPA 1', 'title': 'Limit Fungsi',
-                    'submitted': 30, 'total': 35},
-            ],
-            'schedule_today': [
-                {'time': '07:00-08:30', 'class': 'XII IPA 1', 'subject': 'Matematika'},
-                {'time': '08:30-10:00', 'class': 'XI IPA 2', 'subject': 'Matematika'},
-                {'time': '10:30-12:00', 'class': 'XII IPA 2', 'subject': 'Matematika'},
-            ],
-            'notifications': [
-                {'type': 'assignment', 'message': '15 tugas menunggu penilaian dari XII IPA 1',
-                    'time': '1 jam lalu'},
-                {'type': 'meeting', 'message': 'Rapat koordinasi guru pukul 14:00',
-                    'time': '3 jam lalu'},
-                {'type': 'system', 'message': 'Sistem penilaian telah diperbarui',
-                    'time': '1 hari lalu'},
-            ]
-        })
-
-    elif role == 'admin':
-        base_data.update({
-            'total_users': random.randint(800, 1200),
-            'total_teachers': random.randint(45, 65),
-            'total_students': random.randint(750, 1100),
-            'system_uptime': '99.8%',
-            'server_status': 'Online',
-            'database_size': f"{random.randint(150, 250)} MB",
-            'daily_active_users': random.randint(400, 800),
-            'user_stats': [
-                {'role': 'Students', 'count': random.randint(
-                    750, 1100), 'active': random.randint(400, 600)},
-                {'role': 'Teachers', 'count': random.randint(
-                    45, 65), 'active': random.randint(30, 50)},
-                {'role': 'Admins', 'count': random.randint(
-                    3, 8), 'active': random.randint(2, 5)},
-            ],
-            'system_metrics': {
-                'cpu_usage': random.randint(20, 60),
-                'memory_usage': random.randint(40, 75),
-                'disk_usage': random.randint(30, 70),
-                'network_traffic': f"{random.randint(50, 200)} MB/h"
-            },
-            'recent_logs': [
-                {'type': 'login', 'message': 'User ahmad.rizki logged in successfully',
-                    'time': '5 menit lalu'},
-                {'type': 'system', 'message': 'Database backup completed',
-                    'time': '1 jam lalu'},
-                {'type': 'error', 'message': 'Failed login attempt from 192.168.1.100',
-                    'time': '2 jam lalu'},
-            ],
-            'notifications': [
-                {'type': 'system', 'message': 'Server maintenance dijadwalkan Minggu 14:00',
-                    'time': '2 jam lalu'},
-                {'type': 'alert', 'message': 'Disk usage mencapai 85%',
-                    'time': '4 jam lalu'},
-                {'type': 'update', 'message': 'Update sistem berhasil diinstall',
-                    'time': '1 hari lalu'},
-            ]
-        })
-
-    return base_data
-
-
 @app.before_request
 def load_user():
     """Load user data untuk simulasi session - only for protected routes"""
-    # Bypass auth for landing page and login
-    if request.endpoint in ['landing', 'login', 'static']:
+    # Bypass auth for landing page, login, static, and cara_kerja pages
+    public_endpoints = [
+        'landing', 'login', 'static',
+        'cara_kerja_siswa', 'cara_kerja_guru', 'cara_kerja_admin'
+    ]
+    if request.endpoint in public_endpoints:
         return
 
     if 'user_id' not in session:
         # Redirect to login if not authenticated
-        if request.endpoint not in ['landing', 'login']:
+        if request.endpoint not in public_endpoints:
             return redirect(url_for('login'))
 
 # Main Routes
@@ -225,7 +79,7 @@ def load_user():
 @app.route('/')
 def landing():
     """Landing page route"""
-    return render_template('landing.html')
+    return render_template('landing_page/landing.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -254,11 +108,11 @@ def login():
 
                 # Redirect based on role
                 if role == 'student':
-                    return redirect(url_for('dashboard_siswa'))
+                    return redirect(url_for('siswa.dashboard_siswa'))
                 elif role == 'teacher':
-                    return redirect(url_for('teacher_workflow'))
+                    return redirect(url_for('guru.dashboard_guru'))
                 elif role == 'admin':
-                    return redirect(url_for('dashboard_admin'))
+                    return redirect(url_for('admin.dashboard_admin'))
 
         # If validation fails
         return render_template('login.html', error='Username atau password salah!')
@@ -279,14 +133,14 @@ def logout():
 def refresh_dashboard_data(role):
     """API untuk refresh data dashboard"""
     try:
-        user_data = get_user_data()
-        dashboard_data = get_dynamic_dashboard_data(role)
+        # user_data handled in Blueprint
+        # dashboard_data handled in Blueprint
 
         return jsonify({
             'status': 'success',
-            'user': user_data,
-            'data': dashboard_data,
-            'timestamp': dashboard_data['timestamp']
+            # 'user': user_data,
+            # 'data': dashboard_data,
+            # 'timestamp': dashboard_data['timestamp']
         })
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
@@ -296,11 +150,11 @@ def refresh_dashboard_data(role):
 def get_notifications(role):
     """API untuk mendapatkan notifikasi terbaru"""
     try:
-        dashboard_data = get_dynamic_dashboard_data(role)
+        # dashboard_data handled in Blueprint
         return jsonify({
             'status': 'success',
-            'notifications': dashboard_data['notifications'],
-            'count': len(dashboard_data['notifications'])
+            # 'notifications': dashboard_data['notifications'],
+            # 'count': len(dashboard_data['notifications'])
         })
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
@@ -516,145 +370,13 @@ def monitor_learning_progress(user_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# --- User Workflow Routes (Alur Kerja Pengguna) ---
-
-
-@app.route('/student/workflow')
-def student_workflow():
-    """Alur kerja siswa sesuai dokumen"""
-    try:
-        user_id = session.get('user_id')
-        student = StudentProfile.query.filter_by(user_id=user_id).first()
-
-        if not student:
-            return redirect(url_for('home'))
-
-        # Get student workflow data
-        recent_activities = LearningActivity.query.filter_by(user_id=user_id).order_by(
-            LearningActivity.created_at.desc()
-        ).limit(5).all()
-
-        progress_records = StudentProgress.query.filter_by(
-            student_id=student.id).all()
-        recommendations = ai_learning_process.generate_recommendations(
-            student.id)
-
-        workflow_data = {
-            'student': student,
-            'recent_activities': [a.to_dict() for a in recent_activities],
-            'progress_summary': {
-                'total_courses': len(progress_records),
-                'completed': len([p for p in progress_records if p.progress_percentage == 100]),
-                'in_progress': len([p for p in progress_records if 0 < p.progress_percentage < 100]),
-                'not_started': len([p for p in progress_records if p.progress_percentage == 0])
-            },
-            'ai_recommendations': recommendations
-        }
-
-        return render_template('workflows/student_workflow.html', **workflow_data)
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
-@app.route('/teacher/workflow')
-def teacher_workflow():
-    """Dashboard guru dengan data dinamis"""
-    # Get user data dan dashboard data
-    user_data = get_user_data()
-    dashboard_data = get_dynamic_dashboard_data('teacher')
-
-    # Combine data
-    context = {
-        'user': user_data,
-        'teacher_name': user_data.get('name', 'Demo Teacher'),
-        'user_role': 'teacher',
-        **dashboard_data
-    }
-
-    return render_template('workflows/teacher_workflow.html', **context)
-
-
-@app.route('/admin/workflow')
-def admin_workflow():
-    """Alur kerja administrator sesuai dokumen"""
-    try:
-        # System metrics untuk admin
-        total_users = User.query.count()
-        active_users = User.query.filter_by(is_active=True).count()
-        system_metrics = SystemMetrics.query.order_by(
-            SystemMetrics.recorded_at.desc()).limit(10).all()
-
-        # Recent activities
-        recent_activities = LearningActivity.query.order_by(
-            LearningActivity.created_at.desc()
-        ).limit(20).all()
-
-        workflow_data = {
-            'total_users': total_users,
-            'active_users': active_users,
-            'system_health': {
-                'uptime': '99.8%',
-                'response_time': '120ms',
-                'error_rate': '0.2%'
-            },
-            'metrics': [m.to_dict() for m in system_metrics],
-            'recent_activities': [a.to_dict() for a in recent_activities]
-        }
-
-        return render_template('workflows/admin_workflow.html', **workflow_data)
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
 
 @app.route('/')
 def home():
     return render_template('home.html')
 
-# --- Dashboard Siswa ---
-
-
-@app.route('/dashboard/siswa')
-def dashboard_siswa():
-    """Dashboard siswa dengan data dinamis"""
-    # Get user data dan dashboard data
-    user_data = get_user_data()
-    dashboard_data = get_dynamic_dashboard_data('student')
-
-    # Combine data
-    context = {
-        'user': user_data,
-        'student_name': user_data.get('name', 'Demo Student'),
-        'user_role': 'student',
-        **dashboard_data
-    }
-
-    return render_template('dashboard_siswa.html', **context)
-
-# --- Dashboard Admin ---
-
-
-@app.route('/dashboard/admin')
-def dashboard_admin():
-    """Dashboard admin dengan data dinamis"""
-    # Get user data dan dashboard data
-    user_data = get_user_data()
-    dashboard_data = get_dynamic_dashboard_data('admin')
-
-    # Combine data
-    context = {
-        'user': user_data,
-        'admin_name': user_data.get('name', 'Demo Admin'),
-        'user_role': 'admin',
-        **dashboard_data
-    }
-
-    return render_template('dashboard_admin.html', **context)
 
 # --- Modul Retraining Model AI ---
-
-
 @app.route('/ai/retrain', methods=['GET', 'POST'])
 def retrain_model():
     if request.method == 'POST':
@@ -664,7 +386,7 @@ def retrain_model():
             'message': 'Model AI berhasil diretrain dengan data terbaru',
             'timestamp': datetime.now().isoformat()
         })
-    return render_template('ai_retrain.html')
+    return render_template('ai_personalization.html')
 
 # --- Monitoring & Evaluasi Implementasi ---
 
@@ -692,7 +414,7 @@ def survey():
             'status': 'success',
             'message': 'Terima kasih atas feedback Anda!'
         })
-    return render_template('survey.html')
+    return render_template('reporting/survey.html')
 
 # --- Pelatihan Pengguna & Kompetensi Guru ---
 
@@ -708,7 +430,7 @@ def training():
             'duration': '60 menit', 'status': 'pending'},
         {'title': 'Troubleshooting Umum', 'duration': '20 menit', 'status': 'pending'}
     ]
-    return render_template('training.html', modules=training_modules)
+    return render_template('interface/training.html', modules=training_modules)
 
 # --- Analisis Data Siswa ---
 
@@ -742,8 +464,9 @@ def analytics_student():
         for subject in subjects:
             courses_count = Course.query.filter_by(
                 subject_id=subject.id).count()
-            avg_progress = db.session.query(db.func.avg(StudentProgress.progress_percentage))\
-                .join(Course).filter(Course.subject_id == subject.id).scalar() or 0
+            avg_progress = db.session.query(
+                db.func.avg(StudentProgress.progress_percentage)
+            ).join(Course).filter(Course.subject_id == subject.id).scalar() or 0
 
             learning_trends.append({
                 'subject': subject.name,
@@ -773,7 +496,7 @@ def analytics_student():
             ]
         }
 
-    return render_template('analytics.html', **analytics_data)
+    return render_template('analytics/analytics.html', **analytics_data)
 
 # --- Personalisasi Konten ---
 
@@ -828,7 +551,7 @@ def ai_personalization():
                 'match': 85, 'duration': '2 jam'}
         ]
 
-    return render_template('ai_personalization.html', recommendations=recommendations)
+    return render_template('ai/ai_personalization.html', recommendations=recommendations)
 
 # --- Laporan & Visualisasi ---
 
@@ -850,7 +573,7 @@ def reporting_report():
             'most_active_day': 'Rabu'
         }
     }
-    return render_template('reporting.html', **report_data)
+    return render_template('reporting/reporting.html', **report_data)
 
 # --- Pilot Testing & Evaluasi Bertahap ---
 
@@ -867,10 +590,20 @@ def pilot_testing():
             {'name': 'SMK Telkom Bandung', 'status': 'Aktif', 'progress': 72}
         ]
     }
-    return render_template('pilot_testing.html', **pilot_data)
+    return render_template('integration/pilot_testing.html', **pilot_data)
 
+
+# Register Blueprints for modular routes
+app.register_blueprint(admin_bp)
+app.register_blueprint(siswa_bp)
+app.register_blueprint(guru_bp)
+app.register_blueprint(admin_features_bp)
+app.register_blueprint(guru_features_bp)
+app.register_blueprint(siswa_features_bp)
 
 # Add database initialization route and main block
+
+
 @app.route('/init-database')
 def init_database_route():
     """Initialize database with sample data"""
@@ -896,24 +629,40 @@ def init_database_route():
 @app.errorhandler(404)
 def not_found_error(error):
     """Handle 404 errors"""
-    return render_template('404.html'), 404
+    return render_template('error/404.html'), 404
 
 
 @app.errorhandler(500)
 def internal_error(error):
     """Handle 500 errors"""
     db.session.rollback()
-    return render_template('500.html'), 500
+    return render_template('error/500.html'), 500
 
 
 @app.errorhandler(403)
 def forbidden_error(error):
     """Handle 403 errors"""
-    return render_template('403.html'), 403
+    return render_template('error/403.html'), 403
+
+
+@app.context_processor
+def inject_user():
+    user = {
+        'name': session.get('user_name', ''),
+        'role': session.get('user_role', ''),
+        'email': session.get('username', ''),
+        'avatar': session.get('avatar', '/static/images/avatar-default.png'),
+        'class': session.get('class', ''),
+        'student_id': session.get('student_id', ''),
+        'join_date': session.get('join_date', ''),
+        'subject': session.get('subject', ''),
+        'employee_id': session.get('employee_id', ''),
+        'department': session.get('department', ''),
+    }
+    return dict(user=user)
 
 
 if __name__ == "__main__":
     with app.app_context():
-        # Create tables if they don't exist
         db.create_all()
     app.run(debug=True)

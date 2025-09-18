@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Panduan Lengkap Siswa & AI - LENTERAMU{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="dashboard-header mb-4">
+    <div class="user-welcome">
+      <div class="user-avatar">
+        <i class="fas fa-book fa-3x" style="color:#764ba2;"></i>
+      </div>
+      <div class="welcome-text">
+        <h1>Panduan Lengkap Siswa & AI</h1>
+        <p class="user-info">Pelajari cara memaksimalkan fitur dan AI di LENTERAMU.</p>
+      </div>
+    </div>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h3><i class="fas fa-book"></i> Panduan & Tips</h3>
+      </div>
+      <ol class="guidelines-list">
+        <li><b>Login & Dashboard</b><br>
+          Masuk menggunakan akun siswa. Dashboard menampilkan progress, tugas, rekomendasi AI, dan statistik belajar.
+        </li>
+        <li><b>Progress & Tugas</b><br>
+          Kerjakan materi/tugas. Progress otomatis tercatat. Jika progress 100%, sistem AI akan belajar dari aktivitasmu.
+        </li>
+        <li><b>Rekomendasi AI (Q-learning RL)</b><br>
+          - Sistem AI menganalisis gaya belajar (VARK), motivasi (MSLQ, AMS), dan engagement.<br>
+          - Rekomendasi materi/tugas dihasilkan otomatis berdasarkan data real dan Q-table RL.<br>
+          - Semakin sering kamu belajar, semakin personal rekomendasinya.
+        </li>
+        <li><b>Feedback & Badge</b><br>
+          Setelah menyelesaikan tugas/materi, kamu akan mendapat feedback adaptif dan badge pencapaian jika memenuhi kriteria.
+        </li>
+        <li><b>Tips Maksimalkan AI</b><br>
+          - Selesaikan materi/tugas secara konsisten.<br>
+          - Jawab survey motivasi/engagement jika tersedia.<br>
+          - Cek menu <b>Rekomendasi AI</b> untuk saran belajar personal.
+        </li>
+        <li><b>Cara Kerja AI Q-learning</b><br>
+          - Setiap aktivitasmu membentuk state: (VARK, MSLQ, AMS, Engagement).<br>
+          - AI memilih aksi/materi terbaik berdasarkan Q-table.<br>
+          - Q-table diupdate otomatis setiap progress selesai.<br>
+          - Reward diberikan jika progress 100%.
+        </li>
+        <li><b>Notifikasi & Insight</b><br>
+          Sistem akan memberi notifikasi jika ada rekomendasi penting atau badge baru.
+        </li>
+        <li><b>Privasi & Data</b><br>
+          Semua data aktivitas dan rekomendasi hanya digunakan untuk personalisasi pembelajaran.
+        </li>
+      </ol>
+      <div class="alert alert-info mt-4">
+        <b>Butuh bantuan?</b> Hubungi admin/guru atau cek FAQ di menu bantuan.
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+.guidelines-list { margin-top:2rem; margin-bottom:2rem; }
+.guidelines-list li { margin-bottom:1.5rem; font-size:1.1rem; }
+</style>
+{% endblock %}

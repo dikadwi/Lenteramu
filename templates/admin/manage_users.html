@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <div class="card">
+    <h2>Manajemen User (Admin)</h2>
+    <a href="#" class="btn" style="margin-bottom:1rem;">+ Tambah User</a>
+    <div style="overflow-x:auto;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Nama Lengkap</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if users and users|length > 0 %}
+            {% for user in users %}
+            <tr>
+              <td>{{ user.id }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.full_name }}</td>
+              <td>{{ user.role }}</td>
+              <td>{{ 'Aktif' if user.is_active else 'Nonaktif' }}</td>
+              <td>
+                <a href="#" class="btn btn-secondary btn-sm">Edit</a>
+                <a href="#" class="btn btn-danger btn-sm">Hapus</a>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr><td colspan="7" style="text-align:center;">Belum ada user.</td></tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

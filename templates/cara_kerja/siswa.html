@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cara Kerja Siswa - LENTERAMU</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <style>
+        .cara-kerja-steps {
+            padding-bottom: 3rem;
+        }
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        .step-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border-radius: 1.2rem;
+            box-shadow: 0 4px 24px rgba(102,126,234,0.12);
+            padding: 2.2rem 1.5rem 1.7rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 260px;
+            transition: transform 0.18s, box-shadow 0.18s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .step-card:hover {
+            transform: translateY(-8px) scale(1.04);
+            box-shadow: 0 8px 32px rgba(102,126,234,0.18);
+            z-index: 2;
+        }
+        .step-card i {
+            font-size: 2.4rem;
+            margin-bottom: 1.1rem;
+            background: linear-gradient(135deg, #fff 0%, #e0e3f7 100%);
+            color: #764ba2;
+            border-radius: 50%;
+            padding: 0.6rem;
+            box-shadow: 0 2px 8px rgba(102,126,234,0.10);
+        }
+        .step-card h4 {
+            font-size: 1.18rem;
+            font-weight: 600;
+            margin-bottom: 0.7rem;
+            text-align: center;
+        }
+        .step-card p {
+            font-size: 1rem;
+            color: #f3f3f3;
+            text-align: center;
+            margin-bottom: 0;
+        }
+        @media (max-width: 700px) {
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .step-card {
+                min-height: 180px;
+                padding: 1.2rem 0.7rem 1rem 0.7rem;
+            }
+            .step-card i {
+                font-size: 2rem;
+                margin-bottom: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="landing-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>LENTERAMU</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Beranda</a></li>
+                <li><a href="#fitur">Fitur</a></li>
+                <li><a href="#tentang">Tentang</a></li>
+                <li><a href="#kontak">Kontak</a></li>
+                <li><a href="/login" class="btn-login">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div style="height:56px;"></div>
+    <!-- Hero Section: Cara Kerja Siswa -->
+    <section class="hero cara-kerja-hero" style="padding: 4rem 0 2rem 0; color: #fff; background: linear-gradient(120deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <div class="hero-content" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center;">
+                <div class="hero-text" style="flex: 1 1 350px; min-width: 300px;">
+                    <h1 class="hero-title" style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">
+                        <i class="fas fa-user-graduate" style="margin-right: 10px;"></i> Cara Kerja Siswa di <span class="gradient-text">LENTERAMU</span>
+                    </h1>
+                    <p class="hero-subtitle" style="font-size: 1.2rem; margin-bottom: 2rem;">
+                        Ikuti langkah-langkah berikut untuk memaksimalkan pengalaman belajar adaptif berbasis AI.
+                    </p>
+                </div>
+                <div class="hero-visual" style="flex: 1 1 300px; min-width: 250px; display: flex; justify-content: center;">
+                    <div class="floating-card card-1" style="background: rgba(255,255,255,0.15); border-radius: 1rem; padding: 2rem; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center;">
+                        <i class="fas fa-brain fa-3x gradient-text" style="margin-bottom: 1rem;"></i>
+                        <div>AI Learning Experience</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="cara-kerja-steps" style="background: #fff;">
+        <div class="container">
+            <div class="section-header" style="text-align:center; margin-bottom:2rem;">
+                <h2 style="font-size:2rem; font-weight:600; color:#764ba2;">Langkah-langkah Siswa</h2>
+                <p style="color:#555;">Setiap langkah didesain untuk mendukung pembelajaran yang personal dan interaktif.</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <h4>Login ke Platform</h4>
+                    <p>Masuk menggunakan akun siswa untuk mengakses fitur personalisasi.</p>
+                </div>
+                <div class="step-card">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <h4>Akses Dashboard</h4>
+                    <p>Lihat statistik belajar, tugas, dan materi yang tersedia.</p>
+                </div>
+                <div class="step-card">
+                    <i class="fas fa-tasks"></i>
+                    <h4>Mengerjakan Tugas & Kuis</h4>
+                    <p>Selesaikan tugas dan kuis yang diberikan oleh guru secara online.</p>
+                </div>
+                <div class="step-card">
+                    <i class="fas fa-robot"></i>
+                    <h4>Ikuti Rekomendasi AI</h4>
+                    <p>Dapatkan materi dan latihan tambahan yang direkomendasikan AI sesuai kebutuhan belajar.</p>
+                </div>
+                <div class="step-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Analitik & Progress</h4>
+                    <p>Monitor perkembangan belajar dan pencapaian secara real-time.</p>
+                </div>
+                <div class="step-card">
+                    <i class="fas fa-bell"></i>
+                    <h4>Notifikasi & Pengumuman</h4>
+                    <p>Terima notifikasi tugas, nilai, dan pengumuman kelas secara instan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer id="kontak" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>LENTERAMU</span>
+                    </div>
+                    <p>Platform pembelajaran adaptif berbasis AI untuk masa depan pendidikan yang lebih baik.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="/cara_kerja/siswa">Cara Kerja Siswa</a></li>
+                        <li><a href="/cara_kerja/guru">Cara Kerja Guru</a></li>
+                        <li><a href="/cara_kerja/admin">Cara Kerja Admin</a></li>
+                        <li><a href="/analytics/student">Analytics</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Fitur</h4>
+                    <ul>
+                        <li><a href="#fitur">AI Learning</a></li>
+                        <li><a href="#fitur">Adaptive Feedback</a></li>
+                        <li><a href="#fitur">Real-time Analytics</a></li>
+                        <li><a href="#fitur">Multi-Role Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Kontak</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contact@lenteramu.id</li>
+                        <li><i class="fas fa-phone"></i> +62 21 1234 5678</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Jakarta, Indonesia</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LENTERAMU Platform. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Tugas Siswa - LENTERAMU{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="dashboard-header mb-4">
+        <div class="user-welcome">
+            <div class="user-avatar">
+                <i class="fas fa-tasks fa-3x" style="color:#27ae60;"></i>
+            </div>
+            <div class="welcome-text">
+                <h1>Daftar Tugas Siswa</h1>
+                <p class="user-info">Kerjakan tugas tepat waktu untuk progress maksimal!</p>
+            </div>
+        </div>
+    </div>
+    <div class="dashboard-grid">
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h3><i class="fas fa-tasks"></i> Tugas Aktif</h3>
+            </div>
+            <div class="row">
+                {% for tugas in tugas_list %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h4 class="card-title mb-2">{{ tugas.judul }}</h4>
+                            <p class="card-text">Deadline: <b>{{ tugas.deadline }}</b></p>
+                            <span class="badge bg-warning text-dark mb-2">{{ tugas.status }}</span><br>
+                            <a href="/tugas/{{ tugas.id }}" class="btn btn-success btn-sm mt-2">Kerjakan Tugas</a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-12 text-center text-muted">Tidak ada tugas aktif.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

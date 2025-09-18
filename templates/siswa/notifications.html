@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <div class="dashboard-header mb-4">
+    <div class="user-welcome">
+      <div class="user-avatar">
+        <i class="fas fa-bell fa-3x" style="color:#3498db;"></i>
+      </div>
+      <div class="welcome-text">
+        <h1>Notifikasi Tugas & Pengumuman</h1>
+        <p class="user-info">Pantau info penting, tugas, dan pengumuman terbaru di sini.</p>
+      </div>
+    </div>
+  </div>
+  <div class="dashboard-grid">
+    <div class="dashboard-card">
+      <div class="card-header">
+        <h3><i class="fas fa-bell"></i> Daftar Notifikasi</h3>
+      </div>
+      <ul class="list-group">
+        {% for notif in notifications %}
+        <li class="list-group-item d-flex align-items-center">
+          {% if notif.type == 'assignment' %}
+            <i class="fas fa-tasks text-primary me-3"></i>
+          {% elif notif.type == 'grade' %}
+            <i class="fas fa-clipboard-check text-success me-3"></i>
+          {% elif notif.type == 'announcement' %}
+            <i class="fas fa-bullhorn text-warning me-3"></i>
+          {% else %}
+            <i class="fas fa-info-circle text-secondary me-3"></i>
+          {% endif %}
+          <div class="flex-grow-1">
+            <div>{{ notif.message }}</div>
+            <small class="text-muted">{{ notif.time }}</small>
+          </div>
+        </li>
+        {% else %}
+        <li class="list-group-item text-center text-muted">Belum ada notifikasi.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

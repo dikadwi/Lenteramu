@@ -1,17 +1,119 @@
-# AI Learning Process Implementation
-import numpy as np
-import pandas as pd
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from sklearn.preprocessing import StandardScaler
-import joblib
-import json
-from datetime import datetime
 from models import db, User, StudentProfile, LearningActivity, StudentProgress, AIRecommendation
+from datetime import datetime
+import json
+import joblib
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split, cross_val_score
+import pandas as pd
+import numpy as np
+
+
+class QLearningRecommender:
+    """Q-learning RL sederhana untuk rekomendasi materi/tugas siswa"""
+
+    def __init__(self, actions, student_id, alpha=0.1, gamma=0.9, epsilon=0.2):
+        self.actions = actions  # list of possible actions (materi/tugas id)
+        self.alpha = alpha  # learning rate
+        self.gamma = gamma  # discount factor
+        self.epsilon = epsilon  # exploration rate
+        self.student_id = student_id
+        self.q_table = self._load_q_table()
+
+    def _q_key(self, state, action):
+        # Serialize state-action to string for DB
+        return json.dumps({'state': state, 'action': action})
+
+    def _load_q_table(self):
+        q_table = {}
+        # Load from AIRecommendation DB
+        from models import AIRecommendation
+        for rec in AIRecommendation.query.filter_by(user_id=self.student_id, recommendation_type='sequence').all():
+            try:
+                key = rec.reasoning  # serialized state-action
+                q_table[(tuple(json.loads(key)['state']),
+                         json.loads(key)['action'])] = rec.match_score
+            except Exception:
+                continue
+        return q_table
+
+    def _save_q_value(self, state, action, value):
+        from models import AIRecommendation, db
+        key = self._q_key(state, action)
+        rec = AIRecommendation.query.filter_by(user_id=self.student_id, course_id=int(
+            action), recommendation_type='sequence', reasoning=key).first()
+        if not rec:
+            rec = AIRecommendation(user_id=self.student_id, course_id=int(
+                action), recommendation_type='sequence', match_score=value, reasoning=key, is_active=True)
+            db.session.add(rec)
+        else:
+            rec.match_score = value
+        db.session.commit()
+
+    def get_state(self, student):
+        # State: (VARK, MSLQ, AMS, Engagement)
+        vark = student.learning_style or 'visual'
+        mslq = getattr(student, 'mslq_level', 'medium') or 'medium'
+        ams = getattr(student, 'ams_type', 'intrinsic') or 'intrinsic'
+        eng = getattr(student, 'engagement_level', 'medium') or 'medium'
+        return (vark, mslq, ams, eng)
+
+    def choose_action(self, state):
+        # Epsilon-greedy
+        if np.random.rand() < self.epsilon:
+            return np.random.choice(self.actions)
+        q_values = [self.q_table.get((state, a), 0) for a in self.actions]
+        max_q = max(q_values)
+        best_actions = [a for a, q in zip(
+            self.actions, q_values) if q == max_q]
+        return np.random.choice(best_actions)
+
+    def update(self, state, action, reward, next_state):
+        old_q = self.q_table.get((state, action), 0)
+        next_qs = [self.q_table.get((next_state, a), 0) for a in self.actions]
+        max_next_q = max(next_qs) if next_qs else 0
+        new_q = old_q + self.alpha * (reward + self.gamma * max_next_q - old_q)
+        self.q_table[(state, action)] = new_q
+        self._save_q_value(state, action, new_q)
+
+    def get_best_actions(self, state, topk=3):
+        q_values = [(a, self.q_table.get((state, a), 0)) for a in self.actions]
+        q_values.sort(key=lambda x: x[1], reverse=True)
+        return [a for a, _ in q_values[:topk]]
+
+
+# AI Learning Process Implementation
 
 
 class AILearningProcess:
+
+    def batch_train_qlearning(self, episodes=300, alpha=0.1, gamma=0.9):
+        """Batch training Q-learning untuk seluruh siswa dan Course (materi/tugas)"""
+        from models import Course
+        students = StudentProfile.query.all()
+        actions = [str(c.id) for c in Course.query.filter(
+            Course.content_type.in_(['article', 'practice', 'quiz'])).all()]
+        for ep in range(episodes):
+            for student in students:
+                ql = QLearningRecommender(
+                    actions, student_id=student.user_id, alpha=alpha, gamma=gamma)
+                progresses = StudentProgress.query.filter_by(
+                    student_id=student.id).order_by(StudentProgress.created_at).all()
+                for i, prog in enumerate(progresses):
+                    state = ql.get_state(student)
+                    action = str(prog.course_id)
+                    reward = 1 if prog.progress_percentage == 100 else 0
+                    next_state = state
+                    ql.update(state, action, reward, next_state)
+        return True
+
+    def get_qlearning_recommender(self, student):
+        from models import Course
+        course_ids = [str(c.id) for c in Course.query.filter(
+            Course.content_type.in_(['article', 'practice', 'quiz'])).all()]
+        return QLearningRecommender(course_ids, student_id=student.user_id)
+
     """Implementasi Alur Proses Pembelajaran AI sesuai dokumen"""
 
     def __init__(self):
@@ -197,58 +299,78 @@ class AILearningProcess:
             return 'needs_support'
 
     def generate_recommendations(self, student_id):
-        """Generate personalized recommendations"""
+        """Generate personalized recommendations (Q-learning + CBF)"""
         try:
+            from models import Course
             student = StudentProfile.query.get(student_id)
             if not student:
                 return []
 
-            # Dapatkan data siswa untuk prediksi
+            # Hitung fitur state
             activities = LearningActivity.query.filter_by(
                 user_id=student.user_id).all()
             progress = StudentProgress.query.filter_by(
                 student_id=student.id).all()
-
-            # Hitung fitur
             avg_score = np.mean(
                 [a.score for a in activities if a.score]) if activities else 0
             completion_rate = len(
                 [p for p in progress if p.progress_percentage == 100]) / max(len(progress), 1)
+            student.avg_score = avg_score
+            student.completion_rate = completion_rate
 
-            # Generate recommendations berdasarkan performa
+            # Q-learning RL: pilih materi/tugas prioritas (pakai Course, bukan LearningActivity)
+            ql = self.get_qlearning_recommender(student)
+            state = ql.get_state(student)
+            best_ids = ql.get_best_actions(state, topk=3)
+
+            # Ambil Course sesuai best_ids
+            course_objs = Course.query.filter(Course.id.in_(
+                [int(i) for i in best_ids if str(i).isdigit()])).all() if best_ids else []
+            cbf_results = []
+            for c in course_objs:
+                # Contoh: filter berdasarkan minat siswa (jika ada field interest)
+                if hasattr(student, 'interest') and student.interest:
+                    if student.interest.lower() in (c.title or '').lower():
+                        cbf_results.append(c)
+                else:
+                    cbf_results.append(c)
+
+            # Fallback: jika Q-table kosong, tampilkan 3 course demo teratas
+            if not cbf_results:
+                cbf_results = Course.query.order_by(
+                    Course.id.asc()).limit(3).all()
+
+            # Format rekomendasi
             recommendations = []
-
-            if avg_score < 70:
+            for c in cbf_results:
                 recommendations.append({
-                    'type': 'remedial',
-                    'title': 'Materi Dasar Penguatan',
-                    'reason': 'Skor rata-rata perlu ditingkatkan'
+                    'type': c.content_type,
+                    'judul': c.title,
+                    'deskripsi': c.description or '',
+                    'tipe': c.content_type,
+                    'link': f"/siswa/features/materi" if c.content_type == 'article' else (f"/siswa/features/tugas" if c.content_type == 'practice' else f"/siswa/features/kuis")
                 })
 
-            if completion_rate < 0.7:
-                recommendations.append({
-                    'type': 'motivation',
-                    'title': 'Strategi Penyelesaian Tugas',
-                    'reason': 'Tingkat penyelesaian perlu diperbaiki'
-                })
-
-            # Rekomendasi berdasarkan learning style
-            style_recommendations = {
-                'visual': 'Video Tutorial dan Infografis',
-                'auditory': 'Podcast dan Audio Lessons',
-                'kinesthetic': 'Praktik dan Simulasi',
-                'reading': 'E-book dan Artikel'
-            }
-
-            if student.learning_style in style_recommendations:
-                recommendations.append({
-                    'type': 'content',
-                    'title': style_recommendations[student.learning_style],
-                    'reason': f'Sesuai dengan gaya belajar {student.learning_style}'
-                })
+            # Jika kosong, fallback ke rule-based
+            if not recommendations:
+                if avg_score < 70:
+                    recommendations.append({
+                        'type': 'remedial',
+                        'judul': 'Materi Dasar Penguatan',
+                        'deskripsi': 'Skor rata-rata perlu ditingkatkan',
+                        'tipe': 'remedial',
+                        'link': '#'
+                    })
+                if completion_rate < 0.7:
+                    recommendations.append({
+                        'type': 'motivation',
+                        'judul': 'Strategi Penyelesaian Tugas',
+                        'deskripsi': 'Tingkat penyelesaian perlu diperbaiki',
+                        'tipe': 'motivation',
+                        'link': '#'
+                    })
 
             return recommendations
-
         except Exception as e:
             print(f"Error generating recommendations: {e}")
             return []

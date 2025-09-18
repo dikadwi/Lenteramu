@@ -56,6 +56,13 @@ class StudentProfile(db.Model):
     learning_pace = db.Column(
         db.Enum('slow', 'normal', 'fast'), default='normal')
     preferred_subjects = db.Column(db.Text)  # JSON string
+
+    # Q-learning composite state fields
+    mslq_level = db.Column(db.Enum('high', 'medium', 'low'), default='medium')
+    ams_type = db.Column(db.Enum('intrinsic', 'extrinsic',
+                         'achievement', 'amotivation'), default='intrinsic')
+    engagement_level = db.Column(
+        db.Enum('high', 'medium', 'low'), default='medium')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     # Relationships
@@ -70,7 +77,10 @@ class StudentProfile(db.Model):
             'school_name': self.school_name,
             'learning_style': self.learning_style,
             'learning_pace': self.learning_pace,
-            'preferred_subjects': self.preferred_subjects
+            'preferred_subjects': self.preferred_subjects,
+            'mslq_level': self.mslq_level,
+            'ams_type': self.ams_type,
+            'engagement_level': self.engagement_level
         }
 
 
