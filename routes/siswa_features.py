@@ -152,9 +152,8 @@ def personal_analytics():
             progress = StudentProgress.query.filter_by(
                 student_id=student.id).all()
             for p in progress:
-                # Label: nama materi/tugas/kuis
-                act = LearningActivity.query.filter_by(id=p.course_id).first()
-                label = act.title if act else f"ID {p.course_id}"
+                # Label: nama materi/tugas/kuis dari Course
+                label = p.course.title if p.course else f"ID {p.course_id}"
                 chart_labels.append(label)
                 chart_data.append(int(p.progress_percentage))
                 # Nilai detail

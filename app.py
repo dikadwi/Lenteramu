@@ -114,6 +114,39 @@ def login():
                 elif role == 'admin':
                     return redirect(url_for('admin.dashboard_admin'))
 
+        # Database account validation
+
+        # Mapping role input ke role di database
+        role_map = {'student': 'siswa', 'teacher': 'guru', 'admin': 'admin'}
+        db_role = role_map.get(role, role)
+        user = User.query.filter_by(username=username, role=db_role).first()
+        if user and user.check_password(password):
+            session['user_id'] = user.id
+            session['user_role'] = user.role
+            session['user_name'] = getattr(user, 'full_name', user.username)
+            session['username'] = user.username
+            # Tambahan: data lain jika ada
+            if user.role == 'siswa' and hasattr(user, 'student_profile') and user.student_profile:
+                session['class'] = getattr(
+                    user.student_profile, 'grade_level', '')
+                session['student_id'] = getattr(
+                    user.student_profile, 'student_id', '')
+                session['join_date'] = str(
+                    getattr(user.student_profile, 'created_at', ''))
+            elif user.role == 'guru' and hasattr(user, 'teacher_profile') and user.teacher_profile:
+                session['employee_id'] = getattr(
+                    user.teacher_profile, 'teacher_id', '')
+                session['department'] = getattr(
+                    user.teacher_profile, 'school_name', '')
+
+            # Redirect based on role
+            if user.role == 'siswa':
+                return redirect(url_for('siswa.dashboard_siswa'))
+            elif user.role == 'guru':
+                return redirect(url_for('guru.dashboard_guru'))
+            elif user.role == 'admin':
+                return redirect(url_for('admin.dashboard_admin'))
+
         # If validation fails
         return render_template('login.html', error='Username atau password salah!')
 
