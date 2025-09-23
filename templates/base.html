@@ -342,17 +342,17 @@
                                 <li class="dropdown-parent">
                                     <a href="#"><i class="fas fa-cubes"></i> Fitur</a>
                                     <ul class="dropdown-submenu">
-                                        <li><a href="{{ url_for('siswa_features.notifications') }}"><i class="fas fa-bell"></i> Notifikasi</a></li>
                                         <li><a href="{{ url_for('siswa_features.personal_analytics') }}"><i class="fas fa-chart-pie"></i> Analitik Pribadi</a></li>
                                         <li><a href="{{ url_for('siswa_features.ai_rekomendasi') }}"><i class="fas fa-lightbulb"></i> Rekomendasi AI</a></li>
                                         <li><a href="{{ url_for('siswa_features.community') }}"><i class="fas fa-users"></i> Komunitas</a></li>
                                         <li><a href="{{ url_for('siswa_features.badges') }}"><i class="fas fa-award"></i> Badge</a></li>
                                         <li><a href="{{ url_for('siswa_features.tryout') }}"><i class="fas fa-pen"></i> Tryout</a></li>
                                         <li><a href="{{ url_for('siswa_features.calendar') }}"><i class="fas fa-calendar-alt"></i> Kalender</a></li>
-                                        <li><a href="{{ url_for('siswa_features.ai_feedback') }}"><i class="fas fa-robot"></i> Feedback AI</a></li>
-                                        <li><a href="{{ url_for('siswa_features.guidelines') }}"><i class="fas fa-book"></i> Guidelines</a></li>
+                                        <li><a href="{{ url_for('siswa_features.ai_feedback') }}"><i class="fas fa-robot"></i> Feedback AI</a></li>                                       
                                     </ul>
                                 </li>
+                                <li><a href="{{ url_for('siswa_features.notifications') }}"><i class="fas fa-bell"></i> Notifikasi</a></li>
+                                <li><a href="{{ url_for('siswa_features.guidelines') }}"><i class="fas fa-book"></i> Guidelines</a></li>
                                 {% endif %}
 
                                 {% if session.user_role in ['teacher', 'guru'] %}
