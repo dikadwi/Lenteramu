@@ -204,28 +204,28 @@ Buka browser dan akses: `http://localhost:5000`
 
 ### 📚 **Dokumentasi Lengkap**
 
-- 📋 **[Dokumentasi Aplikasi](DOKUMENTASI_APLIKASI.md)** - Panduan lengkap aplikasi
-- 🗺️ **[Dokumentasi Menu & Fitur](DOKUMENTASI_MENU_FITUR.md)** - Detail menu dan fitur
-- 🔌 **[Dokumentasi API](DOKUMENTASI_API.md)** - Reference API untuk developer
-- 🔄 **[Workflow Implementation](workflow_implementation_summary.md)** - Summary implementasi
-- 📐 **[Arsitektur Sistem](arsitektur.md)** - Desain arsitektur aplikasi
+- 📋 **[Dokumentasi Aplikasi](Dokumentasi/DOKUMENTASI_APLIKASI.md)** - Panduan lengkap aplikasi
+- 🗺️ **[Dokumentasi Menu & Fitur](Dokumentasi/DOKUMENTASI_MENU_FITUR.md)** - Detail menu dan fitur
+- 🔌 **[Dokumentasi API](Dokumentasi/DOKUMENTASI_API.md)** - Reference API untuk developer
+- 🔄 **[Workflow Implementation](Dokumentasi/workflow_implementation_summary.md)** - Summary implementasi
+- 📐 **[Arsitektur Sistem](Dokumentasi/arsitektur.md)** - Desain arsitektur aplikasi
 
 ### 🎯 **Quick References**
 
 #### 👨‍🎓 **Untuk Siswa**
 
 - Login → Dashboard → Lihat AI Recommendations → Mulai Belajar
-- [Panduan Student Workflow](DOKUMENTASI_MENU_FITUR.md#workflow-siswa)
+- [Panduan Student Workflow](Dokumentasi/DOKUMENTASI_MENU_FITUR.md#workflow-siswa)
 
 #### 👨‍🏫 **Untuk Guru**
 
 - Login → Teacher Dashboard → Kelola Kelas → Monitor Progress
-- [Panduan Teacher Workflow](DOKUMENTASI_MENU_FITUR.md#workflow-guru)
+- [Panduan Teacher Workflow](Dokumentasi/DOKUMENTASI_MENU_FITUR.md#workflow-guru)
 
 #### 👨‍💼 **Untuk Administrator**
 
 - Login → Admin Dashboard → Monitor Sistem → Kelola User
-- [Panduan Admin Workflow](DOKUMENTASI_MENU_FITUR.md#workflow-admin)
+- [Panduan Admin Workflow](Dokumentasi/DOKUMENTASI_MENU_FITUR.md#workflow-admin)
 
 ---
 
