@@ -17,6 +17,8 @@ class User(db.Model):
     role = db.Column(db.Enum('siswa', 'guru', 'admin'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     is_active = db.Column(db.Boolean, default=True)
+    reset_token = db.Column(db.String(100), unique=True, nullable=True)
+    reset_token_sent_at = db.Column(db.DateTime, nullable=True)
 
     # Relationships
     student_profile = db.relationship(
@@ -48,9 +50,14 @@ class StudentProfile(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    student_id = db.Column(db.String(20), unique=True, nullable=False)
-    grade_level = db.Column(db.String(10), nullable=False)
-    school_name = db.Column(db.String(100), nullable=False)
+    # Nullable karena akan diisi setelah verifikasi
+    student_id = db.Column(db.String(20), unique=True, nullable=True)
+    kelas = db.Column(db.String(10), nullable=False)  # X, XI, atau XII
+    verification_token = db.Column(db.String(100), nullable=True)
+    verification_sent_at = db.Column(db.DateTime, nullable=True)
+    verified_at = db.Column(db.DateTime, nullable=True)
+    # Optional pada saat registrasi
+    school_name = db.Column(db.String(100), nullable=True)
     learning_style = db.Column(
         db.Enum('visual', 'auditory', 'kinesthetic', 'reading'), default='visual')
     learning_pace = db.Column(
@@ -73,7 +80,7 @@ class StudentProfile(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'student_id': self.student_id,
-            'grade_level': self.grade_level,
+            'kelas': self.kelas,
             'school_name': self.school_name,
             'learning_style': self.learning_style,
             'learning_pace': self.learning_pace,
@@ -89,8 +96,13 @@ class TeacherProfile(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    teacher_id = db.Column(db.String(20), unique=True, nullable=False)
-    school_name = db.Column(db.String(100), nullable=False)
+    nip = db.Column(db.String(18), unique=True, nullable=False)
+    mata_pelajaran = db.Column(db.String(50), nullable=False)
+    verification_token = db.Column(db.String(100), nullable=True)
+    verification_sent_at = db.Column(db.DateTime, nullable=True)
+    verified_at = db.Column(db.DateTime, nullable=True)
+    # Optional pada saat registrasi
+    school_name = db.Column(db.String(100), nullable=True)
     subjects = db.Column(db.Text)  # JSON string
     experience_years = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)

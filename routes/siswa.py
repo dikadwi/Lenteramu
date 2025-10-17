@@ -61,7 +61,7 @@ def dashboard_siswa():
             student = StudentProfile(
                 user_id=user.id,
                 student_id=f'DEMO{user.id}',
-                grade_level='XII',
+                kelas='XII',
                 school_name='SMA Demo',
                 learning_style='visual',
                 learning_pace='normal',
@@ -82,7 +82,7 @@ def dashboard_siswa():
         'role': session.get('user_role', 'student'),
         'email': session.get('username', 'siswa@lenteramu.id'),
         'avatar': '/static/images/avatar-student.png',
-        'class': student.grade_level,
+        'class': student.kelas,
         'student_id': student.student_id,
         'join_date': student.created_at.strftime('%Y-%m-%d') if student.created_at else '-',
     }

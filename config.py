@@ -18,6 +18,25 @@ class Config:
         f'mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}'
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # reCAPTCHA Configuration
+    RECAPTCHA_SITE_KEY = os.environ.get('RECAPTCHA_SITE_KEY', 'your-site-key')
+    RECAPTCHA_SECRET_KEY = os.environ.get(
+        'RECAPTCHA_SECRET_KEY', 'your-secret-key')
+
+    # Email Configuration
+    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
+    MAIL_PORT = int(os.environ.get('MAIL_PORT', 587))
+    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', True)
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME', 'your-email@gmail.com')
+    MAIL_PASSWORD = os.environ.get(
+        'MAIL_PASSWORD', 'your-app-specific-password')
+    MAIL_DEFAULT_SENDER = os.environ.get(
+        'MAIL_DEFAULT_SENDER', 'Lenteramu <noreply@lenteramu.com>')
+
+    # Application base URL for email verification links
+    BASE_URL = os.environ.get('BASE_URL', 'http://localhost:5000')
+
     SQLALCHEMY_ENGINE_OPTIONS = {
         'pool_recycle': 300,
         'pool_pre_ping': True,

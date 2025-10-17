@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block title %}Adaptive Feedback - LENTERAMU{% endblock %}
+
+{% block content %}
+<div class="feature-page">
+    <div class="feature-header">
+        <div class="container">
+            <h1>Adaptive Feedback</h1>
+            <p>Umpan balik pembelajaran yang personal dan adaptif</p>
+        </div>
+    </div>
+
+    <div class="feature-content">
+        <div class="container">
+            <section class="feature-overview">
+                <h2>Tentang Adaptive Feedback</h2>
+                <p>Sistem umpan balik adaptif LENTERAMU menggunakan AI untuk memberikan feedback yang dipersonalisasi dan membantu siswa memahami materi dengan lebih baik.</p>
+                
+                <div class="feature-highlights">
+                    <div class="highlight-card">
+                        <i class="fas fa-comments"></i>
+                        <h3>Feedback Personal</h3>
+                        <p>Umpan balik yang disesuaikan dengan tingkat pemahaman siswa</p>
+                    </div>
+                    
+                    <div class="highlight-card">
+                        <i class="fas fa-robot"></i>
+                        <h3>AI Tutor</h3>
+                        <p>Bantuan pembelajaran dari AI yang memahami kebutuhan siswa</p>
+                    </div>
+                    
+                    <div class="highlight-card">
+                        <i class="fas fa-chart-pie"></i>
+                        <h3>Progress Insight</h3>
+                        <p>Wawasan mendalam tentang perkembangan pembelajaran</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="feedback-types">
+                <h2>Jenis Umpan Balik</h2>
+                <div class="types-grid">
+                    <div class="type-card">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Instant Feedback</h3>
+                        <p>Umpan balik langsung saat mengerjakan tugas atau latihan</p>
+                        <ul>
+                            <li>Koreksi kesalahan real-time</li>
+                            <li>Penjelasan detail setiap jawaban</li>
+                            <li>Saran perbaikan langsung</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="type-card">
+                        <i class="fas fa-clock"></i>
+                        <h3>Progress Feedback</h3>
+                        <p>Evaluasi perkembangan pembelajaran secara berkala</p>
+                        <ul>
+                            <li>Laporan kemajuan mingguan</li>
+                            <li>Analisis tren pembelajaran</li>
+                            <li>Rekomendasi peningkatan</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="type-card">
+                        <i class="fas fa-star"></i>
+                        <h3>Achievement Feedback</h3>
+                        <p>Penghargaan dan motivasi atas pencapaian</p>
+                        <ul>
+                            <li>Badge dan rewards</li>
+                            <li>Milestone celebrations</li>
+                            <li>Motivational messages</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="type-card">
+                        <i class="fas fa-bullseye"></i>
+                        <h3>Targeted Feedback</h3>
+                        <p>Umpan balik khusus untuk area yang perlu ditingkatkan</p>
+                        <ul>
+                            <li>Identifikasi kesulitan spesifik</li>
+                            <li>Rekomendasi materi pendukung</li>
+                            <li>Strategi perbaikan personal</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="ai-features">
+                <h2>Fitur AI dalam Feedback</h2>
+                <div class="features-list">
+                    <div class="feature-item">
+                        <i class="fas fa-brain"></i>
+                        <div>
+                            <h3>Pattern Recognition</h3>
+                            <p>AI mengenali pola kesalahan dan memberikan solusi yang tepat</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <i class="fas fa-lightbulb"></i>
+                        <div>
+                            <h3>Smart Suggestions</h3>
+                            <p>Rekomendasi pembelajaran berdasarkan analisis AI</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <i class="fas fa-chart-line"></i>
+                        <div>
+                            <h3>Predictive Analysis</h3>
+                            <p>Prediksi area yang mungkin membutuhkan perhatian khusus</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <i class="fas fa-user-graduate"></i>
+                        <div>
+                            <h3>Personalized Learning Path</h3>
+                            <p>Jalur pembelajaran yang disesuaikan berdasarkan feedback</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="testimonials">
+                <h2>Apa Kata Pengguna</h2>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <p>"Feedback yang diberikan sangat membantu saya memahami kesalahan dan cara memperbaikinya."</p>
+                        <div class="testimonial-author">
+                            <img src="{{ url_for('static', filename='img/testimonials/student1.jpg') }}" alt="Student">
+                            <div>
+                                <h4>Budi Santoso</h4>
+                                <span>Siswa Kelas 11</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <p>"Sebagai guru, saya terbantu dengan insight yang diberikan sistem untuk memahami kebutuhan siswa."</p>
+                        <div class="testimonial-author">
+                            <img src="{{ url_for('static', filename='img/testimonials/teacher1.jpg') }}" alt="Teacher">
+                            <div>
+                                <h4>Siti Aminah</h4>
+                                <span>Guru Matematika</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="cta">
+                <h2>Tingkatkan Pembelajaran dengan Feedback Adaptif</h2>
+                <p>Dapatkan umpan balik personal untuk hasil belajar yang lebih baik</p>
+                <div class="cta-buttons">
+                    <a href="/register_siswa" class="btn btn-primary">Daftar Sekarang</a>
+                    <a href="/demo/feedback" class="btn btn-secondary">Coba Demo</a>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

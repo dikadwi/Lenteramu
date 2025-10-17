@@ -1,15 +1,66 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" {% if request.path.startswith('/login') or request.path.startswith('/register/') or request.path.startswith('/forgot-password') %}class="auth-page"{% endif %}>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}LENTERAMU{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    {% if request.path.startswith('/login') or request.path.startswith('/register/') or request.path.startswith('/forgot-password') %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+    {% endif %}
     
     {% block additional_css %}{% endblock %}
     
     <style>
+        /* Footer Styling */
+        .footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+        }
+        .footer .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+        .footer-brand {
+            display: flex;
+            align-items: center;
+        }
+        .footer-logo {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+        }
+        .footer-logo i {
+            margin-right: 0.5rem;
+        }
+        .footer-copyright {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+        }
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .footer-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover {
+            color: #ffd700;
+        }
+
         /* Enhanced Navigation Styling */
         .navbar {
             background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
@@ -222,7 +273,7 @@
             .footer {
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
-                padding: 2rem 0 1rem 0;
+                padding: 4rem 0 2rem 0;
                 margin-top: 3rem;
                 box-shadow: 0 -2px 20px rgba(0,0,0,0.08);
             }
@@ -231,56 +282,48 @@
                 margin: 0 auto;
                 padding: 0 2rem;
             }
-            .footer-content {
+            
+            .footer-bottom {
+                padding-top: 2rem;
+                border-top: 1px solid rgba(255,255,255,0.1);
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 flex-wrap: wrap;
-                gap: 2rem;
-                margin-bottom: 1rem;
+                gap: 1rem;
             }
-            .footer-logo a {
-                color: white;
-                font-size: 1.3rem;
-                font-weight: 700;
-                text-decoration: none;
+            .footer-bottom p {
+                margin: 0;
+                opacity: 0.8;
+            }
+            .footer-links {
                 display: flex;
-                align-items: center;
-                gap: 0.5rem;
+                gap: 1.5rem;
             }
             .footer-links a {
-                color: white;
-                margin: 0 1rem;
+                color: rgba(255,255,255,0.9);
                 text-decoration: none;
-                font-weight: 500;
+                font-size: 0.9rem;
                 transition: color 0.3s;
             }
             .footer-links a:hover {
                 color: #ffd700;
             }
-            .footer-social a {
-                color: white;
-                margin: 0 0.5rem;
-                font-size: 1.2rem;
-                transition: color 0.3s;
-            }
-            .footer-social a:hover {
-                color: #ffd700;
-            }
-            .footer-bottom {
-                text-align: center;
-                font-size: 0.95rem;
-                opacity: 0.8;
-                margin-top: 0.5rem;
-            }
             @media (max-width: 768px) {
+                .footer {
+                    padding: 3rem 0 1.5rem 0;
+                }
                 .footer-content {
                     flex-direction: column;
-                    align-items: flex-start;
-                    gap: 1rem;
+                    gap: 2rem;
+                }
+                
+                .footer-bottom {
+                    flex-direction: column;
+                    text-align: center;
                 }
                 .footer .container {
-                    padding: 0 1rem;
+                    padding: 0 1.5rem;
                 }
             }
         }
@@ -418,27 +461,23 @@
         {% block content %}{% endblock %}
     </main>
 
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-logo">
-                    <a href="{{ url_for('landing') }}">
+                <div class="footer-brand">
+                    <div class="footer-logo">
                         <i class="fas fa-graduation-cap"></i> LENTERAMU
-                    </a>
+                    </div>
+                </div>
+                <div class="footer-copyright">
+                    © 2025 LENTERAMU Platform. All rights reserved.
                 </div>
                 <div class="footer-links">
-                    <a href="/about">Tentang</a>
-                    <a href="/help">Bantuan</a>
-                    <a href="/contact">Kontak</a>
+                    <a href="/legal/privacy">Privacy Policy</a>
+                    <a href="/legal/terms">Terms of Service</a>
+                    <a href="/legal/cookies">Cookie Policy</a>
                 </div>
-                <div class="footer-social">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                &copy; 2025 LENTERAMU. All rights reserved.
             </div>
         </div>
     </footer>

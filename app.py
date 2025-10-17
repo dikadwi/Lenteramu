@@ -1,3 +1,4 @@
+from utils.email import mail
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from ai.adaptive_feedback import create_adaptive_feedback_system
 from ai.learning_process import create_ai_learning_process
@@ -12,28 +13,13 @@ from routes.guru import guru_bp
 from routes.admin_features import admin_features_bp
 from routes.guru_features import guru_features_bp
 from routes.siswa_features import siswa_features_bp
+from routes.landing.fitur import fitur
+from routes.landing.legal import legal
+from routes.landing.cara_kerja import cara_kerja
 
 # Import models
 # Import AI modules
 app = Flask(__name__)
-
-# Cara Kerja routes (must be after app is defined)
-
-
-# Cara Kerja routes (now use subfolders for each role)
-@app.route('/cara_kerja/siswa')
-def cara_kerja_siswa():
-    return render_template('cara_kerja/siswa.html')
-
-
-@app.route('/cara_kerja/guru')
-def cara_kerja_guru():
-    return render_template('cara_kerja/guru.html')
-
-
-@app.route('/cara_kerja/admin')
-def cara_kerja_admin():
-    return render_template('cara_kerja/admin.html')
 
 
 # Database Configuration
@@ -50,6 +36,9 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
 db.init_app(app)
 migrate = Migrate(app, db)
 
+# Initialize Flask-Mail
+mail.init_app(app)
+
 # Initialize AI systems
 ai_learning_process = create_ai_learning_process()
 adaptive_feedback_system = create_adaptive_feedback_system()
@@ -63,8 +52,15 @@ def load_user():
     # Bypass auth for landing page, login, static, and cara_kerja pages
     public_endpoints = [
         'landing', 'login', 'static',
-        'cara_kerja_siswa', 'cara_kerja_guru', 'cara_kerja_admin'
+        'register_siswa', 'register_guru'
     ]
+
+    # Check if route is marked as public
+    if request.endpoint:
+        view_function = app.view_functions.get(request.endpoint)
+        if view_function and getattr(view_function, 'is_public', False):
+            return
+
     if request.endpoint in public_endpoints:
         return
 
@@ -82,6 +78,49 @@ def landing():
     return render_template('landing_page/landing.html')
 
 
+@app.route('/register/siswa', methods=['GET', 'POST'])
+def register_siswa():
+    """Register siswa route"""
+    if request.method == 'GET':
+        return render_template('auth/register_siswa.html')
+
+    if request.method == 'POST':
+        # Get form data
+        username = request.form.get('username')
+        password = request.form.get('password')
+        email = request.form.get('email')
+        full_name = request.form.get('full_name')
+        grade_level = request.form.get('grade_level')
+        school_name = request.form.get('school_name')
+
+        # Check if username exists
+        if User.query.filter_by(username=username).first():
+            return render_template('auth/register_siswa.html', error='Username sudah digunakan')
+
+        # Create new user
+        user = User(username=username, email=email,
+                    role='siswa', full_name=full_name)
+        user.set_password(password)
+        db.session.add(user)
+
+        # Create student profile
+        profile = StudentProfile(
+            user=user,
+            kelas=grade_level,
+            school_name=school_name
+        )
+        db.session.add(profile)
+
+        try:
+            db.session.commit()
+            return redirect(url_for('login'))
+        except Exception as e:
+            db.session.rollback()
+            return render_template('auth/register_siswa.html', error='Terjadi kesalahan saat registrasi')
+
+    return render_template('auth/register_siswa.html')
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """Login page route"""
@@ -89,6 +128,10 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
         role = request.form.get('role')
+
+        if not all([username, password, role]):
+            return render_template('auth/login.html',
+                                   error='Username, password, dan role harus diisi.')
 
         # Demo account validation
         demo_accounts = {
@@ -115,42 +158,47 @@ def login():
                     return redirect(url_for('admin.dashboard_admin'))
 
         # Database account validation
-
-        # Mapping role input ke role di database
         role_map = {'student': 'siswa', 'teacher': 'guru', 'admin': 'admin'}
         db_role = role_map.get(role, role)
-        user = User.query.filter_by(username=username, role=db_role).first()
-        if user and user.check_password(password):
-            session['user_id'] = user.id
-            session['user_role'] = user.role
-            session['user_name'] = getattr(user, 'full_name', user.username)
-            session['username'] = user.username
-            # Tambahan: data lain jika ada
-            if user.role == 'siswa' and hasattr(user, 'student_profile') and user.student_profile:
-                session['class'] = getattr(
-                    user.student_profile, 'grade_level', '')
-                session['student_id'] = getattr(
-                    user.student_profile, 'student_id', '')
-                session['join_date'] = str(
-                    getattr(user.student_profile, 'created_at', ''))
-            elif user.role == 'guru' and hasattr(user, 'teacher_profile') and user.teacher_profile:
-                session['employee_id'] = getattr(
-                    user.teacher_profile, 'teacher_id', '')
-                session['department'] = getattr(
-                    user.teacher_profile, 'school_name', '')
 
-            # Redirect based on role
-            if user.role == 'siswa':
-                return redirect(url_for('siswa.dashboard_siswa'))
-            elif user.role == 'guru':
-                return redirect(url_for('guru.dashboard_guru'))
-            elif user.role == 'admin':
-                return redirect(url_for('admin.dashboard_admin'))
+        try:
+            user = User.query.filter_by(
+                username=username, role=db_role).first()
+            if user and user.check_password(password):
+                session['user_id'] = user.id
+                session['user_role'] = user.role
+                session['user_name'] = getattr(
+                    user, 'full_name', user.username)
+                session['username'] = user.username
 
-        # If validation fails
-        return render_template('login.html', error='Username atau password salah!')
+                if user.role == 'siswa' and user.student_profile:
+                    session['class'] = getattr(
+                        user.student_profile, 'grade_level', '')
+                    session['student_id'] = getattr(
+                        user.student_profile, 'student_id', '')
+                    session['join_date'] = str(
+                        getattr(user.student_profile, 'created_at', ''))
+                elif user.role == 'guru' and user.teacher_profile:
+                    session['employee_id'] = getattr(
+                        user.teacher_profile, 'teacher_id', '')
+                    session['department'] = getattr(
+                        user.teacher_profile, 'school_name', '')
 
-    return render_template('login.html')
+                if user.role == 'siswa':
+                    return redirect(url_for('siswa.dashboard_siswa'))
+                elif user.role == 'guru':
+                    return redirect(url_for('guru.dashboard_guru'))
+                elif user.role == 'admin':
+                    return redirect(url_for('admin.dashboard_admin'))
+
+            return render_template('auth/login.html',
+                                   error='Username atau password salah!')
+
+        except Exception as e:
+            return render_template('auth/login.html',
+                                   error='Terjadi kesalahan saat login. Silakan coba lagi.')
+
+    return render_template('auth/login.html')
 
 
 @app.route('/logout')
@@ -158,6 +206,52 @@ def logout():
     """Logout route"""
     session.clear()
     return redirect(url_for('landing'))
+
+
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    """Forgot password route"""
+    if request.method == 'POST':
+        email = request.form.get('email')
+        user = User.query.filter_by(email=email).first()
+
+        if user:
+            # Generate reset token
+            token = user.get_reset_token()
+
+            # Send reset email
+            reset_url = url_for('reset_password', token=token, _external=True)
+            # TODO: Implement email sending
+
+            return render_template('auth/forgot_password.html',
+                                   message='Link reset password telah dikirim ke email Anda.')
+
+        return render_template('auth/forgot_password.html',
+                               error='Email tidak ditemukan.')
+
+    return render_template('auth/forgot_password.html')
+
+
+@app.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    """Reset password route"""
+    if request.method == 'POST':
+        try:
+            user = User.verify_reset_token(token)
+            if user:
+                password = request.form.get('password')
+                user.set_password(password)
+                db.session.commit()
+                return redirect(url_for('login'))
+
+            return render_template('auth/reset_password.html',
+                                   error='Token tidak valid atau sudah kadaluarsa.')
+
+        except Exception as e:
+            return render_template('auth/reset_password.html',
+                                   error='Terjadi kesalahan saat reset password.')
+
+    return render_template('auth/reset_password.html', token=token)
 
 # API Routes untuk fitur dinamis
 
@@ -633,6 +727,9 @@ app.register_blueprint(guru_bp)
 app.register_blueprint(admin_features_bp)
 app.register_blueprint(guru_features_bp)
 app.register_blueprint(siswa_features_bp)
+app.register_blueprint(fitur)
+app.register_blueprint(legal)
+app.register_blueprint(cara_kerja)
 
 # Add database initialization route and main block
 

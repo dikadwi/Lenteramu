@@ -20,6 +20,7 @@
 3. **Penyesuaian & Review Kode**
 
 - [ ] Pastikan seluruh data processing dan Q-Learning menggunakan native Python
+- [ ] Tambahkan Login agar tidak bentrok untuk admin, guru, dan siswa
 - [ ] Hapus import dan kode yang tidak digunakan
 - [ ] Review konfigurasi database di `config.py` jika ada perubahan environment
 - [ ] Pastikan tidak ada library eksternal berat (pandas, numpy, scikit-learn, dsb)

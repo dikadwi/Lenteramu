@@ -1,0 +1,33 @@
+/* Custom styles for login and registration pages */
+/* Default auth styles */
+.auth-page {
+    background-color: #f8f9fa;
+}
+
+.auth-page .container {
+    margin-top: 2rem;
+}
+
+.auth-page .card {
+    box-shadow: none;
+}
+
+.auth-page .card-header {
+    background-color: white;
+}
+
+.auth-page .form-control {
+    border: 1px solid #ced4da;
+}
+
+.auth-page .btn {
+    padding: .375rem .75rem;
+}
+
+.auth-page .alert {
+    padding: .75rem 1.25rem;
+}
+
+.auth-page .form-group {
+    margin-bottom: 1rem;
+}

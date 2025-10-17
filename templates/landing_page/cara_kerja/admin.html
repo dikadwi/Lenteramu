@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cara Kerja Guru - LENTERAMU</title>
+    <title>Cara Kerja Admin - LENTERAMU</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -93,63 +93,62 @@
         </div>
     </nav>
     <div style="height:56px;"></div>
-    <!-- Hero Section: Cara Kerja Guru -->
-    <section class="hero cara-kerja-hero" style="padding: 4rem 0 2rem 0; color: #fff; background: linear-gradient(120deg, #667eea 0%, #764ba2 100%);">
+    <!-- Cara Kerja Admin Hero & Steps -->
+    <section class="hero cara-kerja-hero" style="padding: 4rem 0 3rem 0; color: #fff; background: linear-gradient(120deg, #667eea 0%, #764ba2 100%);">
         <div class="container">
-            <div class="hero-content" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center;">
-                <div class="hero-text" style="flex: 1 1 350px; min-width: 300px;">
-                    <h1 class="hero-title" style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">
-                        <i class="fas fa-chalkboard-teacher" style="margin-right: 10px;"></i> Cara Kerja Guru di <span class="gradient-text">LENTERAMU</span>
-                    </h1>
-                    <p class="hero-subtitle" style="font-size: 1.2rem; margin-bottom: 2rem;">
-                        Ikuti langkah-langkah berikut untuk memanfaatkan fitur AI dalam mendukung proses belajar-mengajar.
-                    </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+                <div class="floating-card card-1" style="background: rgba(255,255,255,0.15); border-radius: 1.5rem; padding: 1.5rem; margin-top: 2rem; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center;">
+                    <i class="fas fa-cogs fa-3x gradient-text" style="margin-bottom: 1rem;"></i>
+                    <div style="font-size: 1.1rem;">Admin Control Panel</div>
                 </div>
-                <div class="hero-visual" style="flex: 1 1 300px; min-width: 250px; display: flex; justify-content: center;">
-                    <div class="floating-card card-1" style="background: rgba(255,255,255,0.15); border-radius: 1rem; padding: 2rem; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center;">
-                        <i class="fas fa-lightbulb fa-3x gradient-text" style="margin-bottom: 1rem;"></i>
-                        <div>AI Teaching Tools</div>
-                    </div>
+                <div style="text-align: right; max-width: 600px;">
+                    <h1 class="hero-title" style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">
+                        <i class="fas fa-user-graduate" style="margin-right: 10px;"></i> Cara Kerja Admin di <span class="gradient-text">LENTERAMU</span>
+                    </h1>
+                    <p class="hero-subtitle" style="font-size: 1.2rem; margin-bottom: 0.2rem;">
+                        Ikuti langkah-langkah berikut untuk mengelola platform pembelajaran adaptif berbasis AI secara efisien dan aman.
+                    </p>
                 </div>
             </div>
         </div>
     </section>
+    <!-- Steps Section -->
     <section class="cara-kerja-steps" style="background: #fff;">
         <div class="container">
             <div class="section-header" style="text-align:center; margin-bottom:2rem;">
-                <h2 style="font-size:2rem; font-weight:600; color:#764ba2;">Langkah-langkah Guru</h2>
-                <p style="color:#555;">Setiap langkah didesain untuk mendukung pengajaran yang efektif, adaptif, dan kolaboratif.</p>
+                <h2 style="font-size:2rem; font-weight:600; color:#764ba2;">Langkah-langkah Admin</h2>
+                <p style="color:#555;">Setiap langkah didesain untuk mendukung pengelolaan platform yang aman, efisien, dan terukur.</p>
             </div>
             <div class="steps-grid">
-                <div class="step-card">
-                    <i class="fas fa-sign-in-alt"></i>
-                    <h4>Login ke Platform</h4>
-                    <p>Masuk menggunakan akun guru untuk mengakses dashboard dan fitur pengajaran.</p>
+                <div class="step-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border-radius: 1rem; box-shadow: 0 2px 16px rgba(102,126,234,0.08); padding: 2rem;">
+                    <i class="fas fa-sign-in-alt fa-2x" style="margin-bottom:1rem;"></i>
+                    <h4>Login ke Admin Panel</h4>
+                    <p>Masuk menggunakan akun admin untuk mengakses fitur manajemen platform.</p>
                 </div>
-                <div class="step-card">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <h4>Akses Dashboard Guru</h4>
-                    <p>Pantau statistik kelas, perkembangan siswa, dan aktivitas pembelajaran.</p>
+                <div class="step-card" style="background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); color: #fff; border-radius: 1rem; box-shadow: 0 2px 16px rgba(118,75,162,0.08); padding: 2rem;">
+                    <i class="fas fa-users-cog fa-2x" style="margin-bottom:1rem;"></i>
+                    <h4>Manajemen Pengguna</h4>
+                    <p>Kelola data siswa, guru, dan admin lain, serta atur hak akses sesuai kebutuhan.</p>
                 </div>
-                <div class="step-card">
-                    <i class="fas fa-book-open"></i>
-                    <h4>Buat & Kelola Materi</h4>
-                    <p>Buat, unggah, dan kelola materi pembelajaran serta tugas untuk siswa.</p>
+                <div class="step-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border-radius: 1rem; box-shadow: 0 2px 16px rgba(102,126,234,0.08); padding: 2rem;">
+                    <i class="fas fa-tools fa-2x" style="margin-bottom:1rem;"></i>
+                    <h4>Konfigurasi Platform</h4>
+                    <p>Sesuaikan pengaturan sistem, fitur, dan tampilan platform sesuai kebutuhan institusi.</p>
                 </div>
-                <div class="step-card">
-                    <i class="fas fa-tasks"></i>
-                    <h4>Penilaian & Umpan Balik</h4>
-                    <p>Nilai tugas/kuis dan berikan umpan balik adaptif berbasis AI.</p>
+                <div class="step-card" style="background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); color: #fff; border-radius: 1rem; box-shadow: 0 2px 16px rgba(118,75,162,0.08); padding: 2rem;">
+                    <i class="fas fa-chart-pie fa-2x" style="margin-bottom:1rem;"></i>
+                    <h4>Monitoring & Analitik</h4>
+                    <p>Pantau kesehatan sistem, aktivitas pengguna, dan analitik pembelajaran secara real-time.</p>
                 </div>
-                <div class="step-card">
-                    <i class="fas fa-robot"></i>
-                    <h4>Rekomendasi AI</h4>
-                    <p>Manfaatkan rekomendasi AI untuk mendukung pembelajaran personal siswa.</p>
+                <div class="step-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; border-radius: 1rem; box-shadow: 0 2px 16px rgba(102,126,234,0.08); padding: 2rem;">
+                    <i class="fas fa-shield-alt fa-2x" style="margin-bottom:1rem;"></i>
+                    <h4>Keamanan & Privasi</h4>
+                    <p>Pastikan data dan privasi pengguna terlindungi dengan enkripsi dan kebijakan keamanan yang ketat.</p>
                 </div>
-                <div class="step-card">
-                    <i class="fas fa-bell"></i>
-                    <h4>Notifikasi & Komunikasi</h4>
-                    <p>Kirim pengumuman, notifikasi, dan komunikasi efektif ke siswa.</p>
+                <div class="step-card" style="background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); color: #fff; border-radius: 1rem; box-shadow: 0 2px 16px rgba(118,75,162,0.08); padding: 2rem;">
+                    <i class="fas fa-bell fa-2x" style="margin-bottom:1rem;"></i>
+                    <h4>Notifikasi & Laporan</h4>
+                    <p>Terima notifikasi penting dan hasil laporan analitik untuk pengambilan keputusan yang lebih baik.</p>
                 </div>
             </div>
         </div>
