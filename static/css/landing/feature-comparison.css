@@ -1,0 +1,145 @@
+.feature-comparison {
+    padding: 4rem 0;
+    background: #f8f9fa;
+}
+
+.feature-comparison h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #333;
+    font-size: 2.5rem;
+}
+
+.table-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    overflow-x: auto;
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,0,0,0.1);
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.comparison-table thead th {
+    border-top: 1px solid #ddd;
+}
+
+.comparison-table thead th:first-child {
+    border-left: 1px solid #ddd;
+}
+
+.comparison-table thead th:last-child {
+    border-right: 1px solid #ddd;
+}
+
+.comparison-table tbody tr:last-child td {
+    border-bottom: 1px solid #ddd;
+}
+
+.comparison-table tbody td:first-child {
+    border-left: 1px solid #ddd;
+}
+
+.comparison-table tbody td:last-child {
+    border-right: 1px solid #ddd;
+}
+
+.comparison-table th {
+    background: linear-gradient(135deg, #6C7FEA, #8E54E9);
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.comparison-table th.feature-name {
+    text-align: left;
+    width: 25%;
+}
+
+.comparison-table th.role {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.comparison-table th.role i {
+    display: block;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.comparison-table td:first-child {
+    text-align: left;
+    font-weight: 500;
+    color: #444;
+}
+
+.comparison-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.feature-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: transform 0.2s;
+}
+
+.feature-badge:hover {
+    transform: scale(1.05);
+}
+
+.feature-badge.full {
+    background: #E3F2FD;
+    color: #1976D2;
+}
+
+.feature-badge.limited {
+    background: #FFF3E0;
+    color: #F57C00;
+}
+
+.feature-badge.personal {
+    background: #E8F5E9;
+    color: #388E3C;
+}
+
+.feature-badge.none {
+    background: #FFEBEE;
+    color: #D32F2F;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .feature-comparison h2 {
+        font-size: 2rem;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+        padding: 1rem;
+    }
+
+    .comparison-table th.role i {
+        font-size: 1.5rem;
+    }
+
+    .feature-badge {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}

@@ -1,11 +1,161 @@
-{% extends 'base.html' %}
+{% extends 'landing_page/base_landing.html' %}
 
 {% block title %}Terms of Service - LENTERAMU{% endblock %}
 
+{% block styles %}
+<style>
+    .legal-page {
+        padding: 6rem 0 4rem;
+        background: #f8f9fa;
+    }
+
+    .legal-page .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 0 40px rgba(0,0,0,0.1);
+    }
+
+    .legal-page h1 {
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    .last-updated {
+        text-align: center;
+        color: #666;
+        margin-bottom: 3rem;
+        font-style: italic;
+    }
+
+    .legal-content section {
+        margin-bottom: 2.5rem;
+    }
+
+    .legal-content h2 {
+        color: #4a90e2;
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #eee;
+    }
+
+    .legal-content h3 {
+        color: #555;
+        font-size: 1.3rem;
+        margin: 1.5rem 0 1rem;
+    }
+
+    .legal-content p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .legal-content ul {
+        list-style: none;
+        padding-left: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .legal-content ul li {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 0.8rem;
+        color: #666;
+    }
+
+    .legal-content ul li:before {
+        content: "•";
+        color: #4a90e2;
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+        .legal-page {
+            padding: 5rem 1rem 2rem;
+        }
+
+        .legal-page .container {
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .legal-page h1 {
+            font-size: 2rem;
+        }
+
+        .legal-content h2 {
+            font-size: 1.5rem;
+        }
+
+        .legal-content h3 {
+            font-size: 1.2rem;
+        }
+    }
+    .contact-cta {
+    background: #f7fafc;
+    padding: 60px 0;
+    text-align: center;
+    margin-top: 40px;
+    }
+
+    .contact-cta h2 {
+        color: #2d3748;
+        margin-bottom: 1rem;
+    }
+
+    .contact-cta p {
+        color: #4a5568;
+        margin-bottom: 2rem;
+    }
+
+    .btn-primary {
+        background: #4F46E5;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 6px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: #4338CA;
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
+<!-- Hero Section -->
+<section class="hero cara-kerja-hero" style="padding: 4rem 0 3rem 0; color: #fff; background: linear-gradient(120deg, #667eea 0%, #764ba2 100%);margin-top: 30px;">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+            <div class="floating-card card-1" style="background: rgba(255,255,255,0.15); border-radius: 1.5rem; padding: 1.5rem; margin-top: 2rem; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center;">
+                <i class="fas fa-gavel fa-3x gradient-text" style="margin-bottom: 1rem;"></i>
+                <div style="font-size: 1.1rem;">Terms of Service</div>
+            </div>
+            <div style="text-align: right; max-width: 600px;">
+                <h1 class="hero-title" style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">
+                    <i class="fas fa-file-contract" style="margin-right: 10px;"></i> Syarat & <span class="gradient-text">Ketentuan</span>
+                </h1>
+                <p class="hero-subtitle" style="font-size: 1.2rem; margin-bottom: 0.2rem;">
+                    Ketentuan penggunaan layanan LENTERAMU
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <div class="legal-page">
     <div class="container">
-        <h1>Syarat dan Ketentuan</h1>
         <p class="last-updated">Terakhir diperbarui: 16 Oktober 2025</p>
 
         <div class="legal-content">
@@ -127,6 +277,19 @@
                 </ul>
             </section>
         </div>
+    </div>
+</div>
+
+<div class="contact-cta" style="background: #f7fafc; padding: 4rem 0; text-align: center;">
+    <div class="container">
+        <i class="fas fa-headset fa-3x" style="color: #4a90e2; margin-bottom: 1.5rem;"></i>
+        <h2 style="font-size: 2rem; margin-bottom: 1rem;">Butuh Bantuan?</h2>
+        <p style="color: #666; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Tim legal kami siap membantu menjawab pertanyaan Anda seputar syarat dan ketentuan layanan LENTERAMU
+        </p>
+        <a href="mailto:legal@lenteramu.id" class="btn" style="background: #4a90e2; color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; display: inline-block; transition: all 0.3s ease;">
+            <i class="fas fa-envelope" style="margin-right: 8px;"></i> Hubungi Tim Legal
+        </a>
     </div>
 </div>
 {% endblock %}

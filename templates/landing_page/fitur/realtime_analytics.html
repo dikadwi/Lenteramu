@@ -1,0 +1,150 @@
+{% extends 'landing_page/base_landing.html' %}
+
+{% block title %}Real-time Analytics - LENTERAMU{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cara_kerja.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero cara-kerja-hero" style="padding: 4rem 0 3rem 0; color: #fff; background: linear-gradient(120deg, #667eea 0%, #764ba2 100%);margin-top: 30px;">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+            <div class="floating-card card-1" style="background: rgba(255,255,255,0.15); border-radius: 1.5rem; padding: 1.5rem; margin-top: 2rem; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center;">
+                <i class="fas fa-chart-bar fa-3x gradient-text" style="margin-bottom: 1rem;"></i>
+                <div style="font-size: 1.1rem;">Real-time Analytics</div>
+            </div>
+            <div style="text-align: right; max-width: 600px;">
+                <h1 class="hero-title" style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">
+                    <i class="fas fa-chart-line" style="margin-right: 10px;"></i> Real-time <span class="gradient-text">Analytics</span>
+                </h1>
+                <p class="hero-subtitle" style="font-size: 1.2rem; margin-bottom: 0.2rem;">
+                    Pantau dan analisis performa pembelajaran secara real-time dengan data yang mendalam.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cara-kerja-steps" style="background: #fff; margin-top: 20px;">
+    <div class="feature-content">
+        <div class="container">
+            <section class="feature-overview">
+                <h2>Tentang Real-time Analytics</h2>
+                <p>LENTERAMU menyediakan analisis data pembelajaran secara real-time yang membantu siswa, guru, dan administrator memahami dan mengoptimalkan proses pembelajaran.</p>
+                
+                <div class="feature-highlights">
+                    <div class="highlight-card">
+                        <i class="fas fa-chart-bar"></i>
+                        <h3>Performance Tracking</h3>
+                        <p>Pemantauan performa belajar secara detail dan real-time</p>
+                    </div>
+                    
+                    <div class="highlight-card">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>Smart Insights</h3>
+                        <p>Wawasan mendalam tentang pola dan tren pembelajaran</p>
+                    </div>
+                    
+                    <div class="highlight-card">
+                        <i class="fas fa-tasks"></i>
+                        <h3>Progress Monitoring</h3>
+                        <p>Pantau kemajuan pembelajaran dengan metrik yang terukur</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="how-it-works">
+                <h2>Cara Kerja Analytics</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Pengumpulan Data</h3>
+                        <p>Sistem mengumpulkan data pembelajaran dari berbagai aktivitas siswa</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Analisis Real-time</h3>
+                        <p>Data dianalisis secara real-time untuk menghasilkan insight bermakna</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Visualisasi & Report</h3>
+                        <p>Hasil analisis ditampilkan dalam bentuk visual yang mudah dipahami</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="benefits">
+                <h2>Fitur Utama Analytics</h2>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Learning Progress</h3>
+                        <p>Track kemajuan pembelajaran dan analisis waktu belajar secara detail</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <i class="fas fa-puzzle-piece"></i>
+                        <h3>Skill Analysis</h3>
+                        <p>Pemetaan kompetensi dan identifikasi area pengembangan</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <i class="fas fa-users"></i>
+                        <h3>Comparative Analysis</h3>
+                        <p>Bandingkan performa dengan benchmark dan rata-rata kelas</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>Custom Reports</h3>
+                        <p>Generate laporan terperinci dengan visualisasi interaktif</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="benefits">
+                <h2>Manfaat untuk Pengguna</h2>
+                 <div class="benefits-grid">
+                <div class="benefit-card">
+                    <i class="fas fa-user-graduate"></i>
+                    <div>
+                        <h3>Untuk Siswa</h3>
+                        <p>Pemahaman mendalam tentang kemajuan belajar, identifikasi area peningkatan, dan motivasi melalui tracking pencapaian</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-card">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <div>
+                        <h3>Untuk Guru</h3>
+                        <p>Monitoring performa kelas real-time, identifikasi siswa yang membutuhkan bantuan, dan pengambilan keputusan berbasis data</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-card">
+                    <i class="fas fa-user-cog"></i>
+                    <div>
+                        <h3>Untuk Administrator</h3>
+                        <p>Overview performa institusi, analisis tren pembelajaran, dan optimasi alokasi sumber daya yang efektif</p>
+                    </div>
+                </div>
+            </div>
+            </section>
+
+            <section class="cta">
+                <h2>Optimalkan Pembelajaran dengan Analytics</h2>
+                <p>Gunakan data untuk meningkatkan efektivitas pembelajaran Anda</p>
+                <div class="cta-buttons">
+                    <a href="/register/siswa" class="btn btn-primary">Mulai Sekarang</a>
+                    <a href="/analytics/demo" class="btn btn-secondary">Lihat Demo Analytics</a>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+{% endblock %}

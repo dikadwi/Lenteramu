@@ -1,0 +1,243 @@
+{% extends 'landing_page/base_landing.html' %}
+
+{% block title %}Cara Kerja Analytics - LENTERAMU{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cara_kerja.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero cara-kerja-hero" style="padding: 4rem 0 3rem 0; color: #fff; background: linear-gradient(120deg, #667eea 0%, #764ba2 100%); margin-top: 30px;">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+            <div class="floating-card card-1" style="background: rgba(255,255,255,0.15); border-radius: 1.5rem; padding: 1.5rem; margin-top: 2rem; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center;">
+                <i class="fas fa-chart-line fa-3x gradient-text" style="margin-bottom: 1rem;"></i>
+                <div style="font-size: 1.1rem;">Analytics System</div>
+            </div>
+            <div style="text-align: right; max-width: 600px;">
+                <h1 class="hero-title" style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">
+                    <i class="fas fa-chart-pie" style="margin-right: 10px;"></i> Cara Kerja <span class="gradient-text">Analytics</span>
+                </h1>
+                <p class="hero-subtitle" style="font-size: 1.2rem; margin-bottom: 0.2rem;">
+                    Sistem analitik cerdas untuk pemantauan dan peningkatan kualitas pembelajaran
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cara-kerja-steps" style="background: #fff; margin-top: 20px;">
+    <div class="feature-content">
+        <div class="container">
+            <!-- Overview Section -->
+            <section class="feature-overview">
+                <h2>Analytics Overview</h2>
+                <p>Sistem analytics LENTERAMU menggunakan teknologi machine learning dan data mining untuk menganalisis data pembelajaran secara real-time dan menghasilkan insights yang akurat.</p>
+                
+                <div class="feature-highlights">
+                    <div class="highlight-card">
+                        <i class="fas fa-brain"></i>
+                        <h3>Machine Learning</h3>
+                        <p>Analisis pola pembelajaran menggunakan AI</p>
+                    </div>
+                    
+                    <div class="highlight-card">
+                        <i class="fas fa-chart-bar"></i>
+                        <h3>Real-time Analytics</h3>
+                        <p>Pemantauan performa secara langsung</p>
+                    </div>
+                    
+                    <div class="highlight-card">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>Smart Insights</h3>
+                        <p>Rekomendasi berbasis data analytics</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How It Works Section -->
+            <section class="how-it-works">
+                <h2>Proses Analytics</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Pengumpulan Data</h3>
+                        <p>Mengumpulkan data aktivitas pembelajaran, interaksi, dan performa dari berbagai sumber</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Analisis Data</h3>
+                        <p>Memproses data menggunakan algoritma AI untuk menemukan pola dan tren</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Generasi Insight</h3>
+                        <p>Menghasilkan rekomendasi dan insights yang dapat ditindaklanjuti</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics Features -->
+            <section class="feature-comparison">
+                <h2>Fitur Analytics Per Level</h2>
+                <div class="table-wrapper">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th class="feature-name">Tipe Analisis</th>
+                                <th class="role">
+                                    <i class="fas fa-user-graduate"></i>
+                                    <span>Siswa</span>
+                                </th>
+                                <th class="role">
+                                    <i class="fas fa-chalkboard-teacher"></i>
+                                    <span>Guru</span>
+                                </th>
+                                <th class="role">
+                                    <i class="fas fa-user-shield"></i>
+                                    <span>Administrator</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Learning Analytics</td>
+                                <td><span class="feature-badge personal">Personal</span></td>
+                                <td><span class="feature-badge full">Kelas</span></td>
+                                <td><span class="feature-badge full">Institusi</span></td>
+                            </tr>
+                            <tr>
+                                <td>Performance Tracking</td>
+                                <td><span class="feature-badge personal">Individual</span></td>
+                                <td><span class="feature-badge full">Grup</span></td>
+                                <td><span class="feature-badge full">Global</span></td>
+                            </tr>
+                            <tr>
+                                <td>Predictive Analytics</td>
+                                <td><span class="feature-badge limited">Basic</span></td>
+                                <td><span class="feature-badge full">Advanced</span></td>
+                                <td><span class="feature-badge full">Enterprise</span></td>
+                            </tr>
+                            <tr>
+                                <td>Report Generation</td>
+                                <td><span class="feature-badge personal">Self</span></td>
+                                <td><span class="feature-badge full">Class</span></td>
+                                <td><span class="feature-badge full">Complete</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Detailed Features -->
+            <section class="detailed-features">
+                <h2>Fitur Analytics Detail</h2>
+                <div class="features-grid">
+                    <!-- Learning Analytics -->
+                    <div class="feature-detail-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>Learning Analytics</h3>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Analisis pola belajar</li>
+                            <li><i class="fas fa-check"></i> Tracking waktu belajar</li>
+                            <li><i class="fas fa-check"></i> Identifikasi gaya belajar</li>
+                            <li><i class="fas fa-check"></i> Rekomendasi materi</li>
+                        </ul>
+                    </div>
+
+                    <!-- Performance Analytics -->
+                    <div class="feature-detail-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Performance Analytics</h3>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Tracking nilai dan progress</li>
+                            <li><i class="fas fa-check"></i> Analisis kesulitan materi</li>
+                            <li><i class="fas fa-check"></i> Perbandingan performa</li>
+                            <li><i class="fas fa-check"></i> Identifikasi area improvement</li>
+                        </ul>
+                    </div>
+
+                    <!-- Predictive Analytics -->
+                    <div class="feature-detail-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>Predictive Analytics</h3>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Prediksi performa</li>
+                            <li><i class="fas fa-check"></i> Risk assessment</li>
+                            <li><i class="fas fa-check"></i> Rekomendasi intervensi</li>
+                            <li><i class="fas fa-check"></i> Forecast pencapaian</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Technology Stack -->
+            <section class="tech-stack">
+                <h2>Teknologi Analytics</h2>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <i class="fas fa-database"></i>
+                        <h3>Big Data Processing</h3>
+                        <p>Menggunakan teknologi big data untuk memproses data pembelajaran dalam skala besar</p>
+                    </div>
+                    
+                    <div class="tech-card">
+                        <i class="fas fa-robot"></i>
+                        <h3>AI & Machine Learning</h3>
+                        <p>Algoritma AI canggih untuk analisis prediktif dan pattern recognition</p>
+                    </div>
+                    
+                    <div class="tech-card">
+                        <i class="fas fa-chart-pie"></i>
+                        <h3>Visualization</h3>
+                        <p>Visualisasi data interaktif untuk memudahkan pemahaman insights</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Benefits Section -->
+            <section class="benefits">
+                <h2>Manfaat Analytics</h2>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <i class="fas fa-user-graduate"></i>
+                        <h3>Untuk Siswa</h3>
+                        <p>Pemahaman mendalam tentang pola belajar dan area pengembangan diri</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <h3>Untuk Guru</h3>
+                        <p>Insight mendalam tentang efektivitas pembelajaran dan kebutuhan siswa</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <i class="fas fa-school"></i>
+                        <h3>Untuk Institusi</h3>
+                        <p>Data komprehensif untuk pengambilan keputusan dan peningkatan kualitas</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Call to Action -->
+            <section class="cta">
+                <h2>Mulai Gunakan Analytics</h2>
+                <p>Tingkatkan kualitas pembelajaran dengan insights yang akurat dan actionable</p>
+                <div class="cta-buttons">
+                    <a href="/register/siswa" class="btn btn-primary">Daftar Sekarang</a>
+                    <a href="/demo" class="btn btn-secondary">Lihat Demo</a>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+{% endblock %}

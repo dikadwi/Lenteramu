@@ -11,10 +11,10 @@ def ai_learning():
     return render_template('landing_page/fitur/ai_learning.html')
 
 
-@fitur.route('/analytics')
+@fitur.route('/realtime_analytics')
 @public_route
-def analytics():
-    return render_template('landing_page/fitur/analytics.html')
+def realtime_analytics():
+    return render_template('landing_page/fitur/realtime_analytics.html')
 
 
 @fitur.route('/adaptive-feedback')

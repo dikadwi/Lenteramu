@@ -1,16 +1,33 @@
-{% extends 'base.html' %}
+{% extends 'landing_page/base_landing.html' %}
 
 {% block title %}Adaptive Feedback - LENTERAMU{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cara_kerja.css') }}">
+{% endblock %}
+
 {% block content %}
-<div class="feature-page">
-    <div class="feature-header">
-        <div class="container">
-            <h1>Adaptive Feedback</h1>
-            <p>Umpan balik pembelajaran yang personal dan adaptif</p>
+<!-- Hero Section -->
+<section class="hero cara-kerja-hero" style="padding: 4rem 0 3rem 0; color: #fff; background: linear-gradient(120deg, #667eea 0%, #764ba2 100%);margin-top: 30px;">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+            <div class="floating-card card-1" style="background: rgba(255,255,255,0.15); border-radius: 1.5rem; padding: 1.5rem; margin-top: 2rem; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center;">
+                <i class="fas fa-comments fa-3x gradient-text" style="margin-bottom: 1rem;"></i>
+                <div style="font-size: 1.1rem;">Smart Feedback System</div>
+            </div>
+            <div style="text-align: right; max-width: 600px;">
+                <h1 class="hero-title" style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">
+                    <i class="fas fa-comments" style="margin-right: 10px;"></i> Adaptive <span class="gradient-text">Feedback</span>
+                </h1>
+                <p class="hero-subtitle" style="font-size: 1.2rem; margin-bottom: 0.2rem;">
+                    Sistem umpan balik pintar yang memberikan saran dan arahan pembelajaran yang tepat sasaran.
+                </p>
+            </div>
         </div>
     </div>
+</section>
 
+<section class="cara-kerja-steps" style="background: #fff; margin-top: 20px;">
     <div class="feature-content">
         <div class="container">
             <section class="feature-overview">
@@ -38,67 +55,62 @@
                 </div>
             </section>
 
-            <section class="feedback-types">
-                <h2>Jenis Umpan Balik</h2>
-                <div class="types-grid">
-                    <div class="type-card">
-                        <i class="fas fa-check-circle"></i>
-                        <h3>Instant Feedback</h3>
-                        <p>Umpan balik langsung saat mengerjakan tugas atau latihan</p>
-                        <ul>
-                            <li>Koreksi kesalahan real-time</li>
-                            <li>Penjelasan detail setiap jawaban</li>
-                            <li>Saran perbaikan langsung</li>
-                        </ul>
+            <section class="how-it-works">
+                <h2>Cara Kerja Adaptive Feedback</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Analisis Jawaban</h3>
+                        <p>Sistem menganalisis jawaban dan mengidentifikasi pola kesalahan</p>
                     </div>
                     
-                    <div class="type-card">
-                        <i class="fas fa-clock"></i>
-                        <h3>Progress Feedback</h3>
-                        <p>Evaluasi perkembangan pembelajaran secara berkala</p>
-                        <ul>
-                            <li>Laporan kemajuan mingguan</li>
-                            <li>Analisis tren pembelajaran</li>
-                            <li>Rekomendasi peningkatan</li>
-                        </ul>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Generasi Feedback</h3>
+                        <p>AI membuat umpan balik yang sesuai dengan kesalahan dan level siswa</p>
                     </div>
                     
-                    <div class="type-card">
-                        <i class="fas fa-star"></i>
-                        <h3>Achievement Feedback</h3>
-                        <p>Penghargaan dan motivasi atas pencapaian</p>
-                        <ul>
-                            <li>Badge dan rewards</li>
-                            <li>Milestone celebrations</li>
-                            <li>Motivational messages</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="type-card">
-                        <i class="fas fa-bullseye"></i>
-                        <h3>Targeted Feedback</h3>
-                        <p>Umpan balik khusus untuk area yang perlu ditingkatkan</p>
-                        <ul>
-                            <li>Identifikasi kesulitan spesifik</li>
-                            <li>Rekomendasi materi pendukung</li>
-                            <li>Strategi perbaikan personal</li>
-                        </ul>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Rekomendasi Belajar</h3>
+                        <p>Memberikan saran materi dan latihan yang tepat untuk perbaikan</p>
                     </div>
                 </div>
             </section>
 
-            <section class="ai-features">
-                <h2>Fitur AI dalam Feedback</h2>
-                <div class="features-list">
-                    <div class="feature-item">
-                        <i class="fas fa-brain"></i>
-                        <div>
-                            <h3>Pattern Recognition</h3>
-                            <p>AI mengenali pola kesalahan dan memberikan solusi yang tepat</p>
-                        </div>
+            <section class="benefits">
+                <h2>Manfaat Adaptive Feedback</h2>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <i class="fas fa-bullseye"></i>
+                        <h3>Fokus Tepat</h3>
+                        <p>Feedback yang tepat sasaran membantu perbaikan lebih efektif</p>
                     </div>
                     
-                    <div class="feature-item">
+                    <div class="benefit-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Kemajuan Terukur</h3>
+                        <p>Pantau perkembangan belajar dengan metrics yang jelas</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <i class="fas fa-smile-beam"></i>
+                        <h3>Motivasi Meningkat</h3>
+                        <p>Feedback positif membangun kepercayaan diri siswa</p>
+                    </div>
+                    
+                    <div class="benefit-card">
+                        <i class="fas fa-tasks"></i>
+                        <h3>Belajar Mandiri</h3>
+                        <p>Mendukung siswa dalam mengidentifikasi dan memperbaiki kesalahan</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="benefits">
+                <h2>Fitur Utama Adaptive Feedback</h2>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
                         <i class="fas fa-lightbulb"></i>
                         <div>
                             <h3>Smart Suggestions</h3>
@@ -106,7 +118,7 @@
                         </div>
                     </div>
                     
-                    <div class="feature-item">
+                    <div class="benefit-card">
                         <i class="fas fa-chart-line"></i>
                         <div>
                             <h3>Predictive Analysis</h3>
@@ -114,7 +126,7 @@
                         </div>
                     </div>
                     
-                    <div class="feature-item">
+                    <div class="benefit-card">
                         <i class="fas fa-user-graduate"></i>
                         <div>
                             <h3>Personalized Learning Path</h3>
@@ -149,14 +161,13 @@
                         </div>
                     </div>
                 </div>
-            </section>
-
+            </section>            
             <section class="cta">
-                <h2>Tingkatkan Pembelajaran dengan Feedback Adaptif</h2>
-                <p>Dapatkan umpan balik personal untuk hasil belajar yang lebih baik</p>
+                <h2>Mulai Dapatkan Feedback Pintar</h2>
+                <p>Tingkatkan pembelajaran Anda dengan sistem feedback yang personal dan efektif</p>
                 <div class="cta-buttons">
-                    <a href="/register_siswa" class="btn btn-primary">Daftar Sekarang</a>
-                    <a href="/demo/feedback" class="btn btn-secondary">Coba Demo</a>
+                    <a href="/register/siswa" class="btn btn-primary">Daftar Sekarang</a>
+                    <a href="/demo" class="btn btn-secondary">Lihat Demo</a>
                 </div>
             </section>
         </div>

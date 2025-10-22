@@ -22,3 +22,9 @@ def cara_kerja_guru():
 @public_route
 def cara_kerja_admin():
     return render_template('landing_page/cara_kerja/admin.html')
+
+
+@cara_kerja.route('/analytics')
+@public_route
+def cara_kerja_analytics():
+    return render_template('landing_page/cara_kerja/analytics.html')

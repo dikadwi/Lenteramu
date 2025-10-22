@@ -1,37 +1,57 @@
-{% extends 'base.html' %}
+{% extends 'landing_page/base_landing.html' %}
 
 {% block title %}AI Learning - LENTERAMU{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cara_kerja.css') }}">
+{% endblock %}
+
 {% block content %}
-<div class="feature-page">
-    <div class="feature-header">
-        <div class="container">
-            <h1>AI-Powered Learning</h1>
-            <p>Pengalaman belajar yang dipersonalisasi dengan kecerdasan buatan</p>
+<!-- Cara Kerja Admin Hero & Steps -->
+<section class="hero cara-kerja-hero" style="padding: 4rem 0 3rem 0; color: #fff; background: linear-gradient(120deg, #667eea 0%, #764ba2 100%);margin-top: 30px;">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
+            <div class="floating-card card-1" style="background: rgba(255,255,255,0.15); border-radius: 1.5rem; padding: 1.5rem; margin-top: 2rem; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center;">
+                <i class="fas fa-brain fa-3x gradient-text" style="margin-bottom: 1rem;"></i>
+                <div style="font-size: 1.1rem;">AI Learning Experience</div>
+            </div>
+            <div style="text-align: right; max-width: 600px;">
+                <h1 class="hero-title" style="font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem;">
+                    <i class="fas fa-brain" style="margin-right: 10px;"></i> AI-Powered <span class="gradient-text">Learning</span>
+                </h1>
+                <p class="hero-subtitle" style="font-size: 1.2rem; margin-bottom: 0.2rem;">
+                    Pengalaman belajar yang dipersonalisasi dengan kecerdasan buatan untuk hasil maksimal.
+                </p>
+            </div>
         </div>
     </div>
-
+</section>
+<!-- Steps Section -->
+<section class="cara-kerja-steps" style="background: #fff; margin-top: 20px;">
+    <!-- Main Content -->
     <div class="feature-content">
         <div class="container">
             <section class="feature-overview">
-                <h2>Tentang AI Learning</h2>
-                <p>AI Learning di LENTERAMU menggunakan teknologi kecerdasan buatan canggih untuk memahami cara belajar setiap siswa dan memberikan konten yang paling sesuai dengan kebutuhan mereka.</p>
-                
+                 <div class="section-header" style="text-align:center; margin-bottom:2rem;">
+                    <h2 style="font-size:2rem; font-weight:600; color:#764ba2;">Tentang AI Learning</h2>
+                    <p style="color:#555;">AI Learning di LENTERAMU menggunakan teknologi kecerdasan buatan canggih untuk memahami cara belajar setiap siswa dan memberikan konten yang paling sesuai dengan kebutuhan mereka.</p>
+                </div>
+
                 <div class="feature-highlights">
                     <div class="highlight-card">
-                        <i class="fas fa-brain"></i>
+                        <i class="fas fa-brain fa-2x"></i>
                         <h3>Pembelajaran Adaptif</h3>
                         <p>Sistem yang menyesuaikan dengan gaya belajar dan tingkat pemahaman setiap siswa</p>
                     </div>
                     
                     <div class="highlight-card">
-                        <i class="fas fa-chart-line"></i>
+                        <i class="fas fa-chart-line fa-2x"></i>
                         <h3>Analisis Real-time</h3>
                         <p>Pemantauan kemajuan belajar secara real-time dengan insight mendalam</p>
                     </div>
                     
                     <div class="highlight-card">
-                        <i class="fas fa-bullseye"></i>
+                        <i class="fas fa-bullseye fa-2x"></i>
                         <h3>Rekomendasi Personal</h3>
                         <p>Saran materi pembelajaran yang disesuaikan dengan kebutuhan individu</p>
                     </div>
@@ -65,25 +85,25 @@
                 <h2>Manfaat AI Learning</h2>
                 <div class="benefits-grid">
                     <div class="benefit-card">
-                        <i class="fas fa-clock"></i>
+                        <i class="fas fa-clock fa-2x"></i>
                         <h3>Efisiensi Waktu</h3>
                         <p>Pembelajaran yang lebih cepat dengan materi yang tepat sasaran</p>
                     </div>
                     
                     <div class="benefit-card">
-                        <i class="fas fa-graduation-cap"></i>
+                        <i class="fas fa-graduation-cap fa-2x"></i>
                         <h3>Hasil Lebih Baik</h3>
                         <p>Peningkatan pemahaman dan hasil belajar yang terukur</p>
                     </div>
                     
                     <div class="benefit-card">
-                        <i class="fas fa-heart"></i>
+                        <i class="fas fa-heart fa-2x"></i>
                         <h3>Motivasi Tinggi</h3>
                         <p>Siswa lebih termotivasi dengan pembelajaran yang sesuai kemampuan</p>
                     </div>
                     
                     <div class="benefit-card">
-                        <i class="fas fa-users"></i>
+                        <i class="fas fa-users fa-2x"></i>
                         <h3>Pembelajaran Kolaboratif</h3>
                         <p>Mendukung pembelajaran individu dan kelompok</p>
                     </div>
@@ -94,11 +114,11 @@
                 <h2>Mulai Pembelajaran Adaptif Anda</h2>
                 <p>Bergabunglah dengan ribuan siswa yang telah merasakan manfaat AI Learning</p>
                 <div class="cta-buttons">
-                    <a href="/register_siswa" class="btn btn-primary">Daftar Sekarang</a>
+                    <a href="/register/siswa" class="btn btn-primary">Daftar Sekarang</a>
                     <a href="/demo" class="btn btn-secondary">Coba Demo</a>
                 </div>
             </section>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}

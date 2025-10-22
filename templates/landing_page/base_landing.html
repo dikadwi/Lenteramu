@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LENTERAMU{% endblock %}</title>
+    
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    
+    <!-- Additional Styles -->
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="landing-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>LENTERAMU</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Beranda</a></li>
+                <li><a href="/fitur">Fitur</a></li>
+                <li><a href="/tentang">Tentang</a></li>
+                <li><a href="#kontak">Kontak</a></li>
+                <li><a href="/login" class="btn-login">Login</a></li>
+            </ul>
+            <button class="nav-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer id="kontak" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>LENTERAMU</span>
+                    </div>
+                    <p>Platform pembelajaran adaptif berbasis AI untuk masa depan pendidikan yang lebih baik.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="/cara_kerja/siswa">Cara Kerja Siswa</a></li>
+                        <li><a href="/cara_kerja/guru">Cara Kerja Guru</a></li>
+                        <li><a href="/cara_kerja/admin">Cara Kerja Admin</a></li>
+                        <li><a href="/cara_kerja/analytics">Analytics</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Fitur</h4>
+                    <ul>
+                        <li><a href="/fitur/ai-learning">AI Learning</a></li>
+                        <li><a href="/fitur/adaptive-feedback">Adaptive Feedback</a></li>
+                        <li><a href="/fitur/realtime_analytics">Real-time Analytics</a></li>
+                        <li><a href="/fitur/multi-role">Multi-Role Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Kontak</h4>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contact@lenteramu.id</li>
+                        <li><i class="fas fa-phone"></i> +62 21 1234 5678</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandung, Indonesia</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LENTERAMU Platform. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="/legal/privacy">Privacy Policy</a>
+                    <a href="/legal/terms">Terms of Service</a>
+                    <a href="/legal/cookies">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script>
+        // Navigation toggle for mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const navMenu = document.querySelector('.nav-menu');
+            const navToggle = document.querySelector('.nav-toggle');
+            
+            navToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+                this.querySelector('i').classList.toggle('fa-bars');
+                this.querySelector('i').classList.toggle('fa-times');
+            });
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
