@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block head %}
+<!-- Add Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Add ApexCharts for better data visualization -->
+<link href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0/dist/apexcharts.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0/dist/apexcharts.min.js"></script>
+<!-- Custom CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/siswa/style.css') }}">
+{% endblock %}
+
+{% block navbar %}
+<nav class="siswa-navbar">
+    <div class="container">
+        <div class="nav-brand">
+            <a href="{{ url_for('siswa.dashboard_siswa') }}">
+                <i class="fas fa-graduation-cap"></i>
+                <span>LENTERAMU</span>
+            </a>
+        </div>
+
+        <div class="nav-toggle" onclick="toggleMobileMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="nav-menu">
+            <ul class="nav-links">
+                <li>
+                    <a href="{{ url_for('siswa.dashboard_siswa') }}" {% if request.endpoint == 'siswa.dashboard_siswa' %}class="active"{% endif %}>
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('siswa_features.materi') }}" {% if request.endpoint == 'siswa_features.materi' %}class="active"{% endif %}>
+                        <i class="fas fa-book"></i>
+                        <span>Materi</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('siswa_features.tugas') }}" {% if request.endpoint == 'siswa_features.tugas' %}class="active"{% endif %}>
+                        <i class="fas fa-tasks"></i>
+                        <span>Tugas</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('siswa_features.kuis') }}" {% if request.endpoint == 'siswa_features.kuis' %}class="active"{% endif %}>
+                        <i class="fas fa-question-circle"></i>
+                        <span>Kuis</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('siswa_features.ai_rekomendasi') }}" {% if request.endpoint == 'siswa_features.ai_rekomendasi' %}class="active"{% endif %}>
+                        <i class="fas fa-robot"></i>
+                        <span>AI Rekomendasi</span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="nav-profile">
+                <div class="profile-menu" onclick="toggleProfileMenu()">
+                    <img src="{{ user.avatar or url_for('static', filename='images/avatar-default.png') }}" alt="Profile" class="profile-img">
+                    <span class="profile-name">{{ user.name }}</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a href="{{ url_for('siswa.profile') }}">
+                        <i class="fas fa-user"></i>
+                        Profil Saya
+                    </a>
+                    <a href="{{ url_for('siswa_features.notifications') }}">
+                        <i class="fas fa-bell"></i>
+                        Notifikasi
+                        <span class="badge">3</span>
+                    </a>
+                    <a href="{{ url_for('siswa_features.settings') }}">
+                        <i class="fas fa-cog"></i>
+                        Pengaturan
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ url_for('auth.logout') }}" class="logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Keluar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block footer %}
+<footer class="siswa-footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span>LENTERAMU</span>
+                <p>Platform Pembelajaran Adaptif dengan AI</p>
+            </div>
+            <div class="footer-links">
+                <div class="link-group">
+                    <h4>Bantuan</h4>
+                    <ul>
+                        <li><a href="{{ url_for('siswa_features.guidelines') }}">Panduan Penggunaan</a></li>
+                        <li><a href="{{ url_for('siswa_features.faq') }}">FAQ</a></li>
+                        <li><a href="{{ url_for('siswa_features.support') }}">Dukungan Teknis</a></li>
+                    </ul>
+                </div>
+                <div class="link-group">
+                    <h4>Informasi</h4>
+                    <ul>
+                        <li><a href="{{ url_for('landing.privacy') }}">Kebijakan Privasi</a></li>
+                        <li><a href="{{ url_for('landing.terms') }}">Syarat & Ketentuan</a></li>
+                        <li><a href="{{ url_for('landing.about') }}">Tentang Kami</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 LENTERAMU. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Notification System -->
+<div id="notification-container"></div>
+
+<!-- Custom Scripts -->
+<script src="{{ url_for('static', filename='js/siswa/main.js') }}"></script>
+{% endblock %}
