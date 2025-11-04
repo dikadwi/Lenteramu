@@ -1,24 +1,95 @@
-{% extends 'base.html' %}
+{% extends 'siswa/base_siswa.html' %}
+
+{% block title %}Komunitas Siswa - LENTERAMU{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/siswa/community.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="container">
-  <div class="dashboard-header mb-4">
-    <div class="user-welcome">
-      <div class="user-avatar">
-        <i class="fas fa-users fa-3x" style="color:#764ba2;"></i>
-      </div>
-      <div class="welcome-text">
-        <h1>Diskusi & Komunitas Siswa</h1>
-        <p class="user-info">Bergabunglah dalam diskusi, tanya jawab, dan komunitas belajar!</p>
-      </div>
+
+  <div class="menu-header mb-4">
+        <div class="header-welcome">
+            <div class="header-text">
+                <i class="fas fa-users fa-3x" style="color:#764ba2;"></i>
+                <div class="header-title">
+                <h1>Diskusi & Komunitas Siswa</h1>
+                <p class="header-info">Bergabunglah dalam diskusi, tanya jawab, dan komunitas belajar!</p>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="dashboard-grid">
-    <div class="dashboard-card">
-      <div class="card-header">
-        <h3><i class="fas fa-comments"></i> Forum Diskusi</h3>
-      </div>
-      <div class="alert alert-info text-center">Fitur diskusi akan segera hadir. Nantikan update selanjutnya!</div>
+
+    <div class="community-grid">
+        <!-- Forum Diskusi -->
+        <div class="dashboard-card forum-card">
+            <div class="card-header">
+                <h3><i class="fas fa-comments"></i> Forum Diskusi</h3>
+                <button type="button" class="btn btn-primary btn-sm" disabled>
+                    <i class="fas fa-plus"></i> Buat Diskusi
+                </button>
+            </div>
+            <div class="card-content">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div class="alert-content">
+                        <strong>Fitur diskusi akan segera hadir!</strong>
+                        <p>Nantikan update selanjutnya untuk fitur forum diskusi yang lebih interaktif.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grup Belajar -->
+        <div class="dashboard-card study-groups-card">
+            <div class="card-header">
+                <h3><i class="fas fa-user-friends"></i> Grup Belajar</h3>
+                <span class="badge badge-primary">Segera</span>
+            </div>
+            <div class="card-content">
+                <ul class="feature-list">
+                    <li><i class="fas fa-check-circle"></i> Belajar bersama teman sekelas</li>
+                    <li><i class="fas fa-check-circle"></i> Diskusi materi pelajaran</li>
+                    <li><i class="fas fa-check-circle"></i> Berbagi catatan dan ringkasan</li>
+                    <li><i class="fas fa-check-circle"></i> Jadwal belajar kelompok</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tanya Jawab -->
+        <div class="dashboard-card qa-card">
+            <div class="card-header">
+                <h3><i class="fas fa-question-circle"></i> Tanya Jawab</h3>
+                <span class="badge badge-primary">Segera</span>
+            </div>
+            <div class="card-content">
+                <ul class="feature-list">
+                    <li><i class="fas fa-check-circle"></i> Tanya guru langsung</li>
+                    <li><i class="fas fa-check-circle"></i> Bantuan dari siswa lain</li>
+                    <li><i class="fas fa-check-circle"></i> Arsip pertanyaan populer</li>
+                    <li><i class="fas fa-check-circle"></i> Poin reward untuk jawaban terbaik</li>
+                </ul>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animasi card saat muncul
+    const cards = document.querySelectorAll('.dashboard-card');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.5s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, 100 * (index + 1));
+    });
+});
+</script>
 {% endblock %}

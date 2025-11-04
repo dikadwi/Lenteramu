@@ -1,0 +1,125 @@
+digraph Sistem_Pembelajaran_AI {
+    rankdir=TB;
+    node [shape=box, style=rounded, fontname="Arial", fontsize=12];
+    edge [fontname="Arial", fontsize=10];
+
+    /* Style definitions */
+    graph [fontname="Arial", fontsize=14, splines=ortho];
+    ranksep=1.0;
+    nodesep=0.9;
+    
+    /* Struktur Database */
+    subgraph cluster_database {
+        label="Skema Database";
+        style=filled;
+        fillcolor=lavender;
+        
+        user_table [label="siswa\n---\nid: INT\nnama: VARCHAR\nkelas: VARCHAR\ngaya_belajar: VARCHAR\nterakhir_aktif: DATETIME\nstatus_akun: VARCHAR\nlevel_kemampuan: VARCHAR", shape=record];
+        
+        learning_progress [label="progres_pembelajaran\n---\nid: INT\nsiswa_id: INT\nmapel_id: INT\ntopik_id: INT\nnilai: FLOAT\nwaktu_belajar: INT\nselesai: BOOLEAN\ntanggal: DATE\nketerangan: TEXT", shape=record];
+        
+        interaction_data [label="data_interaksi\n---\nid: INT\nsiswa_id: INT\njenis_aktivitas: VARCHAR\nwaktu: DATETIME\nkonteks: JSON\nhasil: JSON\ndurasi: INT\nperangkat: VARCHAR", shape=record];
+        
+        qlearning_state [label="status_pembelajaran\n---\nid: INT\nsiswa_id: INT\nkondisi: JSON\nnilai_q: JSON\npenghargaan: FLOAT\nwaktu: DATETIME\niterasi: INT\nstatus: VARCHAR", shape=record];
+        
+        learning_materials [label="materi_pembelajaran\n---\nid: INT\nmapel_id: INT\ntopik: VARCHAR\nsubtopik: VARCHAR\nkesulitan: INT\nprasyarat: JSON\nkonten: TEXT\ntipe: VARCHAR", shape=record];
+        
+        recommendations [label="rekomendasi\n---\nid: INT\nsiswa_id: INT\njenis_konten: VARCHAR\nkonten_id: INT\ntingkat_keyakinan: FLOAT\nstatus: VARCHAR\nprioritas: INT\nkadaluarsa: DATETIME", shape=record];
+        
+        assessment_results [label="hasil_penilaian\n---\nid: INT\nsiswa_id: INT\njenis_tes: VARCHAR\nnilai: FLOAT\nwaktu_mulai: DATETIME\nwaktu_selesai: DATETIME\ndetail_jawaban: JSON", shape=record];
+    }
+
+    /* Komponen Utama */
+    student [label="Antarmuka\nSiswa", shape=component, style=filled, fillcolor=lightblue];
+    adaptive_system [label="Sistem Pembelajaran\nAdaptif", shape=doubleoctagon, style=filled, fillcolor=lightgreen];
+    
+    /* Komponen Inti AI */
+    subgraph cluster_ai_core {
+        label="Sistem Inti AI";
+        style=filled;
+        fillcolor=azure;
+        
+        learning_process [label="Analisis Proses Belajar\n---\n• Input: Interaksi Siswa\n• Proses: Pengenalan Pola\n• Output: Profil Pembelajaran\n• Metrik: Waktu, Akurasi, Pola", shape=record];
+        
+        feedback_engine [label="Mesin Umpan Balik Adaptif\n---\n• Input: Data Performa\n• Proses: Generasi Feedback\n• Output: Tips Personal\n• Analisis: Kesalahan, Perbaikan", shape=record];
+        
+        q_learning [label="Modul Q-Learning\n---\n• Kondisi: Progress Saat Ini\n• Aksi: Konten Berikutnya\n• Reward: Nilai Performa\n• Kebijakan: Pemilihan Materi\n• Optimasi: Jalur Belajar", shape=record];
+        
+        personalization [label="Mesin Personalisasi\n---\n• Profil Siswa: Kemampuan & Minat\n• Pemetaan Konten: Level & Tipe\n• Penyesuaian Kesulitan\n• Optimasi Jalur Pembelajaran\n• Rekomendasi Konten", shape=record];
+    }
+
+    /* Komponen Pengolahan Data */
+    subgraph cluster_data {
+        label="Pemrosesan Data";
+        style=filled;
+        fillcolor=lightyellow;
+        
+        student_data [label="Pengolah Data Siswa\n---\n• Deteksi Gaya Belajar\n• Analisis Pola Aktivitas\n• Pelacakan Kemajuan\n• Preferensi Waktu Belajar\n• Identifikasi Kesulitan", shape=record];
+        
+        performance_metrics [label="Metrik Performa\n---\n• Tingkat Penyelesaian\n• Waktu per Topik\n• Nilai Assessmen\n• Tingkat Keterlibatan\n• Konsistensi Belajar\n• Kecepatan Pemahaman", shape=record];
+        
+        learning_patterns [label="Analisis Pola Belajar\n---\n• Waktu Belajar Optimal\n• Preferensi Jenis Konten\n• Adaptasi Kesulitan\n• Pola Retensi\n• Kebiasaan Belajar\n• Interaksi Sosial", shape=record];
+        
+        input_features [label="Fitur Input AI\n---\n• Riwayat Performa\n• Pola Waktu\n• Pola Kesalahan\n• Kecepatan Belajar\n• Preferensi Konten\n• Gaya Belajar\n• Respons Terhadap Feedback", shape=record];
+    }
+
+    /* Fitur AI */
+    subgraph cluster_features {
+        label="Fitur Sistem AI";
+        style=filled;
+        fillcolor=lightgray;
+        
+        smart_recommendations [label="Rekomendasi Konten Pintar\n---\n• Berbasis Gaya Belajar\n• Penyesuaian Tipe Konten\n• Penyesuaian Kesulitan\n• Probabilitas Keberhasilan\n• Relevansi dengan Tujuan\n• Urutan Optimal", shape=record];
+        
+        adaptive_path [label="Jalur Pembelajaran Adaptif\n---\n• Cek Prasyarat Materi\n• Analisis Kesenjangan\n• Urutan Optimal\n• Pembaruan Dinamis\n• Penyesuaian Kecepatan\n• Alternatif Pembelajaran", shape=record];
+        
+        real_time_feedback [label="Umpan Balik Real-time\n---\n• Analisis Kesalahan\n• Tips Perbaikan\n• Pemicu Motivasi\n• Peringatan Kemajuan\n• Saran Pembelajaran\n• Penguatan Positif", shape=record];
+        
+        progress_tracking [label="Pelacakan Kemajuan Cerdas\n---\n• Tingkat Penguasaan\n• Kecepatan Belajar\n• Hubungan Antar Topik\n• Prediksi Pencapaian\n• Identifikasi Masalah\n• Rekomendasi Tindakan", shape=record];
+        
+        learning_analytics [label="Analitik Pembelajaran\n---\n• Dashboard Kemajuan\n• Visualisasi Data\n• Laporan Berkala\n• Tren Pembelajaran\n• Prediksi Performa\n• Rekomendasi Perbaikan", shape=record];
+    }
+
+    /* Hubungan Data */
+    user_table -> learning_progress [label="1:N\n(Progres Siswa)"];
+    user_table -> interaction_data [label="1:N\n(Aktivitas)"];
+    user_table -> qlearning_state [label="1:N\n(Status)"];
+    user_table -> recommendations [label="1:N\n(Rekomendasi)"];
+    user_table -> assessment_results [label="1:N\n(Hasil Tes)"];
+    learning_materials -> learning_progress [label="1:N\n(Materi)"];
+    
+    /* Alur Interaksi */
+    student -> adaptive_system [label="Interaksi\n(Aktivitas Siswa)"];
+    adaptive_system -> learning_process [label="Data Pembelajaran\n(Interaksi & Nilai)"];
+    
+    /* Proses Inti AI */
+    learning_process -> feedback_engine [label="Pola\nPembelajaran"];
+    feedback_engine -> q_learning [label="Data\nUmpan Balik"];
+    q_learning -> personalization [label="Hasil\nOptimasi"];
+    
+    /* Alur Data */
+    learning_process -> student_data [label="Data\nMentah"];
+    student_data -> performance_metrics [label="Proses\nData"];
+    performance_metrics -> learning_patterns [label="Analisis\nMetrik"];
+    learning_patterns -> input_features [label="Ekstraksi\nFitur"];
+    
+    /* Implementasi Fitur */
+    personalization -> smart_recommendations [label="Rekomendasi\nKonten"];
+    personalization -> adaptive_path [label="Rute\nBelajar"];
+    feedback_engine -> real_time_feedback [label="Feedback\nLangsung"];
+    learning_patterns -> progress_tracking [label="Data\nKemajuan"];
+    input_features -> learning_analytics [label="Analisis\nMendalam"];
+    
+    /* Alur Output */
+    smart_recommendations -> student [label="Menyajikan\nRekomendasi"];
+    adaptive_path -> student [label="Mengarahkan\nPembelajaran"];
+    real_time_feedback -> student [label="Memberikan\nBantuan"];
+    progress_tracking -> student [label="Melaporkan\nKemajuan"];
+    learning_analytics -> student [label="Menampilkan\nAnalisis"];
+    
+    /* Pengaturan Tata Letak */
+    {rank=same; smart_recommendations adaptive_path real_time_feedback progress_tracking learning_analytics}
+    {rank=same; learning_process feedback_engine q_learning personalization}
+    {rank=min; student adaptive_system}
+    {rank=max; user_table learning_progress interaction_data qlearning_state recommendations assessment_results}
+}

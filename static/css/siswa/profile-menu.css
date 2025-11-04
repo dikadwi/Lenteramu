@@ -1,0 +1,132 @@
+/* User Menu & Profile Dropdown Styles */
+.user-menu {
+    position: relative;
+    margin-left: 0.5rem;
+}
+
+.user-button {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.user-button:hover {
+    background: var(--bg-hover);
+    transform: translateY(-1px);
+}
+
+.user-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-color-light);
+}
+
+.user-button i {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    min-width: 220px;
+    background: var(--bg-card);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-light);
+    margin-top: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.user-info {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.user-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    gap: 0.75rem;
+}
+
+.dropdown-item:hover {
+    background: var(--bg-hover);
+}
+
+.dropdown-item i {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    width: 20px;
+}
+
+.dropdown-divider {
+    margin: 0.5rem 0;
+    border: 0;
+    border-top: 1px solid var(--border-light);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .user-button {
+    color: var(--text-primary-dark);
+}
+
+[data-theme="dark"] .dropdown-menu {
+    background: var(--bg-card-dark);
+    border-color: var(--border-dark);
+}
+
+[data-theme="dark"] .dropdown-item:hover {
+    background: var(--bg-hover-dark);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .dropdown-menu {
+        position: fixed;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        border-radius: 12px 12px 0 0;
+        transform: translateY(100%);
+        margin: 0;
+    }
+
+    .dropdown-menu.show {
+        transform: translateY(0);
+    }
+
+    .user-info {
+        text-align: center;
+    }
+}

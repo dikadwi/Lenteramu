@@ -1,135 +1,524 @@
-{% extends "base.html" %}
+{% set ai_recommendations = ai_recommendations|default([
+    {
+        'id': 'rec1',
+        'icon': 'mdi mdi-book-open-variant',
+        'title': 'Pelajari Dasar-dasar',
+        'description': 'Mulai dengan konsep dasar untuk pemahaman yang kuat'
+    },
+    {
+        'id': 'rec2',
+        'icon': 'mdi mdi-clipboard-check',
+        'title': 'Latihan Soal',
+        'description': 'Uji pemahaman Anda dengan latihan interaktif'
+    }
+]) %}
 
-{% block head %}
-<!-- Add Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<!-- Add ApexCharts for better data visualization -->
-<link href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0/dist/apexcharts.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0/dist/apexcharts.min.js"></script>
-<!-- Custom CSS -->
-<link rel="stylesheet" href="{{ url_for('static', filename='css/siswa/style.css') }}">
-{% endblock %}
+{% set new_recommendations = new_recommendations|default([]) %}
 
-{% block navbar %}
-<nav class="siswa-navbar">
-    <div class="container">
-        <div class="nav-brand">
-            <a href="{{ url_for('siswa.dashboard_siswa') }}">
-                <i class="fas fa-graduation-cap"></i>
-                <span>LENTERAMU</span>
-            </a>
-        </div>
+{% set notifications = notifications|default([
+    {
+        'icon': 'mdi mdi-book-check',
+        'title': 'Selamat datang di Lenteramu!',
+        'time_ago': 'baru saja',
+        'read': false
+    }
+]) %}
 
-        <div class="nav-toggle" onclick="toggleMobileMenu()">
-            <i class="fas fa-bars"></i>
-        </div>
+{% set unread_notifications = unread_notifications|default(
+    (notifications|selectattr('read', 'equalto', false)|list|length) if notifications is defined else 0
+) %}
 
-        <div class="nav-menu">
-            <ul class="nav-links">
-                <li>
-                    <a href="{{ url_for('siswa.dashboard_siswa') }}" {% if request.endpoint == 'siswa.dashboard_siswa' %}class="active"{% endif %}>
-                        <i class="fas fa-home"></i>
-                        <span>Dashboard</span>
+{# Safe defaults for commonly-used template variables to avoid runtime errors #}
+{% set user = user|default({'name':'Siswa','avatar': url_for('static', filename='images/image.png'),'level':1,'is_online':false}) %}
+{% set learning_progress = learning_progress|default(0) %}
+{% set material_progress = material_progress|default(0) %}
+{% set pending_tasks = pending_tasks|default(0) %}
+{% set new_achievements = new_achievements|default(0) %}
+{% set user = user %}
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LENTERAMU - Platform Pembelajaran Adaptif{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Modern UI Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0/dist/apexcharts.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/siswa/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/siswa/ai-features.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/siswa/profile-menu.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/siswa/dashboard.css') }}">
+    
+    <!-- AI System Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/tensorflow/tf.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+    {% block head %}{% endblock %}
+</head>
+<body>
+   
+
+    <!-- Sidebar (kept layout) with siswa menu items -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <a href="{{ url_for('landing') }}" class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span class="logo-text">LENTERAMU</span>
+                </a>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="{{ url_for('siswa.dashboard_siswa') }}" class="nav-link {{ 'active' if request.endpoint == 'siswa.dashboard_siswa' }}">
+                        <i class="fas fa-user-graduate"></i>
+                        <span class="nav-text">Dashboard</span>
                     </a>
-                </li>
-                <li>
-                    <a href="{{ url_for('siswa_features.materi') }}" {% if request.endpoint == 'siswa_features.materi' %}class="active"{% endif %}>
-                        <i class="fas fa-book"></i>
-                        <span>Materi</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url_for('siswa_features.tugas') }}" {% if request.endpoint == 'siswa_features.tugas' %}class="active"{% endif %}>
-                        <i class="fas fa-tasks"></i>
-                        <span>Tugas</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url_for('siswa_features.kuis') }}" {% if request.endpoint == 'siswa_features.kuis' %}class="active"{% endif %}>
-                        <i class="fas fa-question-circle"></i>
-                        <span>Kuis</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url_for('siswa_features.ai_rekomendasi') }}" {% if request.endpoint == 'siswa_features.ai_rekomendasi' %}class="active"{% endif %}>
+                </li>               
+                        <li class="nav-item">
+                            <a href="{{ url_for('siswa_features.personal_analytics') }}" class="nav-link {{ 'active' if request.endpoint == 'siswa_features.personal_analytics' }}">
+                                <i class="fas fa-chart-pie"></i> 
+                                 <span class="nav-text">Analitik Pribadi</span>
+                                </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('siswa_features.ai_rekomendasi') }}" class="nav-link {{ 'active' if request.endpoint == 'siswa_features.ai_rekomendasi' }}">
+                                <i class="fas fa-lightbulb"></i> 
+                                <span class="nav-text">Rekomendasi AI</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('siswa_features.badges') }}" class="nav-link {{ 'active' if request.endpoint == 'siswa_features.badges' }}">
+                                <i class="fas fa-award"></i> 
+                                <span class="nav-text">Badge</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('siswa_features.tryout') }}" class="nav-link {{ 'active' if request.endpoint == 'siswa_features.tryout' }}">
+                                <i class="fas fa-pen"></i> 
+                                 <span class="nav-text">Tryout</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('siswa_features.calendar') }}" class="nav-link {{ 'active' if request.endpoint == 'siswa_features.calendar' }}">
+                                <i class="fas fa-calendar-alt"></i> 
+                                <span class="nav-text">Kalender</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('siswa_features.ai_feedback') }}" class="nav-link {{ 'active' if request.endpoint == 'siswa_features.ai_feedback' }}">
+                                <i class="fas fa-robot"></i> 
+                                <span class="nav-text">Feedback AI</span>
+                            </a>
+                        </li>
+
+                <!-- sidebar profile menu removed to avoid duplication with topbar and footer -->
+            </ul>           
+        </nav>
+
+        <!-- Top Navigation Bar (pulls important actions from sidebar) -->
+        <header class="top-nav" role="banner">
+            <div class="container topbar-container">
+                <div class="top-left">
+                    <button class="btn btn-secondary" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <form class="search-form" action="/siswa/search" method="get" style="display:inline-block; margin-left:1rem;">
+                        <input type="search" name="q" placeholder="Cari materi, tugas..." class="search-box">
+                    </form>
+                </div>
+                <div class="top-right">
+                    <div class="user-menu notifications" style="position:relative;">
+                        <button id="notifButton" type="button" class="icon-button" aria-haspopup="true" aria-expanded="false" aria-label="Notifikasi" onclick="toggleNotifications(event)">
+                            <i class="fas fa-bell" aria-hidden="true"></i>
+                            {% if unread_notifications and unread_notifications > 0 %}
+                            <span class="badge">{{ unread_notifications }}</span>
+                            {% endif %}
+                        </button>
+                        <div class="dropdown-menu" id="notifDropdown" role="menu" aria-labelledby="notifButton">
+                            <div class="notifications-header" style="display:flex;justify-content:space-between;align-items:center;padding:.5rem .75rem;border-bottom:1px solid var(--border-light);">
+                                <strong>Notifikasi</strong>
+                                <button class="btn-link" onclick="markAllRead(); return false;">Tandai semua</button>
+                            </div>
+                            <div class="notifications-list" style="max-height:300px;overflow:auto;">
+                                {% for n in notifications %}
+                                <a href="{{ n.link if n.link is defined else url_for('siswa_features.notifications') }}" class="dropdown-item notification-item {% if not n.read %}unread{% endif %}" data-index="{{ loop.index0 }}" data-read="{{ 'true' if n.read else 'false' }}" onclick="markNotificationRead(event, this)">
+                                    <div class="notif-left"><i class="{{ n.icon }}" aria-hidden="true"></i></div>
+                                    <div class="notif-body"><div class="notif-title">{{ n.title }}</div><div class="notif-time">{{ n.time_ago }}</div></div>
+                                </a>
+                                {% else %}
+                                <div class="dropdown-item empty">Belum ada notifikasi</div>
+                                {% endfor %}
+                            </div>
+                            <div class="notifications-footer" style="padding:.5rem .75rem;border-top:1px solid var(--border-light);text-align:center;">
+                                <a href="{{ url_for('siswa_features.notifications') }}" class="btn btn-sm btn-primary">Tampilkan semua</a>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('siswa_features.community') }}" class="icon-button" aria-label="Komunitas">
+                        <i class="fas fa-users"></i>
+                    </a>            
+                    <a href="/siswa/ai-tutor" class="icon-button" aria-label="AI Tutor">
                         <i class="fas fa-robot"></i>
-                        <span>AI Rekomendasi</span>
                     </a>
-                </li>
-            </ul>
-
-            <div class="nav-profile">
-                <div class="profile-menu" onclick="toggleProfileMenu()">
-                    <img src="{{ user.avatar or url_for('static', filename='images/avatar-default.png') }}" alt="Profile" class="profile-img">
-                    <span class="profile-name">{{ user.name }}</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="profile-dropdown" id="profileDropdown">
-                    <a href="{{ url_for('siswa.profile') }}">
-                        <i class="fas fa-user"></i>
-                        Profil Saya
+                    <a href="{{ url_for('siswa_features.guidelines') }}" class="icon-button" aria-label="Guidelines">
+                        <i class="fas fa-book"></i>
                     </a>
-                    <a href="{{ url_for('siswa_features.notifications') }}">
-                        <i class="fas fa-bell"></i>
-                        Notifikasi
-                        <span class="badge">3</span>
-                    </a>
-                    <a href="{{ url_for('siswa_features.settings') }}">
-                        <i class="fas fa-cog"></i>
-                        Pengaturan
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="{{ url_for('auth.logout') }}" class="logout">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Keluar
-                    </a>
+                    <div class="user-menu">
+                        <button id="userButton" type="button" class="user-button" onclick="toggleUserMenu(event)" aria-haspopup="true" aria-expanded="false" aria-label="Menu profil">
+                                <i class="fas fa-user-circle" aria-hidden="true"></i>
+                        </button>
+                        <div class="dropdown-menu" id="userMenu" role="menu" aria-labelledby="userButton">
+                            <div class="user-info">
+                                <div class="user-name">{{ user.name }}</div>
+                            </div>
+                            <a class="dropdown-item" href="/siswa/profile">
+                                <i class="fas fa-user-edit"></i>
+                                <span>Edit Profile</span>
+                            </a>
+                            <a class="dropdown-item" href="/siswa/settings">
+                                <i class="fas fa-cog"></i>
+                                <span>Pengaturan</span>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a class="dropdown-item" href="{{ url_for('logout') }}">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Logout</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
     </div>
-</nav>
-{% endblock %}
+    
+    <!-- JavaScript -->
+    <script>
+        // Toggle user menu (profile) and maintain aria-expanded
+        function toggleUserMenu(e) {
+            const menu = document.getElementById('userMenu');
+            const button = document.getElementById('userButton') || document.querySelector('.user-button');
+            if (!menu || !button) return;
+            const isNowShown = menu.classList.toggle('show');
+            button.setAttribute('aria-expanded', isNowShown ? 'true' : 'false');
+                    if (e && e.stopPropagation) e.stopPropagation();
+                    // when opening, move focus to first focusable item and attach simple focus-trap
+                    if (isNowShown) {
+                        // find first focusable element inside menu
+                        const first = menu.querySelector('a, button, [tabindex]:not([tabindex="-1"])');
+                        try { if (first) first.focus(); } catch (err) {}
 
-{% block content %}
-{% endblock %}
+                        // attach a lightweight key handler to trap Tab and handle Escape
+                        const keyHandler = function(ev) {
+                            if (ev.key === 'Escape') {
+                                menu.classList.remove('show');
+                                button.setAttribute('aria-expanded', 'false');
+                                button.focus();
+                            }
+                            if (ev.key === 'Tab') {
+                                const focusables = Array.from(menu.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])'));
+                                if (focusables.length === 0) return;
+                                const firstEl = focusables[0];
+                                const lastEl = focusables[focusables.length - 1];
+                                if (!ev.shiftKey && document.activeElement === lastEl) {
+                                    ev.preventDefault();
+                                    firstEl.focus();
+                                } else if (ev.shiftKey && document.activeElement === firstEl) {
+                                    ev.preventDefault();
+                                    lastEl.focus();
+                                }
+                            }
+                        };
+                        menu._keyHandler = keyHandler;
+                        menu.addEventListener('keydown', keyHandler);
+                    } else {
+                        // remove key handler when closing
+                        if (menu._keyHandler) {
+                            menu.removeEventListener('keydown', menu._keyHandler);
+                            delete menu._keyHandler;
+                        }
+                    }
+        }
 
-{% block footer %}
-<footer class="siswa-footer">
-    <div class="container">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <i class="fas fa-graduation-cap"></i>
-                <span>LENTERAMU</span>
-                <p>Platform Pembelajaran Adaptif dengan AI</p>
-            </div>
-            <div class="footer-links">
-                <div class="link-group">
-                    <h4>Bantuan</h4>
-                    <ul>
-                        <li><a href="{{ url_for('siswa_features.guidelines') }}">Panduan Penggunaan</a></li>
-                        <li><a href="{{ url_for('siswa_features.faq') }}">FAQ</a></li>
-                        <li><a href="{{ url_for('siswa_features.support') }}">Dukungan Teknis</a></li>
-                    </ul>
-                </div>
-                <div class="link-group">
-                    <h4>Informasi</h4>
-                    <ul>
-                        <li><a href="{{ url_for('landing.privacy') }}">Kebijakan Privasi</a></li>
-                        <li><a href="{{ url_for('landing.terms') }}">Syarat & Ketentuan</a></li>
-                        <li><a href="{{ url_for('landing.about') }}">Tentang Kami</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 LENTERAMU. All rights reserved.</p>
-        </div>
-    </div>
-</footer>
+        // Close user menu when clicking outside and update aria-expanded
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('userMenu');
+            const button = document.getElementById('userButton') || document.querySelector('.user-button');
+            if (!menu || !button) return;
+            if (!button.contains(event.target) && !menu.contains(event.target)) {
+                if (menu.classList.contains('show')) {
+                    menu.classList.remove('show');
+                    button.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
 
-<!-- Notification System -->
-<div id="notification-container"></div>
+        // Close other dropdowns (recommendations, notifications) when clicking outside
+        document.addEventListener('click', function(event) {
+            document.querySelectorAll('.nav-item .dropdown-content.show, .dropdown-menu.show').forEach(function(drop) {
+                const parent = drop.closest('.nav-item') || drop.closest('.user-menu');
+                if (parent && !parent.contains(event.target)) {
+                    drop.classList.remove('show');
+                }
+            });
+        });
 
-<!-- Custom Scripts -->
-<script src="{{ url_for('static', filename='js/siswa/main.js') }}"></script>
-{% endblock %}
+        // Toggle dark mode
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Set initial theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        // Lightweight stubs for dropdowns and AI assistant to avoid console errors
+        function toggleRecommendations() {
+            document.querySelectorAll('.nav-item.ai-recommendations .dropdown-content').forEach(d => d.classList.toggle('show'));
+        }
+
+        function toggleNotifications(e) {
+            const menu = document.getElementById('notifDropdown');
+            const button = document.getElementById('notifButton');
+            if (!menu || !button) return;
+            const isNowShown = menu.classList.toggle('show');
+            // small aria/animation helper
+            button.setAttribute('aria-expanded', isNowShown ? 'true' : 'false');
+            if (e && e.stopPropagation) e.stopPropagation();
+        }
+
+        // Mark a single notification as read (client-side). If the item was unread,
+        // decrement the top badge and update the visual state. This is optimistic UI;
+        // real persistence should be implemented on the server side.
+        function markNotificationRead(e, el) {
+            try {
+                if (!el) return;
+                const wasRead = el.dataset.read === 'true';
+                if (wasRead) return; // nothing to do
+                // update dataset and appearance
+                el.dataset.read = 'true';
+                el.classList.remove('unread');
+
+                // update topbar badge
+                const badge = document.querySelector('#notifButton .badge');
+                if (badge) {
+                    let count = parseInt(badge.textContent || '0', 10);
+                    count = isNaN(count) ? 0 : Math.max(0, count - 1);
+                    if (count <= 0) {
+                        badge.remove();
+                    } else {
+                        badge.textContent = count;
+                    }
+                }
+
+                // small visual feedback
+                el.style.transition = 'background .2s';
+                el.style.background = 'transparent';
+
+                // allow default navigation (don't preventDefault) so user can click through
+            } catch (err) {
+                console.error('markNotificationRead error', err);
+            }
+        }
+
+        function toggleQuickActions() {
+            document.querySelectorAll('.nav-item.quick-actions .dropdown-content').forEach(d => d.classList.toggle('show'));
+        }
+
+        function followRecommendation(id) {
+            showToast('Mengikuti rekomendasi: ' + id);
+            // TODO: wire to API
+        }
+
+        function markAllRead() {
+            // mark all DOM items as read
+            document.querySelectorAll('.notification-item').forEach(function(it) {
+                it.dataset.read = 'true';
+                it.classList.remove('unread');
+            });
+            // remove badge
+            const badge = document.querySelector('#notifButton .badge');
+            if (badge) badge.remove();
+            showToast('Menandai semua notifikasi sebagai sudah dibaca');
+            // TODO: send request to server to persist mark-all-read
+        }
+
+        // Keyboard support: open/close notifications with Enter/Space
+        document.addEventListener('DOMContentLoaded', function() {
+            const notifBtn = document.getElementById('notifButton');
+            if (notifBtn) {
+                notifBtn.addEventListener('keydown', function(k) {
+                    if (k.key === 'Enter' || k.key === ' ') {
+                        k.preventDefault();
+                        toggleNotifications(k);
+                    }
+                });
+            }
+            // Keyboard support for profile menu (userButton)
+            const userBtn = document.getElementById('userButton');
+            if (userBtn) {
+                userBtn.addEventListener('keydown', function(k) {
+                    if (k.key === 'Enter' || k.key === ' ') {
+                        k.preventDefault();
+                        toggleUserMenu(k);
+                    }
+                });
+            }
+        });
+
+        function toggleAIAssistant() {
+            const panel = document.getElementById('aiAssistantPanel');
+            if (!panel) return;
+            panel.classList.toggle('open');
+        }
+
+        function sendToAI() {
+            const input = document.getElementById('aiInput');
+            const area = document.getElementById('aiChatArea');
+            if (!input || !area) return;
+            const text = input.value.trim();
+            if (!text) return;
+            const msg = document.createElement('div');
+            msg.className = 'ai-message user';
+            msg.textContent = text;
+            area.appendChild(msg);
+            input.value = '';
+            // placeholder response
+            setTimeout(() => {
+                const reply = document.createElement('div');
+                reply.className = 'ai-message bot';
+                reply.textContent = 'Terima kasih — saya akan membantu Anda dengan itu.';
+                area.appendChild(reply);
+                area.scrollTop = area.scrollHeight;
+            }, 600);
+        }
+
+        function showToast(message) {
+            const t = document.createElement('div');
+            t.className = 'toast';
+            t.textContent = message;
+            t.style.cssText = 'position:fixed;right:20px;bottom:20px;background:#333;color:#fff;padding:10px 14px;border-radius:8px;z-index:9999;opacity:0;transition:opacity .25s';
+            document.body.appendChild(t);
+            requestAnimationFrame(()=> t.style.opacity = '1');
+            setTimeout(()=>{ t.style.opacity = '0'; setTimeout(()=> t.remove(),300); }, 2500);
+        }
+
+        // Apply compact layout when viewport is small: hide top-nav and collapse sidebar
+        function applyCompactLayout() {
+            const isCompact = window.innerWidth <= 1024;
+            const sidebar = document.querySelector('.sidebar');
+            const main = document.querySelector('.main-content');
+            const topnav = document.querySelector('.top-nav');
+
+            if (isCompact) {
+                if (sidebar) sidebar.classList.add('collapsed');
+                if (main) { main.style.marginLeft = '80px'; main.style.maxWidth = 'calc(100% - 80px)'; }
+                if (topnav) topnav.style.display = 'none';
+            } else {
+                if (sidebar) sidebar.classList.remove('collapsed');
+                if (main) { main.style.marginLeft = '280px'; main.style.maxWidth = 'calc(100% - 280px)'; }
+                if (topnav) topnav.style.display = '';
+            }
+        }
+
+        // Close dropdowns and panels with Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.nav-item .dropdown-content.show, .dropdown-menu.show, #aiAssistantPanel.open').forEach(function(el) {
+                    el.classList.remove('show');
+                    el.classList.remove('open');
+                });
+            }
+        });
+
+        // Initial apply and on resize
+        window.addEventListener('resize', applyCompactLayout);
+        document.addEventListener('DOMContentLoaded', applyCompactLayout);
+
+        // Sidebar toggle: collapse/expand and adjust main/top offsets
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const main = document.querySelector('.main-content');
+            const topnav = document.querySelector('.top-nav');
+            if (!sidebar) return;
+            sidebar.classList.toggle('collapsed');
+            const collapsed = sidebar.classList.contains('collapsed');
+            if (main) {
+                main.style.marginLeft = collapsed ? '80px' : '280px';
+                main.style.maxWidth = collapsed ? 'calc(100% - 80px)' : 'calc(100% - 280px)';
+            }
+            if (topnav) {
+                topnav.style.marginLeft = collapsed ? '80px' : '280px';
+                topnav.style.width = collapsed ? 'calc(100% - 80px)' : 'calc(100% - 280px)';
+            }
+        }
+        
+        // Mobile menu toggle for navbar-based sidebar
+        function toggleMobileMenu() {
+            const nav = document.getElementById('navLinks');
+            if (!nav) return;
+            nav.classList.toggle('open');
+        }
+
+        // Generic dropdown toggle used by navbar/sidebar links (updates aria-expanded)
+        function toggleDropdown(event) {
+            if (event) event.preventDefault();
+            const el = event.currentTarget || event.target;
+            const parent = el.closest('.dropdown-parent') || el.closest('.user-menu');
+            if (!parent) return;
+            const menu = parent.querySelector('.dropdown-submenu') || parent.querySelector('.dropdown-menu');
+            if (!menu) return;
+            const isNowShown = menu.classList.toggle('show');
+            // update aria attributes where applicable
+            try {
+                const toggleEl = parent.querySelector('.nav-link') || parent.querySelector('.dropdown-toggle');
+                if (toggleEl) toggleEl.setAttribute('aria-expanded', isNowShown ? 'true' : 'false');
+                menu.setAttribute('aria-hidden', isNowShown ? 'false' : 'true');
+            } catch (err) {}
+        }
+
+        // keyboard support for sidebar dropdowns (Enter/Space)
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.nav-menu .dropdown-parent > .nav-link').forEach(function(btn) {
+                btn.setAttribute('tabindex', '0');
+                btn.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleDropdown({ currentTarget: btn });
+                    }
+                });
+            });
+        });
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

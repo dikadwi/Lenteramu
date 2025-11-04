@@ -8,11 +8,11 @@ import json
 from datetime import datetime
 from flask_migrate import Migrate
 from routes.admin import admin_bp
-from routes.siswa import siswa_bp
 from routes.guru import guru_bp
 from routes.admin_features import admin_features_bp
 from routes.guru_features import guru_features_bp
-from routes.siswa_features import siswa_features_bp
+from routes.siswa.siswa import siswa_bp
+from routes.siswa.siswa_features import siswa_features_bp
 from routes.landing.fitur import fitur
 from routes.landing.legal import legal
 from routes.landing.cara_kerja import cara_kerja

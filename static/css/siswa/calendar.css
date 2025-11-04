@@ -1,0 +1,401 @@
+/* Calendar Styles */
+:root {
+    --calendar-primary: #764ba2;
+    --calendar-secondary: #667eea;
+    --calendar-gradient: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    --calendar-shadow: 0 4px 15px rgba(118, 75, 162, 0.08);
+    --calendar-hover-shadow: 0 8px 25px rgba(118, 75, 162, 0.15);
+    
+    /* Card backgrounds */
+    --bg-card: #ffffff;
+    --bg-card-dark: #2a2d3a;
+    --border-light: rgba(118, 75, 162, 0.1);
+    --text-secondary: #6b7280;
+    --text-primary: #1f2937;
+    --bg-dark: #1f2937;
+}
+
+/* Header Styles */
+.header-calendar-icon {
+    color: var(--calendar-primary);
+}
+
+/* Content Wrapper */
+.content-wrapper {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Notification Strip */
+.notification-strip {
+    background: var(--calendar-gradient);
+    color: white;
+    padding: 1.25rem 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: var(--calendar-shadow);
+    position: relative;
+}
+
+.notif-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.12);
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    font-size: 2rem;
+    margin-right: 1rem;
+    box-shadow: 0 2px 8px rgba(118,75,162,0.08);
+    transition: transform 0.3s;
+}
+
+.notification-strip:focus-within .notif-icon,
+.notification-strip:hover .notif-icon {
+    transform: scale(1.1);
+}
+
+.notif-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.notif-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: 0.01em;
+}
+
+.notif-btn {
+    background: rgba(255,255,255,0.18);
+    border: none;
+    color: white;
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(118,75,162,0.08);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.notif-btn:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.notif-btn:active {
+    transform: scale(0.97);
+}
+
+.notif-btn:disabled {
+    background: rgba(255,255,255,0.3);
+    color: #eee;
+    cursor: not-allowed;
+}
+
+/* Calendar Preview */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+.calendar-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: var(--calendar-shadow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+}
+.calendar-card:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(118,75,162,0.3);
+}
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 1.5rem;
+}
+.calendar-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+.calendar-header h3 i {
+    color: var(--calendar-primary);
+}
+
+/* Coming Soon Section */
+.coming-soon {
+    text-align: center;
+    padding: 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-light);
+    border-radius: 16px;
+    box-shadow: var(--calendar-shadow);
+    margin-top: 1rem;
+}
+.coming-soon-icon {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 2rem;
+    background: var(--calendar-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    animation: float 3s ease-in-out infinite;
+    box-shadow: 0 2px 12px rgba(118,75,162,0.12);
+    transition: transform 0.3s;
+}
+.coming-soon-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    letter-spacing: 0.01em;
+}
+.coming-soon-text {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+    font-weight: 400;
+}
+.coming-soon-text .highlight {
+    color: var(--calendar-primary);
+    font-weight: 600;
+    background: rgba(118,75,162,0.07);
+    border-radius: 6px;
+    padding: 0.1em 0.4em;
+    margin-left: 2px;
+}
+.soon-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--calendar-gradient);
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 0.4em 1em;
+    margin-top: 1.5rem;
+    box-shadow: 0 2px 8px rgba(118,75,162,0.08);
+    letter-spacing: 0.03em;
+    animation: pulse 2s infinite;
+}
+
+/* Feature Preview */
+.feature-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.preview-card {
+    background: var(--bg-card);
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(118,75,162,0.08);
+    border: 1px solid var(--border-light);
+    padding: 1.5rem;
+    position: relative;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    outline: none;
+}
+
+.preview-card:hover {
+    box-shadow: 0 8px 32px rgba(118,75,162,0.15);
+    transform: translateY(-6px);
+    background: var(--calendar-gradient);
+    color: white;
+}
+
+.preview-card:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(118,75,162,0.3);
+}
+
+.preview-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 1rem auto;
+    background: rgba(118,75,162,0.08);
+    border-radius: 50%;
+    font-size: 2rem;
+    transition: all 0.3s ease;
+}
+
+.preview-card:hover .preview-icon {
+    background: rgba(255,255,255,0.18);
+}
+
+.preview-card i {
+    color: var(--calendar-primary);
+    transition: all 0.3s ease;
+}
+
+.preview-card:hover i {
+    color: white;
+    transform: scale(1.15);
+}
+
+.preview-card h4 {
+    font-size: 1.1rem;
+    margin: 0 0 0.75rem 0;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--text-primary);
+}
+
+.preview-card:hover h4 {
+    color: white;
+}
+
+.preview-card p {
+    font-size: 0.9rem;
+    margin: 0;
+    opacity: 0.8;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+.preview-card:hover p {
+    color: white;
+}
+
+/* Card Badges */
+.card-badge {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: var(--calendar-gradient);
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.3em 0.9em;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(118,75,162,0.10);
+    letter-spacing: 0.04em;
+    z-index: 2;
+    animation: badgePop 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+}
+.badge-personal { background: linear-gradient(90deg,#667eea,#764ba2); }
+.badge-reminder { background: linear-gradient(90deg,#f7971e,#ffd200); color:#764ba2; }
+.badge-analytics { background: linear-gradient(90deg,#43cea2,#185a9d); }
+
+@keyframes badgePop {
+    0% { transform: scale(0.7); opacity: 0; }
+    60% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Card Footer */
+.card-footer {
+    margin-top: 1.2rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid rgba(118,75,162,0.08);
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.95rem;
+    color: var(--calendar-primary);
+    opacity: 0.85;
+}
+.card-tip i {
+    margin-right: 0.3em;
+    color: var(--calendar-secondary);
+    font-size: 1.1em;
+}
+
+/* Animations */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+@keyframes cardFadeIn {
+    0% { opacity: 0; transform: scale(0.95) translateY(20px); }
+    60% { opacity: 1; transform: scale(1.05) translateY(-5px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .coming-soon {
+        padding: 2rem 1.2rem;
+    }
+    .coming-soon-icon {
+        width: 72px;
+        height: 72px;
+    }
+    .coming-soon-icon i {
+        font-size: 2rem;
+    }
+    .coming-soon-title {
+        font-size: 1.3rem;
+    }
+    .coming-soon-text {
+        font-size: 1rem;
+    }
+    .soon-badge {
+        font-size: 0.95rem;
+        padding: 0.3em 0.7em;
+    }
+    .notification-strip {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem 1rem;
+    }
+    .notif-icon {
+        margin: 0 auto 1rem auto;
+    }
+}
+
+/* Dark Mode Support */
+[data-theme=\"dark\"] .calendar-card {
+    background: var(--bg-card-dark);
+}
+[data-theme=\"dark\"] .preview-card {
+    background: var(--bg-dark);
+}
+[data-theme=\"dark\"] .preview-card:hover {
+    background: var(--calendar-gradient);
+}

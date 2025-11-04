@@ -1,570 +1,33 @@
-{% extends "base.html" %}
+{% extends "siswa/base_siswa.html" %}
 
 {% block title %}Dashboard Siswa - LENTERAMU{% endblock %}
 
 {% block head %}
 <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0/dist/apexcharts.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0/dist/apexcharts.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/siswa/avatar.css') }}">
 {% endblock %}
 
 {% block content %}
-<!-- Custom CSS for Dashboard -->
-<style>
-/* Dark mode variables */
-:root {
-    --primary-gradient: linear-gradient(135deg, #667eea, #764ba2);
-    --secondary-gradient: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-    --card-bg: #ffffff;
-    --card-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    --text-primary: #2c3e50;
-    --text-secondary: #7f8c8d;
-    --border-color: rgba(102, 126, 234, 0.1);
-}
-
-[data-theme="dark"] {
-    --primary-gradient: linear-gradient(135deg, #4c5eaa, #563b72);
-    --secondary-gradient: linear-gradient(135deg, rgba(76, 94, 170, 0.1), rgba(86, 59, 114, 0.1));
-    --card-bg: #1a1c23;
-    --card-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    --text-primary: #e2e8f0;
-    --text-secondary: #a0aec0;
-    --border-color: rgba(102, 126, 234, 0.2);
-}
-
-/* Dashboard Header */
-.dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: var(--primary-gradient);
-    padding: 2.5rem;
-    border-radius: 20px;
-    margin-bottom: 2rem;
-    box-shadow: var(--card-shadow);
-    color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.dashboard-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('/static/images/pattern.svg') no-repeat;
-    background-size: cover;
-    opacity: 0.1;
-    pointer-events: none;
-}
-
-.dark-mode-toggle {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: white;
-    padding: 0.5rem;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.dark-mode-toggle:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
-}
-
-.user-welcome {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.user-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.avatar-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.welcome-text h1 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.5rem;
-    font-weight: 600;
-}
-
-.user-info {
-    display: flex;
-    gap: 1rem;
-    margin: 0.5rem 0;
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.9rem;
-}
-
-.user-info span {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-}
-
-.last-login {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.85rem;
-    margin: 0;
-}
-
-.dashboard-actions .btn {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 25px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.dashboard-actions .btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-/* Stats Grid */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.stat-card {
-    background: var(--card-bg);
-    backdrop-filter: blur(10px);
-    padding: 1.8rem;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: var(--card-shadow);
-    border: 1px solid var(--border-color);
-    position: relative;
-    cursor: pointer;
-    overflow: hidden;
-}
-
-.stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--primary-gradient);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 1;
-}
-
-.stat-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-}
-
-.stat-card:hover::before {
-    opacity: 0.05;
-}
-
-.stat-card .stat-icon,
-.stat-card .stat-content {
-    position: relative;
-    z-index: 2;
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-}
-
-.stat-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: white;
-}
-
-.progress-stat .stat-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
-.completed-stat .stat-icon { background: linear-gradient(135deg, #27ae60, #2ecc71); }
-.pending-stat .stat-icon { background: linear-gradient(135deg, #f39c12, #e67e22); }
-.grade-stat .stat-icon { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-.streak-stat .stat-icon { background: linear-gradient(135deg, #ff6b35, #f7931e); }
-.hours-stat .stat-icon { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
-
-.stat-content {
-    flex: 1;
-}
-
-.stat-number {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 0.25rem;
-}
-
-.stat-label {
-    color: #7f8c8d;
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-}
-
-.stat-trend {
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-}
-
-/* Dashboard Grid */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 2rem;
-}
-
-.dashboard-card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 1.5rem;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-}
-
-.dashboard-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(102, 126, 234, 0.1);
-}
-
-.card-header h3 {
-    color: #2c3e50;
-    font-size: 1.2rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.card-header h3 i {
-    color: #667eea;
-}
-
-.card-header .btn {
-    font-size: 0.8rem;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-}
-
-/* Subject Progress */
-.subjects-list {
-    display: grid;
-    gap: 1rem;
-}
-
-.subject-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background: rgba(102, 126, 234, 0.05);
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
-
-.subject-item:hover {
-    background: rgba(102, 126, 234, 0.1);
-    transform: translateX(5px);
-}
-
-.subject-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.subject-name {
-    font-weight: 600;
-    color: #2c3e50;
-}
-
-.subject-grade {
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: white;
-}
-
-.grade-A { background: #27ae60; }
-.grade-Aplus { background: #2ecc71; }
-.grade-Aminus { background: #16a085; }
-.grade-Bplus { background: #f39c12; }
-.grade-B { background: #e67e22; }
-
-.subject-progress {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    min-width: 120px;
-}
-
-.progress-bar {
-    background: rgba(0, 0, 0, 0.1);
-    height: 8px;
-    border-radius: 4px;
-    overflow: hidden;
-    flex: 1;
-    position: relative;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 4px;
-    transition: width 0.8s ease;
-}
-
-.progress-text {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #667eea;
-    min-width: 35px;
-}
-
-/* Exams and Notifications */
-.exam-item, .notification-item {
-    display: flex;
-    align-items: center;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.exam-item:hover, .notification-item:hover {
-    background: rgba(102, 126, 234, 0.05);
-    margin: 0 -1rem;
-    padding: 1rem;
-    border-radius: 8px;
-}
-
-.exam-date {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    border-radius: 12px;
-    margin-right: 1rem;
-}
-
-.date-day {
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-.date-month {
-    font-size: 0.8rem;
-    opacity: 0.9;
-}
-
-.exam-details {
-    flex: 1;
-}
-
-.exam-details h4 {
-    color: #2c3e50;
-    margin-bottom: 0.3rem;
-    font-size: 1rem;
-}
-
-.exam-details p {
-    color: #7f8c8d;
-    font-size: 0.9rem;
-    margin-bottom: 0.3rem;
-}
-
-.exam-time {
-    font-size: 0.8rem;
-    color: #95a5a6;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-}
-
-/* Notification styles */
-.notification-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 1rem;
-    color: white;
-}
-
-.notification-item.assignment .notification-icon { background: #3498db; }
-.notification-item.grade .notification-icon { background: #f39c12; }
-.notification-item.announcement .notification-icon { background: #e74c3c; }
-
-.notification-content {
-    flex: 1;
-}
-
-.notification-content p {
-    color: #2c3e50;
-    margin-bottom: 0.3rem;
-    font-size: 0.95rem;
-}
-
-.notification-time {
-    font-size: 0.8rem;
-    color: #95a5a6;
-}
-
-/* Quick Actions */
-.quick-actions {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-}
-
-.action-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-    border: 2px solid rgba(102, 126, 234, 0.2);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: #667eea;
-    font-weight: 500;
-}
-
-.action-btn:hover {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
-    border-color: rgba(102, 126, 234, 0.4);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
-}
-
-.action-btn i {
-    font-size: 1.5rem;
-}
-
-/* Color classes */
-.text-success { color: #27ae60; }
-.text-warning { color: #f39c12; }
-.text-orange { color: #ff6b35; }
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .dashboard-header {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-    }
-    
-    .user-welcome {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .user-info {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .dashboard-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .subject-item {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-    }
-    
-    .subject-progress {
-        width: 100%;
-    }
-    
-    .quick-actions {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 480px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .dashboard-header {
-        padding: 1.5rem;
-    }
-    
-    .stat-card {
-        padding: 1rem;
-    }
-    
-    .stat-number {
-        font-size: 1.5rem;
-    }
-}
-</style>
-
+{# Safe defaults to avoid undefined errors and provide graceful empty states #}
+{% set subjects = subjects|default([]) %}
+{% set upcoming_exams = upcoming_exams|default([]) %}
+{% set notifications = notifications|default([]) %}
+{% set progress = progress|default(0) %}
+{% set completed_courses = completed_courses|default(0) %}
+{% set pending_tasks = pending_tasks|default(0) %}
+{% set average_grade = average_grade|default('-') %}
+{% set learning_streak = learning_streak|default(0) %}
+{% set total_study_hours = total_study_hours|default(0) %}
+{% set student_name = student_name|default(user.name if user is defined else 'Siswa') %}
+{% set timestamp = timestamp|default('—') %}
 
 <div class="container">
     <!-- Header -->
     <div class="dashboard-header">
         <div class="user-welcome">
             <div class="user-avatar">
-                <img src="{{ user.avatar or '/static/images/avatar-default.png' }}" alt="Avatar" class="avatar-img">
+                <img src="{{ user.avatar or url_for('static', filename='images/avatar.png') }}" alt="{{ user.name or 'Avatar' }}" class="avatar-img">
             </div>
             <div class="welcome-text">
                 <h1><i class="fas fa-user-graduate"></i> Selamat datang, {{ user.name or student_name }}!</h1>
@@ -575,9 +38,19 @@
                 <p class="last-login">Terakhir login: {{ timestamp }}</p>
             </div>
         </div>
+        <div class="user-welcome">
+            <!-- Badges Siswa -->
+            <div class="user-avatar">
+                <img src="{{ user.avatar or url_for('static', filename='images/badge.png') }}" alt="Badge" class="avatar-img">
+            </div>
+            <!-- Gaya Belajar Siswa (VARK) -->
+            <div class="user-avatar">
+                <img src="{{ user.avatar or url_for('static', filename='images/badge.png') }}" alt="Badge" class="avatar-img">
+            </div>
+        </div>
         <div class="dashboard-actions">
-            <button class="btn btn-primary" onclick="refreshDashboard()">
-                <i class="fas fa-sync-alt"></i> Refresh Data
+            <button type="button" class="btn btn-primary" onclick="refreshDashboard()" aria-label="Refresh Data">
+                <i class="fas fa-sync-alt" aria-hidden="true"></i> Refresh Data
             </button>
         </div>
     </div>
@@ -657,7 +130,7 @@
         <div class="dashboard-card subjects-card">
             <div class="card-header">
                 <h3><i class="fas fa-book-open"></i> Progress Mata Pelajaran</h3>
-                <button class="btn btn-small">Lihat Semua</button>
+                <button type="button" class="btn btn-small" aria-label="Lihat semua materi">Lihat Semua</button>
             </div>
             <div class="subjects-list">
                 {% for subject in subjects %}
@@ -668,11 +141,13 @@
                     </div>
                     <div class="subject-progress">
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: {{ subject.progress }}%"></div>
+                            <div class="progress-fill" style="width: {{ subject.progress }}%;"></div>
                         </div>
                         <span class="progress-text">{{ subject.progress }}%</span>
                     </div>
                 </div>
+                {% else %}
+                <div class="empty-state">Belum ada mata pelajaran untuk ditampilkan.</div>
                 {% endfor %}
             </div>
         </div>
@@ -696,9 +171,11 @@
                         <span class="exam-time"><i class="fas fa-clock"></i> 08:00 - 10:00</span>
                     </div>
                     <div class="exam-actions">
-                        <button class="btn btn-small btn-outline">Siapkan</button>
+                        <button type="button" class="btn btn-small btn-outline" aria-label="Siapkan ujian">Siapkan</button>
                     </div>
                 </div>
+                {% else %}
+                <div class="empty-state">Tidak ada ujian mendatang.</div>
                 {% endfor %}
             </div>
         </div>
@@ -726,72 +203,71 @@
                         <span class="notification-time">{{ notification.time }}</span>
                     </div>
                 </div>
+                {% else %}
+                <div class="empty-state">Tidak ada notifikasi saat ini.</div>
                 {% endfor %}
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="dashboard-card actions-card">
-            <div class="card-header">
-                <h3><i class="fas fa-lightning-bolt"></i> Aksi Cepat</h3>
-            </div>
-            <div class="quick-actions">
-                <button class="action-btn" onclick="startLearning()">
-                    <i class="fas fa-play"></i>
-                    <span>Mulai Belajar</span>
-                </button>
-                <button class="action-btn" onclick="viewAssignments()">
-                    <i class="fas fa-tasks"></i>
-                    <span>Lihat Tugas</span>
-                </button>
-                <button class="action-btn" onclick="takeQuiz()">
-                    <i class="fas fa-question-circle"></i>
-                    <span>Kuis Harian</span>
-                </button>
-                <a class="action-btn" href="/siswa/features/rekomendasi">
-                    <i class="fas fa-lightbulb"></i>
-                    <span>Rekomendasi AI</span>
-                </a>
-            </div>
-        </div>
+        <!-- Quick Actions removed per request -->
     </div>
     <!-- Additional Features -->
     <div class="dashboard-grid" style="margin-top: 2rem;">
         <div class="feature-card">
-            <i class="fas fa-tasks" style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;"></i>
-            <h3>Tugas & Kuis</h3>
-            <p>Kerjakan tugas dan kuis untuk mengukur pemahaman</p>
-            <div class="alert alert-info">
-                <strong>3 tugas</strong> menunggu dikerjakan
+            <div class="feature-top">
+                <i class="fas fa-tasks feature-icon" aria-hidden="true"></i>
+                <div class="feature-meta">
+                    <h3>Tugas & Kuis</h3>
+                    <p class="muted">Kerjakan tugas dan kuis untuk mengukur pemahaman</p>
+                </div>
             </div>
-            <a href="#" class="btn btn-secondary">Lihat Tugas</a>
+            <div class="feature-bottom">
+                <div class="alert alert-info feature-alert" role="status">
+                    <strong>{{ pending_tasks }}</strong> tugas menunggu
+                </div>
+                <a href="/assignments" class="btn btn-secondary">Lihat Tugas</a>
+            </div>
         </div>
 
         <div class="feature-card">
-            <i class="fas fa-chart-pie" style="font-size: 2.5rem; color: #667eea; margin-bottom: 1rem;"></i>
-            <h3>Progress Report</h3>
-            <p>Pantau perkembangan belajar Anda secara detail</p>
-            <a href="/reporting/report" class="btn btn-secondary">Lihat Laporan</a>
+            <div class="feature-top">
+                <i class="fas fa-chart-pie feature-icon" aria-hidden="true"></i>
+                <div class="feature-meta">
+                    <h3>Progress Report</h3>
+                    <p class="muted">Pantau perkembangan belajar Anda secara detail</p>
+                </div>
+            </div>
+            <div class="feature-bottom">
+                <div class="feature-stats">
+                    <span class="small">Progress saat ini</span>
+                    <div class="progress-bar" style="height:8px;margin-top:.5rem;">
+                        <div class="progress-fill" style="width: {{ progress }}%;"></div>
+                    </div>
+                    <div class="small muted" style="margin-top:.5rem;">{{ progress }}% selesai</div>
+                </div>
+                <a href="/reporting/report" class="btn btn-secondary">Lihat Laporan</a>
+            </div>
         </div>
     </div>
 
     <!-- Aktivitas Terbaru -->
-    <div class="card" style="margin-top: 2rem;">
-    <div class="card">
-        <h3>Aktivitas Terbaru</h3>
+    <section class="card" style="margin-top: 2rem;" aria-labelledby="recent-activity-title">
+        <h3 id="recent-activity-title">Aktivitas Terbaru</h3>
         <div style="margin-top: 1rem;">
-            <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i> Menyelesaikan materi "Algoritma Dasar" - 2 jam yang lalu
+            <div class="alert alert-success" role="status">
+                <i class="fas fa-check-circle" aria-hidden="true"></i>
+                <span>Menyelesaikan materi "Algoritma Dasar" - 2 jam yang lalu</span>
             </div>
-            <div class="alert alert-info">
-                <i class="fas fa-star"></i> Mendapat nilai A pada kuis "Struktur Data" - 1 hari yang lalu
+            <div class="alert alert-info" role="status">
+                <i class="fas fa-star" aria-hidden="true"></i>
+                <span>Mendapat nilai A pada kuis "Struktur Data" - 1 hari yang lalu</span>
             </div>
-            <div class="alert alert-info">
-                <i class="fas fa-trophy"></i> Mencapai target belajar mingguan - 3 hari yang lalu
+            <div class="alert alert-info" role="status">
+                <i class="fas fa-trophy" aria-hidden="true"></i>
+                <span>Mencapai target belajar mingguan - 3 hari yang lalu</span>
             </div>
         </div>
-    </div>
-</div>
+    </section>
 </div>
 
 <script>
@@ -1068,5 +544,20 @@ setInterval(function() {
         updateRandomStats();
     }
 }, 60000);
+
+// Make elements with role="button" keyboard accessible (Enter / Space)
+document.body.addEventListener('keydown', function (e) {
+    try {
+        if ((e.key === 'Enter' || e.code === 'Space') && document.activeElement && document.activeElement.getAttribute) {
+            const role = document.activeElement.getAttribute('role');
+            if (role === 'button') {
+                document.activeElement.click();
+                e.preventDefault();
+            }
+        }
+    } catch (err) {
+        // silent
+    }
+});
 </script>
 {% endblock %}

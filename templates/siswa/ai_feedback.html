@@ -1,24 +1,204 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class="container">
-  <div class="dashboard-header mb-4">
-    <div class="user-welcome">
-      <div class="user-avatar">
-        <i class="fas fa-comments fa-3x" style="color:#27ae60;"></i>
-      </div>
-      <div class="welcome-text">
+{% extends 'siswa/base_siswa.html' %} {% block title %}AI Feedback - LENTERAMU{%
+endblock %} {% block head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/siswa/ai-feedback.css') }}"
+/>
+{% endblock %} {% block content %}
+<div class="menu-header mb-4">
+  <div class="header-welcome">
+    <div class="header-text">
+      <i class="fas fa-comments fa-3x" style="color: #764ba2"></i>
+      <div class="header-title">
         <h1>Feedback AI Materi/Latihan</h1>
-        <p class="user-info">Dapatkan insight dan saran otomatis dari AI setelah mengerjakan materi/latihan.</p>
+        <p class="header-info">
+          Dapatkan insight dan saran otomatis dari AI setelah mengerjakan
+          materi/latihan.
+        </p>
       </div>
-    </div>
-  </div>
-  <div class="dashboard-grid">
-    <div class="dashboard-card">
-      <div class="card-header">
-        <h3><i class="fas fa-robot"></i> Feedback Terbaru</h3>
-      </div>
-      <div class="alert alert-info text-center">Belum ada feedback AI. Selesaikan materi/latihan untuk mendapatkan insight!</div>
     </div>
   </div>
 </div>
+
+<div class="content-wrapper">
+  <!-- AI Feedback Preview -->
+  <div class="ai-feedback-grid">
+    <div class="feedback-card" tabindex="0">
+      <div class="coming-soon">
+        <i class="fas fa-robot"></i>
+        <h2 class="coming-soon-title">AI Feedback Terbaru!</h2>
+        <p class="coming-soon-text">
+          Sistem AI akan memberikan analisis mendalam tentang performa
+          belajarmu.<br />
+          <span class="highlight"
+            >Selesaikan materi atau latihan untuk mendapatkan insight
+            personal!</span
+          >
+        </p>
+        <div class="soon-badge">
+          <i class="fas fa-brain"></i>
+          <p>Coming Soon</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature Preview -->
+  <div class="feature-preview">
+    <div class="preview-card" tabindex="0">
+      <div class="preview-icon">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <div class="card-badge badge-analytics">Analytics</div>
+      <h4>Analisis Performa</h4>
+      <p>AI menganalisis pola belajar dan memberikan rekomendasi</p>
+      <div class="card-footer">
+        <span class="card-tip">
+          <i class="fas fa-brain"></i> Smart Analysis
+        </span>
+      </div>
+    </div>
+
+    <div class="preview-card" tabindex="0">
+      <div class="preview-icon">
+        <i class="fas fa-lightbulb"></i>
+      </div>
+      <div class="card-badge badge-insight">Insight</div>
+      <h4>Saran Personal</h4>
+      <p>Rekomendasi belajar yang disesuaikan dengan kemampuanmu</p>
+      <div class="card-footer">
+        <span class="card-tip">
+          <i class="fas fa-user-cog"></i> Personalized
+        </span>
+      </div>
+    </div>
+
+    <div class="preview-card" tabindex="0">
+      <div class="preview-icon">
+        <i class="fas fa-target"></i>
+      </div>
+      <div class="card-badge badge-progress">Progress</div>
+      <h4>Tracking Kemajuan</h4>
+      <p>Pantau perkembangan dan pencapaian target belajarmu</p>
+      <div class="card-footer">
+        <span class="card-tip">
+          <i class="fas fa-trophy"></i> Goal Oriented
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Animate preview cards sequentially
+    const previewCards = document.querySelectorAll(".preview-card");
+    previewCards.forEach((card, index) => {
+      card.style.opacity = "0";
+      card.style.transform = "translateY(20px) scale(0.95)";
+      setTimeout(() => {
+        card.style.transition = "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+        card.style.opacity = "1";
+        card.style.transform = "translateY(0) scale(1)";
+      }, 200 * (index + 1));
+    });
+
+    // Enhanced hover effects for preview cards
+    previewCards.forEach((card, index) => {
+      card.addEventListener("mouseenter", function () {
+        this.style.transform = "translateY(-8px) scale(1.02)";
+        this.style.boxShadow = "0 12px 30px rgba(118,75,162,0.15)";
+      });
+
+      card.addEventListener("mouseleave", function () {
+        this.style.transform = "translateY(0) scale(1)";
+        this.style.boxShadow = "0 8px 25px rgba(118,75,162,0.12)";
+      });
+
+      // Add click ripple effect
+      card.addEventListener("click", function (e) {
+        const ripple = document.createElement("div");
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+
+        ripple.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                background: rgba(118,75,162,0.1);
+                border-radius: 50%;
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                left: ${x}px;
+                top: ${y}px;
+                pointer-events: none;
+            `;
+
+        this.style.position = "relative";
+        this.style.overflow = "hidden";
+        this.appendChild(ripple);
+
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
+    });
+
+    // Interactive mouse tracking for feedback card
+    const feedbackCard = document.querySelector(".feedback-card");
+    if (feedbackCard) {
+      feedbackCard.addEventListener("mousemove", function (e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        this.style.setProperty("--mouse-x", `${x}px`);
+        this.style.setProperty("--mouse-y", `${y}px`);
+      });
+
+      feedbackCard.addEventListener("mouseleave", function () {
+        this.style.setProperty("--mouse-x", "50%");
+        this.style.setProperty("--mouse-y", "50%");
+      });
+    }
+
+    // Enhanced keyboard navigation
+    const focusableElements = document.querySelectorAll('[tabindex="0"]');
+    focusableElements.forEach((element) => {
+      element.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          this.style.transform = "scale(0.98)";
+          setTimeout(() => {
+            this.style.transform = "";
+            this.click();
+          }, 100);
+          e.preventDefault();
+        }
+      });
+
+      element.addEventListener("focus", function () {
+        this.style.outline = "3px solid rgba(118,75,162,0.3)";
+        this.style.outlineOffset = "2px";
+      });
+
+      element.addEventListener("blur", function () {
+        this.style.outline = "none";
+      });
+    });
+
+    // Add CSS animation for ripple effect
+    const style = document.createElement("style");
+    style.textContent = `
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+  });
+</script>
 {% endblock %}

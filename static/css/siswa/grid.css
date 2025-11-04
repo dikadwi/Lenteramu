@@ -1,0 +1,65 @@
+/* Grid Layout */
+.main-grid {
+    display: grid;
+    gap: 2rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.section-spacing {
+    margin-bottom: 3rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    align-items: start;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Card Styles */
+.card {
+    background: var(--bg-card);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 100%;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .main-grid {
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+    
+    .dashboard-grid,
+    .feature-grid {
+        gap: 1rem;
+    }
+    
+    .card {
+        padding: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-grid,
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+}

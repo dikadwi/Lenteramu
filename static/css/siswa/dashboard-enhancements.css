@@ -1,0 +1,224 @@
+/* Enhanced Modern Styles */
+:root {
+    /* Enhanced Color Palette */
+    --primary-light-hover: rgba(79, 70, 229, 0.15);
+    --card-hover-transform: translateY(-8px);
+    --card-hover-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    --transition-bezier: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced Card Interactions */
+.card {
+    transition: transform 0.4s var(--transition-bezier),
+                box-shadow 0.4s var(--transition-bezier),
+                border-color 0.3s ease;
+}
+
+.card:hover {
+    transform: var(--card-hover-transform);
+    box-shadow: var(--card-hover-shadow);
+    border-color: rgba(79, 70, 229, 0.3);
+}
+
+/* Modern Header Enhancement */
+.dashboard-header {
+    background: linear-gradient(135deg, #4F46E5, #7C3AED);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.welcome-text {
+    transform: translateZ(20px);
+}
+
+.user-avatar-wrapper {
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+.user-avatar {
+    transform: translateZ(30px);
+    transition: transform 0.4s var(--transition-bezier);
+}
+
+.user-avatar:hover {
+    transform: translateZ(40px) scale(1.05);
+}
+
+/* Enhanced Stats Cards */
+.stat-card {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.stat-card:hover .stat-icon {
+    transform: scale(1.1) rotate(10deg);
+}
+
+.stat-value {
+    transform-style: preserve-3d;
+}
+
+.stat-number {
+    transform: translateZ(10px);
+    transition: transform 0.3s var(--transition-bezier);
+}
+
+.stat-card:hover .stat-number {
+    transform: translateZ(20px) scale(1.05);
+}
+
+/* Enhanced Progress Bars */
+.progress-bar {
+    background: linear-gradient(90deg, #E9D5FF, #EDE9FE);
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Enhanced Quick Actions */
+.action-btn {
+    transform-style: preserve-3d;
+    transition: all 0.4s var(--transition-bezier);
+}
+
+.action-btn:hover {
+    transform: translateY(-8px) translateZ(20px);
+}
+
+.action-icon {
+    transform: translateZ(20px);
+    transition: transform 0.3s var(--transition-bezier);
+}
+
+.action-btn:hover .action-icon {
+    transform: translateZ(30px) scale(1.1);
+}
+
+/* Enhanced Notifications */
+.notification-item {
+    transform-style: preserve-3d;
+}
+
+.notification-icon {
+    transform: translateZ(10px);
+    transition: transform 0.3s var(--transition-bezier);
+}
+
+.notification-item:hover .notification-icon {
+    transform: translateZ(20px) scale(1.1) rotate(10deg);
+}
+
+/* Enhanced Activity Timeline */
+.timeline-item {
+    transform-style: preserve-3d;
+}
+
+.timeline-icon {
+    transform: translateZ(10px);
+    transition: transform 0.3s var(--transition-bezier);
+}
+
+.timeline-item:hover .timeline-icon {
+    transform: translateZ(20px) scale(1.1);
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Mobile Enhancements */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1rem;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-4px) translateZ(10px);
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-4px);
+    }
+}
+
+/* Loading States */
+.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0,
+        rgba(255, 255, 255, 0.2) 20%,
+        rgba(255, 255, 255, 0.5) 60%,
+        rgba(255, 255, 255, 0)
+    );
+    animation: shimmer 2s infinite;
+}
+
+/* Enhanced Tooltips */
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    padding: 0.5rem 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+[data-tooltip]:hover::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(-5px);
+}

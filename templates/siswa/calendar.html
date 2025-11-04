@@ -1,24 +1,464 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class="container">
-  <div class="dashboard-header mb-4">
-    <div class="user-welcome">
-      <div class="user-avatar">
-        <i class="fas fa-calendar-alt fa-3x" style="color:#3498db;"></i>
-      </div>
-      <div class="welcome-text">
+{% extends 'siswa/base_siswa.html' %} {% block styles %} {{ super() }}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/siswa/calendar.css') }}"
+/>
+{% endblock %} {% block content %}
+
+<div class="menu-header mb-4">
+  <div class="header-welcome">
+    <div class="header-text">
+      <i class="fas fa-calendar-alt fa-3x" style="color: #764ba2"></i>
+      <div class="header-title">
         <h1>Kalender Belajar</h1>
-        <p class="user-info">Lihat dan atur jadwal belajar, tugas, dan ujianmu di sini.</p>
+        <p class="header-info">
+          Lihat dan atur jadwal belajar, tugas, dan ujianmu di sini.
+        </p>
       </div>
-    </div>
-  </div>
-  <div class="dashboard-grid">
-    <div class="dashboard-card">
-      <div class="card-header">
-        <h3><i class="fas fa-calendar-alt"></i> Jadwal Kalender</h3>
-      </div>
-      <div class="alert alert-info text-center">Integrasi kalender akan segera hadir. Nantikan update berikutnya!</div>
     </div>
   </div>
 </div>
+
+<div class="content-wrapper">
+  <!-- Calendar Preview -->
+  <div class="calendar-grid">
+    <div
+      class="calendar-card"
+      tabindex="0"
+      style="
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 3rem 2rem;
+        box-shadow: 0 10px 30px rgba(118, 75, 162, 0.1);
+        margin-bottom: 3rem;
+        border: 1px solid rgba(118, 75, 162, 0.05);
+      "
+    >
+      <div class="coming-soon" style="text-align: center">
+        <i
+          class="fas fa-calendar-check"
+          style="
+            font-size: 4rem;
+            color: #764ba2;
+            margin-bottom: 1.5rem;
+            display: block;
+          "
+        ></i>
+        <h2
+          class="coming-soon-title"
+          style="
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #1f2937;
+            font-weight: 700;
+          "
+        >
+          Fitur Kalender Segera Hadir!
+        </h2>
+        <p
+          class="coming-soon-text"
+          style="
+            font-size: 1.1rem;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+          "
+        >
+          Atur jadwal belajarmu dengan lebih terstruktur.<br />
+          <span class="highlight" style="color: #764ba2; font-weight: 600"
+            >Dapatkan pengalaman belajar yang lebih terorganisir dan
+            efektif.</span
+          >
+        </p>
+        <div
+          class="soon-badge"
+          style="
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(90deg, #764ba2, #667eea);
+            color: white;
+            padding: 0.8em 1.5em;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(118, 75, 162, 0.2);
+          "
+        >
+          <i class="fas fa-hourglass-half"></i> Coming Soon
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature Preview -->
+  <div
+    class="feature-preview"
+    style="
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+      padding: 0 1rem;
+    "
+  >
+    <div
+      class="preview-card"
+      tabindex="0"
+      style="
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(118, 75, 162, 0.12);
+        border: 1px solid rgba(118, 75, 162, 0.08);
+        padding: 2rem 1.5rem;
+        position: relative;
+        text-align: center;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        min-height: 280px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        class="preview-icon"
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 70px;
+          height: 70px;
+          margin: 0 auto 1.5rem auto;
+          background: rgba(118, 75, 162, 0.1);
+          border-radius: 50%;
+          font-size: 2.2rem;
+          transition: all 0.3s ease;
+        "
+      >
+        <i class="fas fa-calendar-plus" style="color: #764ba2"></i>
+      </div>
+      <div
+        class="card-badge badge-personal"
+        style="
+          position: absolute;
+          top: 15px;
+          right: 15px;
+          background: linear-gradient(90deg, #667eea, #764ba2);
+          color: white;
+          font-size: 0.8rem;
+          font-weight: 600;
+          padding: 0.4em 0.8em;
+          border-radius: 20px;
+          box-shadow: 0 3px 12px rgba(118, 75, 162, 0.15);
+          z-index: 2;
+        "
+      >
+        Baru
+      </div>
+      <h4
+        style="
+          font-size: 1.3rem;
+          margin: 0 0 1rem 0;
+          font-weight: 600;
+          color: #1f2937;
+        "
+      >
+        Jadwal Personal
+      </h4>
+      <p
+        style="
+          font-size: 1rem;
+          margin: 0 0 1.5rem 0;
+          opacity: 0.8;
+          line-height: 1.5;
+          color: #6b7280;
+        "
+      >
+        Buat dan atur jadwal belajar sesuai kebutuhanmu
+      </p>
+      <div
+        class="card-footer"
+        style="
+          margin-top: auto;
+          padding-top: 1rem;
+          border-top: 1px solid rgba(118, 75, 162, 0.08);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          font-size: 0.9rem;
+          color: #764ba2;
+          font-weight: 500;
+        "
+      >
+        <span class="card-tip">
+          <i class="fas fa-user-clock" style="color: #764ba2"></i> Customizable
+        </span>
+      </div>
+    </div>
+    <div
+      class="preview-card"
+      tabindex="0"
+      style="
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(118, 75, 162, 0.12);
+        border: 1px solid rgba(118, 75, 162, 0.08);
+        padding: 2rem 1.5rem;
+        position: relative;
+        text-align: center;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        min-height: 280px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        class="preview-icon"
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 70px;
+          height: 70px;
+          margin: 0 auto 1.5rem auto;
+          background: rgba(118, 75, 162, 0.1);
+          border-radius: 50%;
+          font-size: 2.2rem;
+          transition: all 0.3s ease;
+        "
+      >
+        <i class="fas fa-bell" style="color: #764ba2"></i>
+      </div>
+      <div
+        class="card-badge badge-reminder"
+        style="
+          position: absolute;
+          top: 15px;
+          right: 15px;
+          background: linear-gradient(90deg, #f7971e, #ffd200);
+          color: #764ba2;
+          font-size: 0.8rem;
+          font-weight: 600;
+          padding: 0.4em 0.8em;
+          border-radius: 20px;
+          box-shadow: 0 3px 12px rgba(118, 75, 162, 0.15);
+          z-index: 2;
+        "
+      >
+        Favorit
+      </div>
+      <h4
+        style="
+          font-size: 1.3rem;
+          margin: 0 0 1rem 0;
+          font-weight: 600;
+          color: #1f2937;
+        "
+      >
+        Pengingat Pintar
+      </h4>
+      <p
+        style="
+          font-size: 1rem;
+          margin: 0 0 1.5rem 0;
+          opacity: 0.8;
+          line-height: 1.5;
+          color: #6b7280;
+        "
+      >
+        Notifikasi otomatis untuk setiap jadwal penting
+      </p>
+      <div
+        class="card-footer"
+        style="
+          margin-top: auto;
+          padding-top: 1rem;
+          border-top: 1px solid rgba(118, 75, 162, 0.08);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          font-size: 0.9rem;
+          color: #764ba2;
+          font-weight: 500;
+        "
+      >
+        <span class="card-tip">
+          <i class="fas fa-bolt" style="color: #764ba2"></i> Otomatis
+        </span>
+      </div>
+    </div>
+    <div
+      class="preview-card"
+      tabindex="0"
+      style="
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 8px 25px rgba(118, 75, 162, 0.12);
+        border: 1px solid rgba(118, 75, 162, 0.08);
+        padding: 2rem 1.5rem;
+        position: relative;
+        text-align: center;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        min-height: 280px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        class="preview-icon"
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 70px;
+          height: 70px;
+          margin: 0 auto 1.5rem auto;
+          background: rgba(118, 75, 162, 0.1);
+          border-radius: 50%;
+          font-size: 2.2rem;
+          transition: all 0.3s ease;
+        "
+      >
+        <i class="fas fa-chart-line" style="color: #764ba2"></i>
+      </div>
+      <div
+        class="card-badge badge-analytics"
+        style="
+          position: absolute;
+          top: 15px;
+          right: 15px;
+          background: linear-gradient(90deg, #43cea2, #185a9d);
+          color: white;
+          font-size: 0.8rem;
+          font-weight: 600;
+          padding: 0.4em 0.8em;
+          border-radius: 20px;
+          box-shadow: 0 3px 12px rgba(118, 75, 162, 0.15);
+          z-index: 2;
+        "
+      >
+        Insight
+      </div>
+      <h4
+        style="
+          font-size: 1.3rem;
+          margin: 0 0 1rem 0;
+          font-weight: 600;
+          color: #1f2937;
+        "
+      >
+        Analisis Waktu
+      </h4>
+      <p
+        style="
+          font-size: 1rem;
+          margin: 0 0 1.5rem 0;
+          opacity: 0.8;
+          line-height: 1.5;
+          color: #6b7280;
+        "
+      >
+        Pantau dan optimalkan waktu belajarmu
+      </p>
+      <div
+        class="card-footer"
+        style="
+          margin-top: auto;
+          padding-top: 1rem;
+          border-top: 1px solid rgba(118, 75, 162, 0.08);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          font-size: 0.9rem;
+          color: #764ba2;
+          font-weight: 500;
+        "
+      >
+        <span class="card-tip">
+          <i class="fas fa-lightbulb" style="color: #764ba2"></i> Statistik
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %} {{ super() }}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Animate preview cards sequentially
+    const previewCards = document.querySelectorAll(".preview-card");
+    previewCards.forEach((card, index) => {
+      card.style.opacity = "0";
+      card.style.transform = "translateY(20px)";
+      setTimeout(() => {
+        card.style.transition = "all 0.5s ease-out";
+        card.style.opacity = "1";
+        card.style.transform = "translateY(0)";
+      }, 100 * (index + 1));
+    });
+
+    // Add hover effect to coming soon icon
+    const comingSoonIcon = document.querySelector(".coming-soon-icon");
+    if (comingSoonIcon) {
+      comingSoonIcon.addEventListener("mouseover", function () {
+        this.style.transform = "scale(1.1) translateY(-5px)";
+      });
+
+      comingSoonIcon.addEventListener("mouseout", function () {
+        this.style.transform = "";
+      });
+    }
+
+    // Notification button effect
+    const notifButton = document.getElementById("enableNotif");
+    if (notifButton) {
+      notifButton.addEventListener("click", function () {
+        this.innerHTML = '<i class="fas fa-check"></i> Notifikasi Diaktifkan';
+        this.style.background = "rgba(255, 255, 255, 0.3)";
+        this.disabled = true;
+
+        // Show feedback animation
+        const icon = this.querySelector("i");
+        icon.style.transform = "scale(1.2)";
+        setTimeout(() => {
+          icon.style.transform = "scale(1)";
+        }, 200);
+      });
+    }
+
+    // Add interactive particles effect
+    const calendarCard = document.querySelector(".calendar-card");
+    if (calendarCard) {
+      calendarCard.addEventListener("mousemove", function (e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        this.style.setProperty("--mouse-x", `${x}px`);
+        this.style.setProperty("--mouse-y", `${y}px`);
+      });
+    }
+
+    // Enhance keyboard navigation
+    const focusableElements = document.querySelectorAll('[tabindex="0"]');
+    focusableElements.forEach((element) => {
+      element.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          this.click();
+          e.preventDefault();
+        }
+      });
+    });
+  });
+</script>
 {% endblock %}

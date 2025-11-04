@@ -1,0 +1,156 @@
+/* Community Page Styles */
+.community-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.forum-card,
+.study-groups-card,
+.qa-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.forum-card:hover,
+.study-groups-card:hover,
+.qa-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.card-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.card-header h3 i {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.card-content {
+    padding: 1.25rem;
+}
+
+/* Alert Styling */
+.alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    background: var(--info-light);
+    color: var(--info-dark);
+}
+
+.alert i {
+    font-size: 1.25rem;
+    color: var(--info-color);
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-content strong {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.alert-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Feature List */
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.feature-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-secondary);
+}
+
+.feature-list li:last-child {
+    border-bottom: none;
+}
+
+.feature-list li i {
+    color: var(--success-color);
+    font-size: 1rem;
+}
+
+/* Badge Styling */
+.badge {
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+    font-weight: 600;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-primary {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .community-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .card-header .btn,
+    .card-header .badge {
+        align-self: flex-start;
+    }
+}
+
+/* Dark Mode Support */
+[data-theme="dark"] .forum-card,
+[data-theme="dark"] .study-groups-card,
+[data-theme="dark"] .qa-card {
+    background: var(--bg-card-dark);
+}
+
+[data-theme="dark"] .feature-list li {
+    border-color: var(--border-dark);
+    color: var(--text-secondary-dark);
+}
+
+[data-theme="dark"] .alert {
+    background: var(--info-dark);
+    color: var(--text-primary-dark);
+}

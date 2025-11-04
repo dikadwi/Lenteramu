@@ -1,0 +1,199 @@
+/* Empty State Animations */
+@keyframes floatIcon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(118, 75, 162, 0.2); }
+    50% { box-shadow: 0 0 30px rgba(118, 75, 162, 0.4); }
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.empty-state {
+    background: linear-gradient(135deg, 
+        rgba(118, 75, 162, 0.05) 0%,
+        rgba(102, 126, 234, 0.05) 100%);
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid rgba(118, 75, 162, 0.1);
+    transition: all 0.3s ease;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.empty-state::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        rgba(118, 75, 162, 0.1),
+        rgba(102, 126, 234, 0.1),
+        rgba(118, 75, 162, 0.1)
+    );
+    background-size: 200% 200%;
+    animation: gradientShift 15s ease infinite;
+    transform: rotate(30deg);
+}
+
+.empty-state-icon {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 2rem;
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    animation: floatIcon 3s ease-in-out infinite, glowPulse 3s ease-in-out infinite;
+}
+
+.empty-state-icon i {
+    font-size: 2.5rem;
+    color: white;
+}
+
+.empty-state-title {
+    color: var(--text-primary);
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+}
+
+.empty-state-text {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 500px;
+    margin: 0 auto 2rem;
+    position: relative;
+}
+
+.tryout-schedule {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    max-width: 400px;
+    margin: 0 auto;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.tryout-schedule:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.schedule-title i {
+    color: #764ba2;
+    font-size: 1.25rem;
+}
+
+.schedule-time {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    padding: 0.75rem;
+    background: rgba(118, 75, 162, 0.05);
+    border-radius: 8px;
+    margin-top: 0.5rem;
+}
+
+.schedule-time i {
+    color: #764ba2;
+}
+
+/* Dark mode support */
+[data-theme="dark"] .empty-state {
+    background: linear-gradient(135deg, 
+        rgba(118, 75, 162, 0.1) 0%,
+        rgba(102, 126, 234, 0.1) 100%);
+    border-color: rgba(118, 75, 162, 0.2);
+}
+
+[data-theme="dark"] .tryout-schedule {
+    background: var(--bg-card-dark);
+}
+
+[data-theme="dark"] .schedule-time {
+    background: rgba(118, 75, 162, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .empty-state {
+        padding: 2rem 1.5rem;
+    }
+
+    .empty-state-icon {
+        width: 72px;
+        height: 72px;
+    }
+
+    .empty-state-icon i {
+        font-size: 2rem;
+    }
+
+    .empty-state-title {
+        font-size: 1.5rem;
+    }
+
+    .empty-state-text {
+        font-size: 1rem;
+    }
+
+    .tryout-schedule {
+        padding: 1.25rem;
+    }
+}
+
+/* Hover interactions */
+.empty-state:hover {
+    border-color: rgba(118, 75, 162, 0.2);
+    transform: scale(1.01);
+}
+
+.schedule-time:hover {
+    background: rgba(118, 75, 162, 0.1);
+}
+
+/* Accessibility */
+.empty-state:focus-within {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.3);
+}
+
+.tryout-schedule:focus-within {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.3);
+}

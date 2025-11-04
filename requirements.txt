@@ -1,13 +1,22 @@
-# ==== App dependencies (cPanel friendly) ====
-Flask==2.2.5
-Werkzeug==2.2.3
-Jinja2==3.1.4
-itsdangerous==2.1.2
-click==8.1.7
-MarkupSafe==2.1.3
+# ==== Minimal cPanel Dependencies ====
+Flask==2.2.5  # LTS version yang stabil untuk production
+Werkzeug==2.2.3  # Kompatibel dengan Flask 2.2.5
+Jinja2==3.1.4  # Template engine
+itsdangerous==2.1.2  # Security untuk session
+click==8.1.7  # CLI utilities
+MarkupSafe==2.1.3  # HTML escaping
 
-SQLAlchemy==2.0.21
-mysql-connector-python==8.0.33
+# ==== Database (MySQL) ====
+SQLAlchemy==1.4.41  # Versi LTS yang stabil untuk production
+mysqlclient==2.1.1  # Native MySQL driver, lebih ringan
 
-# (opsional) .env jika Config Anda membaca environment
-python-dotenv==1.0.0
+# ==== Basic Authentication ====
+Flask-Login==0.6.2  # User session management
+bcrypt==4.0.1  # Password hashing (lebih ringan dari Flask-Bcrypt)
+
+# ==== Form Handling ====
+WTForms==3.0.1  # Form tanpa dependencies Flask-WTF
+email-validator==2.0.0  # Email validation
+
+# ==== Environment ====
+python-dotenv==1.0.0  # Untuk .env file
