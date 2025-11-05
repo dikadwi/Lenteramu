@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, session
 from ai.learning_process import create_ai_learning_process
+from models import Badge, db
 
 siswa_features_bp = Blueprint(
     'siswa_features', __name__, url_prefix='/siswa/features')
@@ -189,29 +190,50 @@ def community():
 
 @siswa_features_bp.route('/badges')
 def badges():
-    """Progress badge/achievement (Siswa)"""
-    from models import StudentProfile, User, StudentProgress
-    user_id = session.get('user_id')
-    badges = []
-    if user_id:
-        student = StudentProfile.query.filter_by(user_id=user_id).first()
-        if student:
-            # Contoh badge: progress, streak, nilai, dsb
-            progress = StudentProgress.query.filter_by(
-                student_id=student.id).all()
-            completed = len(
-                [p for p in progress if p.progress_percentage == 100])
-            badges = [
-                {'icon': 'fa-graduation-cap', 'name': 'Penyelesai Materi',
-                    'desc': 'Selesaikan 1 materi/tugas', 'unlocked': completed >= 1},
-                {'icon': 'fa-star', 'name': 'Bintang Belajar',
-                    'desc': 'Selesaikan 5 materi/tugas', 'unlocked': completed >= 5},
-                {'icon': 'fa-fire', 'name': 'Streak Konsisten',
-                    'desc': 'Belajar 3 hari berturut-turut', 'unlocked': False},
-                {'icon': 'fa-trophy', 'name': 'Nilai Hebat',
-                    'desc': 'Rata-rata nilai > 85', 'unlocked': False},
-            ]
-    return render_template('siswa/badges.html', badges=badges)
+    """Display all available badges for the student"""
+    try:
+        # Get all badges from database and sort by points (highest first)
+        badges = Badge.query.order_by(Badge.point.desc()).all()
+        print(f"Found {len(badges)} badges")
+        for badge in badges:
+            print(f"Badge: {badge.nama} - {badge.point} points")
+        return render_template('siswa/badges.html', badges=badges)
+    except Exception as e:
+        print(f"Error fetching badges: {str(e)}")
+        return render_template('siswa/badges.html', badges=[])
+
+# --- Badges ---
+
+
+@siswa_features_bp.route('/badges')
+def badges_view():
+    """Display all available badges for the student"""
+    try:
+        # Dapatkan semua badges dan urutkan berdasarkan point tertinggi
+        badges = db.session.execute("""
+            SELECT 
+                id_badges,
+                nama,
+                point,
+                detail,
+                keterangan,
+                badges,
+                created_at,
+                updated_at
+            FROM badges 
+            ORDER BY point DESC
+        """).fetchall()
+
+        # Debug info
+        print(f"Found {len(badges)} badges")
+        for badge in badges:
+            print(
+                f"Badge: {badge.nama} - {badge.point} points - Badge File: {badge.badges}")
+
+        return render_template('siswa/badges.html', badges=badges)
+    except Exception as e:
+        print(f"Error fetching badges: {str(e)}")
+        return render_template('siswa/badges.html', badges=[])
 
 # --- Exam Simulation ---
 

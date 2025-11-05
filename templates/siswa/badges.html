@@ -5,6 +5,10 @@ LENTERAMU{% endblock %} {% block head %} {{ super() }}
   rel="stylesheet"
   href="{{ url_for('static', filename='css/siswa/badges.css') }}"
 />
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/siswa/badge-image.css') }}"
+/>
 {% endblock %} {% block content %}
 <!-- Ambil data Badges dari PointMarket -->
 <div class="container">
@@ -31,43 +35,44 @@ LENTERAMU{% endblock %} {% block head %} {{ super() }}
         >
       </div>
     </div>
-
     <div class="badges-grid">
       {% for badge in badges %}
       <div
-        class="badge-card {{ 'unlocked' if badge.unlocked }}"
+        class="badge-card"
         data-tilt
         data-tilt-glare
         data-tilt-max-glare="0.3"
       >
+        <div class="badge-info-header">
+          <h4 class="badge-title">{{ badge.nama }}</h4>
+        </div>
         <div class="badge-icon">
-          <i class="fas {{ badge.icon }}"></i>
-          {% if badge.unlocked %}
-          <div class="badge-sparkles"></div>
+          {% if badge.badges %}
+          <img
+            src="{{ url_for('static', filename='uploads/badges/' + badge.badges) }}"
+            alt="{{ badge.nama }}"
+            class="badge-image"
+            onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/default-badge.png') }}'"
+          />
+          {% else %}
+          <i class="fas fa-award"></i>
           {% endif %}
         </div>
-        <h4 class="badge-title">{{ badge.name }}</h4>
-        <p class="badge-description">{{ badge.desc }}</p>
-        <span
-          class="badge-status {{ 'unlocked' if badge.unlocked else 'locked' }}"
-        >
-          {% if badge.unlocked %}
-          <i class="fas fa-check-circle"></i>
-          {% else %}
-          <i class="fas fa-lock"></i>
-          {% endif %} {{ 'Unlocked' if badge.unlocked else 'Locked' }}
-        </span>
-        {% if badge.progress is defined and not badge.unlocked %}
-        <div class="badge-progress">
-          <div class="progress-bar">
-            <div
-              class="progress-fill"
-              style="width: {{ badge.progress }}%"
-            ></div>
-          </div>
-          <span class="progress-text">{{ badge.progress }}%</span>
+        <div class="badge-content">
+          <p class="badge-description">{{ badge.detail }}</p>
+          <!-- <div class="badge-meta">
+            <p class="badge-points {% if badge.point < 0 %}negative{% endif %}">
+              <i
+                class="fas {% if badge.point >= 0 %}fa-star{% else %}fa-exclamation-circle{% endif %}"
+              ></i>
+              {{ badge.point }} Points
+            </p>
+            <p class="badge-keterangan">
+              <i class="fas fa-info-circle"></i>
+              {{ badge.keterangan }}
+            </p>
+          </div> -->
         </div>
-        {% endif %}
       </div>
       {% else %}
       <div class="empty-state">

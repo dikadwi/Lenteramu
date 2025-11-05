@@ -6,6 +6,32 @@ import bcrypt
 db = SQLAlchemy()
 
 
+class Badge(db.Model):
+    __tablename__ = 'badges'
+
+    id_badges = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    nama = db.Column(db.String(100), nullable=False)
+    point = db.Column(db.Integer, nullable=False)
+    detail = db.Column(db.Text, nullable=False)
+    keterangan = db.Column(db.String(150), nullable=False)
+    badges = db.Column(db.String(255), nullable=True)
+    created_at = db.Column(db.TIMESTAMP, nullable=False,
+                           server_default=db.text('CURRENT_TIMESTAMP'))
+    updated_at = db.Column(db.TIMESTAMP, nullable=False, server_default=db.text(
+        'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
+
+    def to_dict(self, user=None):
+        """Convert badge to dictionary for template rendering"""
+        return {
+            'id': self.id_badges,
+            'nama': self.nama,
+            'detail': self.detail,
+            'badges': self.badges,  # This is the image filename
+            'point': self.point,
+            'keterangan': self.keterangan
+        }
+
+
 class User(db.Model):
     __tablename__ = 'users'
 
