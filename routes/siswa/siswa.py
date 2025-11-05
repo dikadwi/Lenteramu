@@ -179,10 +179,14 @@ def dashboard_siswa():
     grades = StudentProgress.query.filter_by(student_id=student.id).all()
     average_grade = 85  # Default value
     if grades:
-        # Assuming grades are stored as numbers 0-100
-        total = sum([g.grade if hasattr(g, 'grade')
-                    and g.grade is not None else 85 for g in grades])
-        average_grade = int(total / len(grades))
+        # Convert grades to integers and handle possible string values
+        try:
+            total = sum([int(g.grade) if hasattr(g, 'grade') and g.grade is not None
+                        else 85 for g in grades])
+            average_grade = int(total / len(grades))
+        except (ValueError, TypeError):
+            # If conversion fails, use default value
+            average_grade = 85
 
     # Calculate total study hours (sample calculation)
     total_study_hours = sum([

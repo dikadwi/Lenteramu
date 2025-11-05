@@ -1,183 +1,192 @@
-{% extends 'siswa/base_siswa.html' %}
-
-{% block title %}Badge & Achievement - LENTERAMU{% endblock %}
-
-{% block head %}
-{{ super() }}
+{% extends 'siswa/base_siswa.html' %} {% block title %}Badge & Achievement -
+LENTERAMU{% endblock %} {% block head %} {{ super() }}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/siswa/badges.css') }}">
-{% endblock %}
-
-{% block content %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/siswa/badges.css') }}"
+/>
+{% endblock %} {% block content %}
 <!-- Ambil data Badges dari PointMarket -->
 <div class="container">
-    <div class="menu-header mb-4">
-        <div class="header-welcome">
-            <div class="header-text">
-                <i class="fas fa-award fa-3x" style="color:#764ba2;"></i>
-                <div class="header-title">
-                <h1>Badge & Achievement</h1>
-                <p class="header-info">Kumpulkan badge pencapaian dari aktivitas belajarmu!</p>
-                </div>
-            </div>
+  <div class="menu-header mb-4">
+    <div class="header-welcome">
+      <div class="header-text">
+        <i class="fas fa-award fa-3x" style="color: #764ba2"></i>
+        <div class="header-title">
+          <h1>Badge & Achievement</h1>
+          <p class="header-info">
+            Kumpulkan badge pencapaian dari aktivitas belajarmu!
+          </p>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-card">
+    <div class="card-header">
+      <h3><i class="fas fa-award"></i> Daftar Badge</h3>
+      <div class="header-actions">
+        <span class="badge-counter"
+          >{{ badges|length if badges else 0 }} Badge</span
+        >
+      </div>
     </div>
 
-    <div class="dashboard-card">
-        <div class="card-header">
-            <h3><i class="fas fa-award"></i> Daftar Badge</h3>
-            <div class="header-actions">
-                <span class="badge-counter">{{ badges|length if badges else 0 }} Badge</span>
-            </div>
+    <div class="badges-grid">
+      {% for badge in badges %}
+      <div
+        class="badge-card {{ 'unlocked' if badge.unlocked }}"
+        data-tilt
+        data-tilt-glare
+        data-tilt-max-glare="0.3"
+      >
+        <div class="badge-icon">
+          <i class="fas {{ badge.icon }}"></i>
+          {% if badge.unlocked %}
+          <div class="badge-sparkles"></div>
+          {% endif %}
         </div>
-        
-        <div class="badges-grid">
-            {% for badge in badges %}
-            <div class="badge-card {{ 'unlocked' if badge.unlocked }}" data-tilt data-tilt-glare data-tilt-max-glare="0.3">
-                <div class="badge-icon">
-                    <i class="fas {{ badge.icon }}"></i>
-                    {% if badge.unlocked %}
-                    <div class="badge-sparkles"></div>
-                    {% endif %}
-                </div>
-                <h4 class="badge-title">{{ badge.name }}</h4>
-                <p class="badge-description">{{ badge.desc }}</p>
-                <span class="badge-status {{ 'unlocked' if badge.unlocked else 'locked' }}">
-                    {% if badge.unlocked %}
-                    <i class="fas fa-check-circle"></i>
-                    {% else %}
-                    <i class="fas fa-lock"></i>
-                    {% endif %}
-                    {{ 'Unlocked' if badge.unlocked else 'Locked' }}
-                </span>
-                {% if badge.progress is defined and not badge.unlocked %}
-                <div class="badge-progress">
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: {{ badge.progress }}%"></div>
-                    </div>
-                    <span class="progress-text">{{ badge.progress }}%</span>
-                </div>
-                {% endif %}
-            </div>
-            {% else %}
-            <div class="empty-state">
-                <i class="fas fa-award"></i>
-                <p>Belum ada badge yang tersedia</p>
-                <small>Selesaikan aktivitas belajar untuk mendapatkan badge!</small>
-                <div class="empty-state-action">
-                    <a href="/siswa/learning" class="btn btn-primary">
-                        <i class="fas fa-graduation-cap"></i>
-                        Mulai Belajar
-                    </a>
-                </div>
-            </div>
-            {% endfor %}
+        <h4 class="badge-title">{{ badge.name }}</h4>
+        <p class="badge-description">{{ badge.desc }}</p>
+        <span
+          class="badge-status {{ 'unlocked' if badge.unlocked else 'locked' }}"
+        >
+          {% if badge.unlocked %}
+          <i class="fas fa-check-circle"></i>
+          {% else %}
+          <i class="fas fa-lock"></i>
+          {% endif %} {{ 'Unlocked' if badge.unlocked else 'Locked' }}
+        </span>
+        {% if badge.progress is defined and not badge.unlocked %}
+        <div class="badge-progress">
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              style="width: {{ badge.progress }}%"
+            ></div>
+          </div>
+          <span class="progress-text">{{ badge.progress }}%</span>
         </div>
+        {% endif %}
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <i class="fas fa-award"></i>
+        <p>Belum ada badge yang tersedia</p>
+        <small>Selesaikan aktivitas belajar untuk mendapatkan badge!</small>
+        <div class="empty-state-action">
+          <a href="/siswa/learning" class="btn btn-primary">
+            <i class="fas fa-graduation-cap"></i>
+            Mulai Belajar
+          </a>
+        </div>
+      </div>
+      {% endfor %}
     </div>
+  </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
+{% endblock %} {% block scripts %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener("DOMContentLoaded", function () {
     initializeBadges();
     setupTiltEffect();
-});
+  });
 
-function initializeBadges() {
-    const badges = document.querySelectorAll('.badge-card');
-    
+  function initializeBadges() {
+    const badges = document.querySelectorAll(".badge-card");
+
     badges.forEach((badge, index) => {
-        // Initial animation
-        badge.style.opacity = '0';
-        badge.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-            badge.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-            badge.style.opacity = '1';
-            badge.style.transform = 'translateY(0)';
-            
-            if (badge.classList.contains('unlocked')) {
-                animateUnlock(badge);
-            }
-        }, index * 150);
+      // Initial animation
+      badge.style.opacity = "0";
+      badge.style.transform = "translateY(20px)";
 
-        // Add sparkle effect for unlocked badges
-        if (badge.classList.contains('unlocked')) {
-            createSparkles(badge.querySelector('.badge-icon'));
+      setTimeout(() => {
+        badge.style.transition = "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+        badge.style.opacity = "1";
+        badge.style.transform = "translateY(0)";
+
+        if (badge.classList.contains("unlocked")) {
+          animateUnlock(badge);
         }
-    });
-}
+      }, index * 150);
 
-function setupTiltEffect() {
-    VanillaTilt.init(document.querySelectorAll('.badge-card'), {
-        max: 15,
-        speed: 400,
-        glare: true,
-        'max-glare': 0.3,
-        scale: 1.05
+      // Add sparkle effect for unlocked badges
+      if (badge.classList.contains("unlocked")) {
+        createSparkles(badge.querySelector(".badge-icon"));
+      }
     });
-}
+  }
 
-function animateUnlock(badge) {
-    const icon = badge.querySelector('.badge-icon');
-    icon.style.transform = 'scale(1.2) rotate(360deg)';
+  function setupTiltEffect() {
+    VanillaTilt.init(document.querySelectorAll(".badge-card"), {
+      max: 15,
+      speed: 400,
+      glare: true,
+      "max-glare": 0.3,
+      scale: 1.05,
+    });
+  }
+
+  function animateUnlock(badge) {
+    const icon = badge.querySelector(".badge-icon");
+    icon.style.transform = "scale(1.2) rotate(360deg)";
     setTimeout(() => {
-        icon.style.transform = 'scale(1) rotate(0deg)';
+      icon.style.transform = "scale(1) rotate(0deg)";
     }, 600);
-}
+  }
 
-function createSparkles(container) {
+  function createSparkles(container) {
     for (let i = 0; i < 3; i++) {
-        const sparkle = document.createElement('div');
-        sparkle.className = 'sparkle';
-        sparkle.style.setProperty('--delay', `${i * 0.2}s`);
-        sparkle.style.left = `${Math.random() * 100}%`;
-        sparkle.style.top = `${Math.random() * 100}%`;
-        container.appendChild(sparkle);
+      const sparkle = document.createElement("div");
+      sparkle.className = "sparkle";
+      sparkle.style.setProperty("--delay", `${i * 0.2}s`);
+      sparkle.style.left = `${Math.random() * 100}%`;
+      sparkle.style.top = `${Math.random() * 100}%`;
+      container.appendChild(sparkle);
     }
-}
+  }
 
-// Progress bar animation
-function animateProgress() {
-    const progressBars = document.querySelectorAll('.progress-fill');
-    progressBars.forEach(bar => {
-        const targetWidth = bar.style.width;
-        bar.style.width = '0%';
-        setTimeout(() => {
-            bar.style.width = targetWidth;
-        }, 300);
+  // Progress bar animation
+  function animateProgress() {
+    const progressBars = document.querySelectorAll(".progress-fill");
+    progressBars.forEach((bar) => {
+      const targetWidth = bar.style.width;
+      bar.style.width = "0%";
+      setTimeout(() => {
+        bar.style.width = targetWidth;
+      }, 300);
     });
-}
+  }
 
-// Optional: Add particle effects for unlocked badges
-function createParticles(badge) {
+  // Optional: Add particle effects for unlocked badges
+  function createParticles(badge) {
     const particles = 10;
-    const colors = ['#FFD700', '#FFA500', '#FF6347'];
-    
-    for (let i = 0; i < particles; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        particle.style.setProperty('--x', `${Math.random() * 200 - 100}px`);
-        particle.style.setProperty('--y', `${Math.random() * 200 - 100}px`);
-        particle.style.setProperty('--delay', `${Math.random() * 0.5}s`);
-        badge.appendChild(particle);
-        
-        setTimeout(() => particle.remove(), 1000);
-    }
-}
+    const colors = ["#FFD700", "#FFA500", "#FF6347"];
 
-// Initialize everything
-document.addEventListener('DOMContentLoaded', function() {
+    for (let i = 0; i < particles; i++) {
+      const particle = document.createElement("div");
+      particle.className = "particle";
+      particle.style.backgroundColor =
+        colors[Math.floor(Math.random() * colors.length)];
+      particle.style.setProperty("--x", `${Math.random() * 200 - 100}px`);
+      particle.style.setProperty("--y", `${Math.random() * 200 - 100}px`);
+      particle.style.setProperty("--delay", `${Math.random() * 0.5}s`);
+      badge.appendChild(particle);
+
+      setTimeout(() => particle.remove(), 1000);
+    }
+  }
+
+  // Initialize everything
+  document.addEventListener("DOMContentLoaded", function () {
     initializeBadges();
     setupTiltEffect();
     animateProgress();
-    
+
     // Add click effect for unlocked badges
-    document.querySelectorAll('.badge-card.unlocked').forEach(badge => {
-        badge.addEventListener('click', () => createParticles(badge));
+    document.querySelectorAll(".badge-card.unlocked").forEach((badge) => {
+      badge.addEventListener("click", () => createParticles(badge));
     });
-});
+  });
 </script>
 {% endblock %}

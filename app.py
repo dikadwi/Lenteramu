@@ -1,12 +1,12 @@
 from utils.email import mail
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
-from ai.adaptive_feedback import create_adaptive_feedback_system
-from ai.learning_process import create_ai_learning_process
+# from ai.adaptive_feedback import create_adaptive_feedback_system
+# from ai.learning_process import create_ai_learning_process
 from models import db, User, StudentProfile, TeacherProfile, Subject, Course, LearningActivity, StudentProgress, AIRecommendation, SystemMetrics, UserFeedback
 import os
 import json
 from datetime import datetime
-from flask_migrate import Migrate
+# from flask_migrate import Migrate
 from routes.admin import admin_bp
 from routes.guru import guru_bp
 from routes.admin_features import admin_features_bp
@@ -22,7 +22,7 @@ from routes.landing.cara_kerja import cara_kerja
 app = Flask(__name__)
 
 
-# Database Configuration
+# Database Configuration Local
 app.config['SECRET_KEY'] = 'lenteramu-secret-key-2024'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     'DATABASE_URL') or 'mysql+pymysql://root:@localhost:3306/lenteramu_db'
@@ -32,16 +32,28 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_pre_ping': True
 }
 
+# # Database Configuration CPanel
+# app.config['SECRET_KEY'] = 'lenteramu-secret-key-2024'
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL') or (
+#     'mysql+pymysql://tigaselaras_lenteramu:bandung%2AAa%3F@localhost/tigaselaras_lenteramu_cbf'
+# )
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+#     'pool_recycle': 280,   # kurangi sedikit biar stabil di cPanel
+#     'pool_pre_ping': True
+# }
+
+
 # Initialize extensions
 db.init_app(app)
-migrate = Migrate(app, db)
+# migrate = Migrate(app, db)
 
 # Initialize Flask-Mail
 mail.init_app(app)
 
 # Initialize AI systems
-ai_learning_process = create_ai_learning_process()
-adaptive_feedback_system = create_adaptive_feedback_system()
+# ai_learning_process = create_ai_learning_process()
+# adaptive_feedback_system = create_adaptive_feedback_system()
 
 # Session management
 
@@ -143,19 +155,23 @@ def login():
         if username in demo_accounts:
             demo_user = demo_accounts[username]
             if demo_user['password'] == password and demo_user['role'] == role:
-                # Create session
-                session['user_id'] = 1  # Demo user ID
-                session['user_role'] = role
-                session['user_name'] = f"Demo {role.title()}"
-                session['username'] = username
+                try:
+                    # Create session with safe type conversion
+                    session['user_id'] = str(1)  # Demo user ID as string
+                    session['user_role'] = str(role)
+                    session['user_name'] = f"Demo {role.title()}"
+                    session['username'] = username
 
-                # Redirect based on role
-                if role == 'student':
-                    return redirect(url_for('siswa.dashboard_siswa'))
-                elif role == 'teacher':
-                    return redirect(url_for('guru.dashboard_guru'))
-                elif role == 'admin':
-                    return redirect(url_for('admin.dashboard_admin'))
+                    # Redirect based on role
+                    if role == 'student':
+                        return redirect(url_for('siswa.dashboard_siswa'))
+                    elif role == 'teacher':
+                        return redirect(url_for('guru.dashboard_guru'))
+                    elif role == 'admin':
+                        return redirect(url_for('admin.dashboard_admin'))
+                except Exception as e:
+                    return render_template('auth/login.html',
+                                           error='Terjadi kesalahan saat login. Silakan coba lagi.')
 
         # Database account validation
         role_map = {'student': 'siswa', 'teacher': 'guru', 'admin': 'admin'}
@@ -165,19 +181,22 @@ def login():
             user = User.query.filter_by(
                 username=username, role=db_role).first()
             if user and user.check_password(password):
-                session['user_id'] = user.id
-                session['user_role'] = user.role
-                session['user_name'] = getattr(
-                    user, 'full_name', user.username)
-                session['username'] = user.username
+                # Convert all session values to strings to prevent type errors
+                session['user_id'] = str(user.id)
+                session['user_role'] = str(user.role)
+                session['user_name'] = str(
+                    getattr(user, 'full_name', user.username))
+                session['username'] = str(user.username)
 
                 if user.role == 'siswa' and user.student_profile:
-                    session['class'] = getattr(
-                        user.student_profile, 'grade_level', '')
-                    session['student_id'] = getattr(
-                        user.student_profile, 'student_id', '')
-                    session['join_date'] = str(
-                        getattr(user.student_profile, 'created_at', ''))
+                    session['class'] = str(getattr(
+                        user.student_profile, 'grade_level', ''))
+                    session['student_id'] = str(getattr(
+                        user.student_profile, 'student_id', ''))
+                    created_at = getattr(
+                        user.student_profile, 'created_at', None)
+                    session['join_date'] = created_at.strftime(
+                        '%Y-%m-%d') if created_at else ''
                 elif user.role == 'guru' and user.teacher_profile:
                     session['employee_id'] = getattr(
                         user.teacher_profile, 'teacher_id', '')
@@ -195,6 +214,10 @@ def login():
                                    error='Username atau password salah!')
 
         except Exception as e:
+            import traceback
+            tb = traceback.format_exc()
+            app.logger.error(f"[LOGIN ERROR] {e}\n{tb}")
+            print(f"[LOGIN ERROR] {e}\n{tb}")
             return render_template('auth/login.html',
                                    error='Terjadi kesalahan saat login. Silakan coba lagi.')
 
@@ -369,151 +392,151 @@ def get_system_stats():
 # --- AI Learning Process Routes ---
 
 
-@app.route('/ai/train-model', methods=['POST'])
-def train_ai_model():
-    """Endpoint untuk training AI model sesuai alur pembelajaran AI"""
-    try:
-        # 1. Data Collection
-        data = ai_learning_process.data_collection()
-        if data.empty:
-            return jsonify({'error': 'Insufficient data for training'}), 400
+# @app.route('/ai/train-model', methods=['POST'])
+# def train_ai_model():
+#     """Endpoint untuk training AI model sesuai alur pembelajaran AI"""
+#     try:
+#         # 1. Data Collection
+#         data = ai_learning_process.data_collection()
+#         if data.empty:
+#             return jsonify({'error': 'Insufficient data for training'}), 400
 
-        # 2. Data Preprocessing
-        X, y = ai_learning_process.data_preprocessing(data)
-        if X is None:
-            return jsonify({'error': 'Data preprocessing failed'}), 400
+#         # 2. Data Preprocessing
+#         X, y = ai_learning_process.data_preprocessing(data)
+#         if X is None:
+#             return jsonify({'error': 'Data preprocessing failed'}), 400
 
-        # 3. Model Training
-        training_success = ai_learning_process.model_training(X, y)
-        if not training_success:
-            return jsonify({'error': 'Model training failed'}), 400
+#         # 3. Model Training
+#         training_success = ai_learning_process.model_training(X, y)
+#         if not training_success:
+#             return jsonify({'error': 'Model training failed'}), 400
 
-        # 4. Model Validation
-        validation_success = ai_learning_process.model_validation(X, y)
-        if not validation_success:
-            return jsonify({'error': 'Model validation failed'}), 400
+#         # 4. Model Validation
+#         validation_success = ai_learning_process.model_validation(X, y)
+#         if not validation_success:
+#             return jsonify({'error': 'Model validation failed'}), 400
 
-        # 5. Model Deployment
-        deployment_success = ai_learning_process.model_deployment()
-        if not deployment_success:
-            return jsonify({'error': 'Model deployment failed'}), 400
+#         # 5. Model Deployment
+#         deployment_success = ai_learning_process.model_deployment()
+#         if not deployment_success:
+#             return jsonify({'error': 'Model deployment failed'}), 400
 
-        return jsonify({
-            'status': 'success',
-            'message': 'AI model trained and deployed successfully',
-            'metrics': ai_learning_process.performance_metrics,
-            'timestamp': datetime.utcnow().isoformat()
-        })
+#         return jsonify({
+#             'status': 'success',
+#             'message': 'AI model trained and deployed successfully',
+#             'metrics': ai_learning_process.performance_metrics,
+#             'timestamp': datetime.utcnow().isoformat()
+#         })
 
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
-@app.route('/ai/monitor-model', methods=['GET'])
-def monitor_ai_model():
-    """Endpoint untuk monitoring AI model"""
-    try:
-        monitoring_result = ai_learning_process.model_monitoring()
-        return jsonify(monitoring_result)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/ai/generate-recommendations/<int:student_id>')
-def generate_ai_recommendations(student_id):
-    """Generate AI recommendations untuk siswa"""
-    try:
-        recommendations = ai_learning_process.generate_recommendations(
-            student_id)
-        return jsonify({
-            'status': 'success',
-            'student_id': student_id,
-            'recommendations': recommendations
-        })
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+# @app.route('/ai/monitor-model', methods=['GET'])
+# def monitor_ai_model():
+#     """Endpoint untuk monitoring AI model"""
+#     try:
+#         monitoring_result = ai_learning_process.model_monitoring()
+#         return jsonify(monitoring_result)
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
+
+
+# @app.route('/ai/generate-recommendations/<int:student_id>')
+# def generate_ai_recommendations(student_id):
+#     """Generate AI recommendations untuk siswa"""
+#     try:
+#         recommendations = ai_learning_process.generate_recommendations(
+#             student_id)
+#         return jsonify({
+#             'status': 'success',
+#             'student_id': student_id,
+#             'recommendations': recommendations
+#         })
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 
 # --- Adaptive Feedback Routes ---
 
 
-@app.route('/assessment/submit', methods=['POST'])
-def submit_assessment():
-    """Submit hasil assessment dan generate adaptive feedback"""
-    try:
-        data = request.get_json()
-        user_id = data.get('user_id') or session.get('user_id')
-        course_id = data.get('course_id')
-        assessment_result = data.get('result')
+# @app.route('/assessment/submit', methods=['POST'])
+# def submit_assessment():
+#     """Submit hasil assessment dan generate adaptive feedback"""
+#     try:
+#         data = request.get_json()
+#         user_id = data.get('user_id') or session.get('user_id')
+#         course_id = data.get('course_id')
+#         assessment_result = data.get('result')
 
-        if not all([user_id, course_id, assessment_result]):
-            return jsonify({'error': 'Missing required data'}), 400
+#         if not all([user_id, course_id, assessment_result]):
+#             return jsonify({'error': 'Missing required data'}), 400
 
-        # 1. Collect Assessment Data
-        collection_result = adaptive_feedback_system.collect_assessment_data(
-            user_id, course_id, assessment_result
-        )
+#         # 1. Collect Assessment Data
+#         collection_result = adaptive_feedback_system.collect_assessment_data(
+#             user_id, course_id, assessment_result
+#         )
 
-        if collection_result['status'] != 'success':
-            return jsonify(collection_result), 400
+#         if collection_result['status'] != 'success':
+#             return jsonify(collection_result), 400
 
-        # 2. Analyze Performance
-        performance_analysis = adaptive_feedback_system.analyze_student_performance(
-            user_id)
+#         # 2. Analyze Performance
+#         performance_analysis = adaptive_feedback_system.analyze_student_performance(
+#             user_id)
 
-        # 3. Generate Adaptive Feedback
-        feedback = adaptive_feedback_system.generate_adaptive_feedback(
-            performance_analysis)
+#         # 3. Generate Adaptive Feedback
+#         feedback = adaptive_feedback_system.generate_adaptive_feedback(
+#             performance_analysis)
 
-        # 4. Integrate with UI
-        ui_integration = adaptive_feedback_system.integrate_with_ui(
-            user_id, feedback)
+#         # 4. Integrate with UI
+#         ui_integration = adaptive_feedback_system.integrate_with_ui(
+#             user_id, feedback)
 
-        # 5. Recommend Additional Content
-        content_recommendations = adaptive_feedback_system.recommend_additional_content(
-            performance_analysis)
+#         # 5. Recommend Additional Content
+#         content_recommendations = adaptive_feedback_system.recommend_additional_content(
+#             performance_analysis)
 
-        return jsonify({
-            'status': 'success',
-            'feedback': feedback,
-            'recommendations': content_recommendations,
-            'ui_integration': ui_integration,
-            'performance_summary': performance_analysis
-        })
+#         return jsonify({
+#             'status': 'success',
+#             'feedback': feedback,
+#             'recommendations': content_recommendations,
+#             'ui_integration': ui_integration,
+#             'performance_summary': performance_analysis
+#         })
 
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
-@app.route('/feedback/monitor/<int:user_id>')
-def monitor_learning_progress(user_id):
-    """Monitor dan adjust pembelajaran siswa"""
-    try:
-        monitoring_result = adaptive_feedback_system.monitor_and_adjust(
-            user_id)
-        return jsonify({
-            'status': 'success',
-            'monitoring': monitoring_result
-        })
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 
 
-@app.route('/')
-def home():
-    return render_template('home.html')
+# @app.route('/feedback/monitor/<int:user_id>')
+# def monitor_learning_progress(user_id):
+#     """Monitor dan adjust pembelajaran siswa"""
+#     try:
+#         monitoring_result = adaptive_feedback_system.monitor_and_adjust(
+#             user_id)
+#         return jsonify({
+#             'status': 'success',
+#             'monitoring': monitoring_result
+#         })
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
+
+
+# @app.route('/')
+# def home():
+#     return render_template('home.html')
 
 
 # --- Modul Retraining Model AI ---
-@app.route('/ai/retrain', methods=['GET', 'POST'])
-def retrain_model():
-    if request.method == 'POST':
-        # Simulasi retraining
-        return jsonify({
-            'status': 'success',
-            'message': 'Model AI berhasil diretrain dengan data terbaru',
-            'timestamp': datetime.now().isoformat()
-        })
-    return render_template('ai_personalization.html')
+# @app.route('/ai/retrain', methods=['GET', 'POST'])
+# def retrain_model():
+#     if request.method == 'POST':
+#         # Simulasi retraining
+#         return jsonify({
+#             'status': 'success',
+#             'message': 'Model AI berhasil diretrain dengan data terbaru',
+#             'timestamp': datetime.now().isoformat()
+#         })
+#     return render_template('ai_personalization.html')
 
 # --- Monitoring & Evaluasi Implementasi ---
 
@@ -628,57 +651,57 @@ def analytics_student():
 # --- Personalisasi Konten ---
 
 
-@app.route('/ai/personalization')
-def ai_personalization():
-    try:
-        # Get AI recommendations from database
-        # For demo, get recommendations for first student
-        student = User.query.filter_by(role='siswa').first()
-        if student:
-            recommendations_query = AIRecommendation.query.filter_by(
-                user_id=student.id,
-                is_active=True
-            ).join(Course).all()
+# @app.route('/ai/personalization')
+# def ai_personalization():
+#     try:
+#         # Get AI recommendations from database
+#         # For demo, get recommendations for first student
+#         student = User.query.filter_by(role='siswa').first()
+#         if student:
+#             recommendations_query = AIRecommendation.query.filter_by(
+#                 user_id=student.id,
+#                 is_active=True
+#             ).join(Course).all()
 
-            recommendations = []
-            for rec in recommendations_query:
-                recommendations.append({
-                    'title': rec.course.title,
-                    'type': rec.course.content_type.title(),
-                    'match': int(rec.match_score),
-                    'duration': f"{rec.course.duration_minutes} menit"
-                })
-        else:
-            recommendations = []
+#             recommendations = []
+#             for rec in recommendations_query:
+#                 recommendations.append({
+#                     'title': rec.course.title,
+#                     'type': rec.course.content_type.title(),
+#                     'match': int(rec.match_score),
+#                     'duration': f"{rec.course.duration_minutes} menit"
+#                 })
+#         else:
+#             recommendations = []
 
-        # Fallback if no recommendations found
-        if not recommendations:
-            recommendations = [
-                {'title': 'Algoritma Sorting', 'type': 'Video',
-                    'match': 95, 'duration': '25 menit'},
-                {'title': 'Struktur Data Tree', 'type': 'Artikel',
-                    'match': 88, 'duration': '15 menit'},
-                {'title': 'Kuis Pemrograman Dasar', 'type': 'Quiz',
-                    'match': 92, 'duration': '10 menit'},
-                {'title': 'Project Web Development', 'type': 'Praktik',
-                    'match': 85, 'duration': '2 jam'}
-            ]
+#         # Fallback if no recommendations found
+#         if not recommendations:
+#             recommendations = [
+#                 {'title': 'Algoritma Sorting', 'type': 'Video',
+#                     'match': 95, 'duration': '25 menit'},
+#                 {'title': 'Struktur Data Tree', 'type': 'Artikel',
+#                     'match': 88, 'duration': '15 menit'},
+#                 {'title': 'Kuis Pemrograman Dasar', 'type': 'Quiz',
+#                     'match': 92, 'duration': '10 menit'},
+#                 {'title': 'Project Web Development', 'type': 'Praktik',
+#                     'match': 85, 'duration': '2 jam'}
+#             ]
 
-    except Exception as e:
-        print(f"Database error: {e}")
-        # Fallback data
-        recommendations = [
-            {'title': 'Algoritma Sorting', 'type': 'Video',
-                'match': 95, 'duration': '25 menit'},
-            {'title': 'Struktur Data Tree', 'type': 'Artikel',
-                'match': 88, 'duration': '15 menit'},
-            {'title': 'Kuis Pemrograman Dasar', 'type': 'Quiz',
-                'match': 92, 'duration': '10 menit'},
-            {'title': 'Project Web Development', 'type': 'Praktik',
-                'match': 85, 'duration': '2 jam'}
-        ]
+#     except Exception as e:
+#         print(f"Database error: {e}")
+#         # Fallback data
+#         recommendations = [
+#             {'title': 'Algoritma Sorting', 'type': 'Video',
+#                 'match': 95, 'duration': '25 menit'},
+#             {'title': 'Struktur Data Tree', 'type': 'Artikel',
+#                 'match': 88, 'duration': '15 menit'},
+#             {'title': 'Kuis Pemrograman Dasar', 'type': 'Quiz',
+#                 'match': 92, 'duration': '10 menit'},
+#             {'title': 'Project Web Development', 'type': 'Praktik',
+#                 'match': 85, 'duration': '2 jam'}
+#         ]
 
-    return render_template('ai/ai_personalization.html', recommendations=recommendations)
+#     return render_template('ai/ai_personalization.html', recommendations=recommendations)
 
 # --- Laporan & Visualisasi ---
 
@@ -790,6 +813,16 @@ def inject_user():
         'department': session.get('department', ''),
     }
     return dict(user=user)
+
+
+if not app.debug:
+    import logging
+    from logging.handlers import RotatingFileHandler
+
+    handler = RotatingFileHandler('error.log', maxBytes=100000, backupCount=3)
+    handler.setLevel(logging.ERROR)
+    app.logger.addHandler(handler)
+    logging.basicConfig(level=logging.DEBUG)
 
 
 if __name__ == "__main__":
